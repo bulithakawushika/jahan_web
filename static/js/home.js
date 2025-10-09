@@ -277,18 +277,15 @@ function createUserCard(user) {
 
 // Perform Search Function
 async function performSearch() {
-    // Get search value from either search input
+    // Get search value
     let query = '';
     const searchInput = $$("searchInput");
+    const topSearchInput = $$("topSearchInput");
 
     if (searchInput) {
         query = searchInput.getValue().trim();
-    } else {
-        // If on results view, get value from the input field directly
-        const topInput = document.querySelector('#homeContent input[type="text"]');
-        if (topInput) {
-            query = topInput.value.trim();
-        }
+    } else if (topSearchInput) {
+        query = topSearchInput.getValue().trim();
     }
 
     if (!query) {
@@ -307,14 +304,18 @@ async function performSearch() {
     const result = await apiCall(API_CONFIG.ENDPOINTS.SEARCH + `?query=${encodeURIComponent(query)}`, 'GET');
 
     if (result.success) {
-        // Clear and recreate the content area
+        // Get home content area
         const homeContent = $$("homeContent");
-        homeContent.destructor();
 
-        webix.ui({
-            id: "homeContent",
-            rows: [createResultsView(result.results, query)]
-        }, $$("homePage"), 1);  // Insert at position 1 (after toolbar)
+        if (homeContent) {
+            // Remove all existing views from homeContent
+            while (homeContent.getChildViews().length > 0) {
+                homeContent.removeView(homeContent.getChildViews()[0]);
+            }
+
+            // Add new results view
+            homeContent.addView(createResultsView(result.results, query));
+        }
 
         webix.message({
             type: "success",
