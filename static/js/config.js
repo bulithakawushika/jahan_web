@@ -10,13 +10,35 @@ const API_CONFIG = {
     }
 };
 
+// Get CSRF token from cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Get CSRF token from Django
+function getCSRFToken() {
+    return getCookie('csrftoken');
+}
+
 // Helper function to make API calls with credentials
 async function apiCall(endpoint, method = 'GET', data = null) {
     const options = {
         method: method,
-        credentials: 'include',  // Important for session cookies
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken()
         }
     };
 
@@ -39,7 +61,10 @@ async function apiCallWithFile(endpoint, formData) {
     const options = {
         method: 'POST',
         credentials: 'include',
-        body: formData  // Don't set Content-Type, browser will set it with boundary
+        headers: {
+            'X-CSRFToken': getCSRFToken()
+        },
+        body: formData
     };
 
     try {

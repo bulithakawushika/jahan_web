@@ -163,9 +163,13 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5500",
 ]
 
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SECURE = False
+
 # Session Settings
 SESSION_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_SECURE = False
 
 
 # REST Framework Settings
