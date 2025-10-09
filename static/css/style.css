@@ -1,0 +1,83 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #FEF6EF;
+    min-height: 100vh;
+}
+
+#app {
+    width: 100%;
+    height: 100vh;
+}
+
+/* Custom Webix Styles */
+.webix_view {
+    background-color: transparent;
+}
+
+.webix_form {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 30px;
+    margin: 20px;
+}
+
+.webix_layout_line {
+    overflow: visible !important;
+}
+
+/* User Card Styles */
+.user_card {
+    transition: transform 0.2s;
+}
+
+.user_card:hover {
+    transform: translateY(-2px);
+}
+
+/* Search Input Styles */
+.webix_el_text input {
+    font-size: 16px !important;
+    padding: 10px !important;
+}
+
+/* Fix widget spacing */
+.user_card_wrapper {
+    margin-bottom: 5px !important;
+}
+
+.webix_scrollview {
+    background: transparent !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .webix_form {
+        padding: 20px;
+    }
+}
+
+/* Responsive layout */
+@media (max-width: 768px) {
+    .user_card {
+        margin: 5px 0 !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .user_card {
+        margin: 10px !important;
+    }
+}
+
+/* Scrollview spacing */
+.webix_scrollview>.webix_scroll_cont {
+    padding-top: 10px;
+}
