@@ -6,7 +6,8 @@ const API_CONFIG = {
         LOGIN: '/api/users/login/',
         LOGOUT: '/api/users/logout/',
         CHECK_AUTH: '/api/users/check-auth/',
-        SEARCH: '/api/users/search/'
+        SEARCH: '/api/users/search/',
+        PROFILE: '/api/users/profile/'
     }
 };
 
@@ -75,4 +76,12 @@ async function apiCallWithFile(endpoint, formData) {
         console.error('API Error:', error);
         return { success: false, message: 'Network error' };
     }
+}
+
+// Get profile photo URL
+function getProfilePhotoURL(photoPath) {
+    if (photoPath) {
+        return API_CONFIG.BASE_URL + photoPath;
+    }
+    return '/static/assets/default_profile_pic.png';
 }

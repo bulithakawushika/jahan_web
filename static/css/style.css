@@ -81,3 +81,58 @@ body {
 .webix_scrollview>.webix_scroll_cont {
     padding-top: 10px;
 }
+
+/* Profile Page Styles */
+.profile_details_card {
+    margin: 20px 0;
+}
+
+.profile_details_card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+}
+
+/* Password toggle button styling */
+.password_toggle {
+    background: #f8f9fa !important;
+    border: 1px solid #dee2e6 !important;
+    cursor: pointer;
+}
+
+.password_toggle:hover {
+    background: #e9ecef !important;
+}
+
+.webix_icon_button {
+    color: #6c757d;
+}
+
+/* Make password icon more clickable */
+.webix_input_icon {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    padding: 5px;
+}
+
+.webix_input_icon:hover {
+    color: #3498db !important;
+}
+
+/* Profile Page - Responsive Layout */
+@media (max-width: 992px) {
+
+    /* For tablets and mobile - stack vertically */
+    .profile_details_card {
+        margin-top: 20px !important;
+    }
+}
+
+/* Profile card shadow on hover */
+.profile_details_card>div {
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.profile_details_card>div:hover {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15) !important;
+    transform: translateY(-3px);
+}

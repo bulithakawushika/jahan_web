@@ -4,8 +4,10 @@ let mainApp = null;
 
 // Initialize the application
 webix.ready(function () {
-    // Check if user is already logged in
-    checkAuthentication();
+    // Small delay to ensure all scripts are loaded
+    setTimeout(function () {
+        checkAuthentication();
+    }, 100);
 });
 
 // Check authentication status
@@ -34,6 +36,11 @@ function showLoginPage() {
     });
 
     currentPage = "login";
+
+    // Attach password toggle handler
+    if (typeof attachPasswordToggle === 'function') {
+        attachPasswordToggle();
+    }
 }
 
 // Show Register Page
@@ -57,6 +64,13 @@ function showHomePage() {
         mainApp.destructor();
     }
 
+    // Check if createHomePage function exists
+    if (typeof createHomePage !== 'function') {
+        console.error('createHomePage is not defined');
+        webix.message('Error loading home page');
+        return;
+    }
+
     mainApp = webix.ui({
         container: "app",
         id: "mainApp",
@@ -64,4 +78,24 @@ function showHomePage() {
     });
 
     currentPage = "home";
+}
+
+// Show Profile Page
+function showProfilePage() {
+    if (mainApp) {
+        mainApp.destructor();
+    }
+
+    mainApp = webix.ui({
+        container: "app",
+        id: "mainApp",
+        rows: [createProfilePage()]
+    });
+
+    currentPage = "profile";
+
+    // Fetch fresh profile data from database
+    setTimeout(function () {
+        fetchProfileFromDatabase();
+    }, 100);
 }

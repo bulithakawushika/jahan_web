@@ -1,3 +1,31 @@
+// Toggle password visibility - SIMPLIFIED VERSION
+function togglePasswordVisibility(inputId) {
+    const input = $$(inputId);
+    if (!input) {
+        console.log('Input not found:', inputId);
+        return;
+    }
+
+    const inputNode = input.getInputNode();
+    const iconNode = input.$view.querySelector('.webix_input_icon');
+
+    console.log('Current type:', inputNode.type);
+
+    if (inputNode.type === "password") {
+        inputNode.type = "text";
+        if (iconNode) {
+            iconNode.className = iconNode.className.replace('wxi-eye', 'wxi-eye-slash');
+        }
+        console.log('Changed to text');
+    } else {
+        inputNode.type = "password";
+        if (iconNode) {
+            iconNode.className = iconNode.className.replace('wxi-eye-slash', 'wxi-eye');
+        }
+        console.log('Changed to password');
+    }
+}
+
 // Login Page UI
 function createLoginPage() {
     return {
@@ -33,11 +61,13 @@ function createLoginPage() {
                                     {
                                         view: "text",
                                         type: "password",
+                                        id: "loginPassword",
                                         name: "password",
                                         label: "Password",
                                         placeholder: "Enter your password",
                                         labelWidth: 120,
-                                        required: true
+                                        required: true,
+                                        icon: "wxi-eye"
                                     },
                                     {
                                         margin: 10
@@ -72,6 +102,24 @@ function createLoginPage() {
             {}
         ]
     };
+}
+
+// Attach icon click handler after page is created
+function attachPasswordToggle() {
+    setTimeout(function () {
+        const loginPasswordInput = $$("loginPassword");
+        if (loginPasswordInput) {
+            const iconNode = loginPasswordInput.$view.querySelector('.webix_input_icon');
+            if (iconNode) {
+                iconNode.style.cursor = 'pointer';
+                iconNode.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    togglePasswordVisibility("loginPassword");
+                });
+            }
+        }
+    }, 100);
 }
 
 // Handle Login

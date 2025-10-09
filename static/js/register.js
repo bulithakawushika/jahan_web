@@ -1,16 +1,46 @@
+// Toggle password visibility
+function togglePasswordVisibility(inputId) {
+    const input = $$(inputId);
+    if (!input) return;
+
+    const node = input.getInputNode();
+
+    if (node.type === "password") {
+        node.type = "text";
+        input.config.icon = "wxi-eye-slash";
+    } else {
+        node.type = "password";
+        input.config.icon = "wxi-eye";
+    }
+    input.refresh();
+}
+
+// Update photo display with filename and green tick
+function updatePhotoDisplay(filename) {
+    const display = $$("photoDisplay");
+    if (display) {
+        display.setHTML(`
+            <div style="display: flex; align-items: center; padding: 5px;">
+                <span style="color: #27ae60; font-size: 20px; margin-right: 8px;">✓</span>
+                <span style="color: #2c3e50; font-size: 14px;">${filename}</span>
+            </div>
+        `);
+    }
+}
+
 // Register Page UI
 function createRegisterPage() {
     return {
         id: "registerPage",
         rows: [
             {
-                height: 30
+                height: 50
             },
             {
                 cols: [
-                    {},
+                    { width: 20 },
                     {
-                        width: 600,
+                        width: 700,
                         rows: [
                             {
                                 view: "template",
@@ -30,7 +60,7 @@ function createRegisterPage() {
                                                 name: "first_name",
                                                 label: "First Name",
                                                 placeholder: "Enter first name",
-                                                labelWidth: 120,
+                                                labelWidth: 150,
                                                 required: true,
                                                 invalidMessage: "First name is required"
                                             },
@@ -39,7 +69,7 @@ function createRegisterPage() {
                                                 name: "last_name",
                                                 label: "Last Name",
                                                 placeholder: "Enter last name",
-                                                labelWidth: 120,
+                                                labelWidth: 150,
                                                 required: true,
                                                 invalidMessage: "Last name is required"
                                             }
@@ -50,7 +80,7 @@ function createRegisterPage() {
                                         name: "username",
                                         label: "Username",
                                         placeholder: "Choose a username",
-                                        labelWidth: 120,
+                                        labelWidth: 150,
                                         required: true,
                                         invalidMessage: "Username is required"
                                     },
@@ -59,36 +89,62 @@ function createRegisterPage() {
                                         name: "email",
                                         label: "Email",
                                         placeholder: "Enter your email",
-                                        labelWidth: 120,
+                                        labelWidth: 150,
                                         required: true,
                                         invalidMessage: "Valid email is required"
                                     },
                                     {
                                         view: "text",
                                         type: "password",
+                                        id: "registerPassword",
                                         name: "password",
                                         label: "Password",
                                         placeholder: "Create a password",
-                                        labelWidth: 120,
+                                        labelWidth: 150,
                                         required: true,
-                                        invalidMessage: "Password is required"
+                                        invalidMessage: "Password is required",
+                                        icon: "wxi-eye",
+                                        on: {
+                                            onAfterRender: function () {
+                                                const iconNode = this.$view.querySelector('.webix_input_icon');
+                                                if (iconNode) {
+                                                    iconNode.onclick = function (e) {
+                                                        e.stopPropagation();
+                                                        togglePasswordVisibility("registerPassword");
+                                                    };
+                                                }
+                                            }
+                                        }
                                     },
                                     {
                                         view: "text",
                                         type: "password",
+                                        id: "registerConfirmPassword",
                                         name: "re_password",
                                         label: "Confirm Password",
                                         placeholder: "Re-enter password",
-                                        labelWidth: 120,
+                                        labelWidth: 150,
                                         required: true,
-                                        invalidMessage: "Please confirm your password"
+                                        invalidMessage: "Please confirm your password",
+                                        icon: "wxi-eye",
+                                        on: {
+                                            onAfterRender: function () {
+                                                const iconNode = this.$view.querySelector('.webix_input_icon');
+                                                if (iconNode) {
+                                                    iconNode.onclick = function (e) {
+                                                        e.stopPropagation();
+                                                        togglePasswordVisibility("registerConfirmPassword");
+                                                    };
+                                                }
+                                            }
+                                        }
                                     },
                                     {
                                         view: "datepicker",
                                         name: "birthday",
                                         label: "Birthday",
                                         placeholder: "Select date (Optional)",
-                                        labelWidth: 120,
+                                        labelWidth: 150,
                                         format: "%Y-%m-%d",
                                         stringResult: true,
                                         editable: true
@@ -98,7 +154,7 @@ function createRegisterPage() {
                                         name: "address",
                                         label: "Address",
                                         placeholder: "Enter your address (Optional)",
-                                        labelWidth: 120,
+                                        labelWidth: 150,
                                         height: 80
                                     },
                                     {
@@ -106,18 +162,35 @@ function createRegisterPage() {
                                         name: "job_role",
                                         label: "Job Role",
                                         placeholder: "Enter your job role (Optional)",
-                                        labelWidth: 120
+                                        labelWidth: 150
                                     },
                                     {
-                                        view: "uploader",
-                                        id: "profilePhotoUploader",
-                                        name: "profile_photo",
-                                        label: "Profile Photo",
-                                        labelWidth: 120,
-                                        value: "Upload Photo (Optional)",
-                                        accept: "image/*",
-                                        multiple: false,
-                                        autosend: false
+                                        cols: [
+                                            {
+                                                view: "uploader",
+                                                id: "profilePhotoUploader",
+                                                name: "profile_photo",
+                                                label: "Select Profile Photo",
+                                                labelWidth: 150,
+                                                value: "Choose File",
+                                                width: 350,
+                                                accept: "image/*",
+                                                multiple: false,
+                                                autosend: false,
+                                                on: {
+                                                    onBeforeFileAdd: function (file) {
+                                                        updatePhotoDisplay(file.name);
+                                                        return true;
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                view: "template",
+                                                id: "photoDisplay",
+                                                template: "",
+                                                borderless: true
+                                            }
+                                        ]
                                     },
                                     {
                                         margin: 15
@@ -159,11 +232,11 @@ function createRegisterPage() {
                             }
                         ]
                     },
-                    {}
+                    { width: 20 }
                 ]
             },
             {
-                height: 30
+                height: 50
             }
         ]
     };

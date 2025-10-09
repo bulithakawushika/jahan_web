@@ -17,17 +17,7 @@ function createHomePage() {
                         view: "button",
                         value: "Profile",
                         width: 100,
-                        click: function () {
-                            webix.message("Profile page - Coming soon!");
-                        }
-                    },
-                    {
-                        view: "button",
-                        value: "Settings",
-                        width: 100,
-                        click: function () {
-                            webix.message("Settings page - Coming soon!");
-                        }
+                        click: showProfilePage
                     },
                     {
                         view: "button",

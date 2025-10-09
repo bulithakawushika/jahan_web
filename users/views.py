@@ -115,3 +115,19 @@ def search_users(request):
         'success': True,
         'results': UserSerializer(users, many=True).data
     })
+
+@api_view(['GET'])
+def get_profile(request):
+    """
+    Get current user's profile
+    """
+    if not request.user.is_authenticated:
+        return Response({
+            'success': False,
+            'message': 'Not authenticated'
+        }, status=status.HTTP_200_OK)  # Change to 200 instead of 401
+    
+    return Response({
+        'success': True,
+        'user': UserSerializer(request.user).data
+    })
