@@ -409,3 +409,13 @@ body {
     border-color: #2980b9 !important;
     box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.3);
 }
+
+/* Step Indicator Hover Effects */
+.step-circle:hover {
+    transform: scale(1.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.step-circle:active {
+    transform: scale(1.1);
+}

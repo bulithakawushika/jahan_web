@@ -335,6 +335,72 @@ function createPrivacySecuritySection(user) {
     };
 }
 
+// Create Step Indicator for Contrast Levels
+function createStepIndicator(selectedLevel) {
+    const levels = [
+        { value: 'low', label: 'Low' },
+        { value: 'normal', label: 'Normal' },
+        { value: 'high', label: 'High' },
+        { value: 'highest', label: 'Highest' }
+    ];
+
+    const selectedIndex = levels.findIndex(l => l.value === selectedLevel);
+
+    let html = '<div style="padding: 20px 40px;">';
+
+    // Container for the line and circles
+    html += '<div style="position: relative; height: 60px;">';
+
+    // Background line
+    html += '<div style="position: absolute; top: 20px; left: 0; right: 0; height: 4px; background: #e0e0e0; border-radius: 2px;"></div>';
+
+    // Active line (progress)
+    const progressPercent = selectedIndex > 0 ? (selectedIndex / (levels.length - 1)) * 100 : 0;
+    html += `<div style="position: absolute; top: 20px; left: 0; width: ${progressPercent}%; height: 4px; background: #3498db; border-radius: 2px; transition: width 0.3s ease;"></div>`;
+
+    // Circles and labels container
+    html += '<div style="position: relative; display: flex; justify-content: space-between;">';
+
+    levels.forEach((level, index) => {
+        const isActive = index <= selectedIndex;
+        const isSelected = level.value === selectedLevel;
+
+        html += '<div style="display: flex; flex-direction: column; align-items: center; flex: 1;">';
+
+        // Circle
+        html += `<div class="step-circle" data-level="${level.value}" style="
+            width: ${isSelected ? '24px' : '20px'};
+            height: ${isSelected ? '24px' : '20px'};
+            border-radius: 50%;
+            background: ${isActive ? '#3498db' : '#ffffff'};
+            border: ${isSelected ? '4px' : '3px'} solid ${isActive ? '#2980b9' : '#bdc3c7'};
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            ${isSelected ? 'box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);' : ''}
+        "></div>`;
+
+        // Label
+        html += `<div style="
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: ${isSelected ? '700' : '500'};
+            color: ${isSelected ? '#2c3e50' : '#7f8c8d'};
+            text-align: center;
+            transition: all 0.3s ease;
+        ">${level.label}</div>`;
+
+        html += '</div>';
+    });
+
+    html += '</div>'; // Close circles container
+    html += '</div>'; // Close relative container
+    html += '</div>'; // Close padding container
+
+    return html;
+}
+
 // 3. Accessibility Section - REAL-TIME UPDATES
 function createAccessibilitySection() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
@@ -452,63 +518,33 @@ function createAccessibilitySection() {
                     },
                     { height: 30 },
 
-                    // Contrast Level - Button Style
+                    // Contrast Level - Step Indicator
                     {
                         view: "template",
-                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:15px;'>🔆 Contrast Level</div>",
+                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:20px;'>🔆 Contrast Level</div>",
                         height: 40,
                         borderless: true
                     },
                     {
-                        cols: [
-                            {},
-                            {
-                                view: "button",
-                                id: "contrastLow",
-                                value: "Low",
-                                width: 100,
-                                css: (user.contrast_level === 'low') ? "webix_primary" : "",
-                                click: function () {
-                                    handleContrastChange('low');
+                        view: "template",
+                        id: "contrastStepIndicator",
+                        template: function () {
+                            return createStepIndicator(user.contrast_level || 'normal');
+                        }(),
+                        height: 100,
+                        borderless: true,
+                        onClick: {
+                            "step-circle": function (e, id) {
+                                const level = e.target.getAttribute('data-level');
+                                if (level) {
+                                    handleContrastChange(level);
+                                    // Update visual
+                                    this.setHTML(createStepIndicator(level));
                                 }
-                            },
-                            { width: 15 },
-                            {
-                                view: "button",
-                                id: "contrastNormal",
-                                value: "Normal",
-                                width: 100,
-                                css: (user.contrast_level === 'normal' || !user.contrast_level) ? "webix_primary" : "",
-                                click: function () {
-                                    handleContrastChange('normal');
-                                }
-                            },
-                            { width: 15 },
-                            {
-                                view: "button",
-                                id: "contrastHigh",
-                                value: "High",
-                                width: 100,
-                                css: (user.contrast_level === 'high') ? "webix_primary" : "",
-                                click: function () {
-                                    handleContrastChange('high');
-                                }
-                            },
-                            { width: 15 },
-                            {
-                                view: "button",
-                                id: "contrastHighest",
-                                value: "Highest",
-                                width: 100,
-                                css: (user.contrast_level === 'highest') ? "webix_primary" : "",
-                                click: function () {
-                                    handleContrastChange('highest');
-                                }
-                            },
-                            {}
-                        ]
+                            }
+                        }
                     },
-                    { height: 30 }
+                    { height: 20 },
                 ]
             }
         ]
@@ -593,32 +629,14 @@ async function handleAccessibilityChange(setting, value) {
     }
 }
 
-// Handler: Contrast Change with Button Highlighting
+// Handler: Contrast Change with Step Indicator Update
 function handleContrastChange(level) {
     console.log('Contrast level changed to:', level);
 
-    // Update button styles
-    const buttons = {
-        'low': 'contrastLow',
-        'normal': 'contrastNormal',
-        'high': 'contrastHigh',
-        'highest': 'contrastHighest'
-    };
-
-    // Remove highlight from all buttons
-    Object.values(buttons).forEach(btnId => {
-        const btn = $$(btnId);
-        if (btn) {
-            btn.define("css", "");
-            btn.refresh();
-        }
-    });
-
-    // Highlight selected button
-    const selectedBtn = $$(buttons[level]);
-    if (selectedBtn) {
-        selectedBtn.define("css", "webix_primary");
-        selectedBtn.refresh();
+    // Update visual indicator
+    const indicator = $$("contrastStepIndicator");
+    if (indicator) {
+        indicator.setHTML(createStepIndicator(level));
     }
 
     // Apply and save
