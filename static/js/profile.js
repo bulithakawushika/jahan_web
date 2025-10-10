@@ -31,13 +31,18 @@ function createProfilePage() {
                     }
                 ]
             },
-            // Main content area with loading message
+            // Main content area with animated loading
             {
                 id: "profileContentArea",
                 rows: [
                     {
                         view: "template",
-                        template: "<div style='text-align:center; padding:100px; font-size:20px; color:#7f8c8d;'><i class='wxi-sync' style='font-size:40px; animation: spin 1s linear infinite;'></i><br><br>Loading profile...</div>",
+                        template: `
+                            <div style='text-align:center; padding:150px 50px;'>
+                                <div class='loading-spinner'></div>
+                                <div style='font-size:20px; color:#7f8c8d; margin-top:30px; font-weight:500;'>Loading profile...</div>
+                            </div>
+                        `,
                         borderless: true
                     }
                 ]
