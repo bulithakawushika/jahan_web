@@ -11,6 +11,18 @@ class CustomUser(AbstractUser):
     job_role = models.CharField(max_length=100, blank=True, null=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
+
+    # Notification settings
+    send_public_notifications = models.BooleanField(default=True)
+    notification_preference = models.CharField(
+        max_length=20,
+        choices=[
+            ('all', 'All Notifications'),
+            ('company', 'Company Only'),
+            ('none', 'None'),
+        ],
+        default='all'
+    )
     
     # Privacy settings (we'll use this later)
     profile_visibility = models.CharField(

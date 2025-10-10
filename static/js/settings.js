@@ -356,7 +356,10 @@ function createAccessibilitySection() {
 }
 
 // 4. Notifications Section (Placeholder)
+// 4. Notifications Section - WITH SETTINGS
 function createNotificationsSection() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+
     return {
         rows: [
             {
@@ -366,13 +369,95 @@ function createNotificationsSection() {
                 borderless: true
             },
             {
-                view: "template",
-                template: "<div style='padding:30px; background:white; border-radius:10px; color:#7f8c8d; font-size:16px; box-shadow:0 2px 5px rgba(0,0,0,0.1); margin:0 20px;'>Notification settings coming soon...</div>",
-                height: 100,
-                borderless: true
+                view: "form",
+                id: "notificationSettingsForm",
+                css: "settings_form",
+                elements: [
+                    // Send Public Notifications Toggle
+                    {
+                        view: "template",
+                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:5px;'>Public Notifications</div>",
+                        height: 30,
+                        borderless: true
+                    },
+                    {
+                        view: "template",
+                        template: "<div style='font-size:14px; color:#7f8c8d; margin-bottom:15px; line-height:1.6;'>If you don't want to send notifications to others about your personal details changes (like address changes), you can disable it. Company notifications (job role changes) will always be sent.</div>",
+                        height: 60,
+                        borderless: true
+                    },
+                    {
+                        view: "checkbox",
+                        id: "sendPublicNotifications",
+                        labelRight: "Send public notifications when I update my address",
+                        value: user.send_public_notifications
+                    },
+                    { height: 30 },
+                    // Notification Preferences
+                    {
+                        view: "template",
+                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:15px;'>Notification Preferences</div>",
+                        height: 40,
+                        borderless: true
+                    },
+                    {
+                        view: "radio",
+                        id: "notificationPreference",
+                        vertical: true,
+                        value: user.notification_preference,
+                        options: [
+                            { id: "all", value: "All Notifications - Receive both company and public updates" },
+                            { id: "company", value: "Company Only - Only receive job role change notifications" },
+                            { id: "none", value: "None - Don't receive any notifications" }
+                        ]
+                    },
+                    { height: 20 },
+                    {
+                        cols: [
+                            {},
+                            {
+                                view: "button",
+                                value: "Save Notification Settings",
+                                css: "webix_primary",
+                                width: 220,
+                                click: handleSaveNotificationSettings
+                            },
+                            {}
+                        ]
+                    }
+                ]
             }
         ]
     };
+}
+
+// Handler: Save Notification Settings
+async function handleSaveNotificationSettings() {
+    const sendPublic = $$("sendPublicNotifications").getValue();
+    const preference = $$("notificationPreference").getValue();
+
+    webix.message({
+        type: "info",
+        text: "Saving notification settings..."
+    });
+
+    const result = await apiCall(API_CONFIG.ENDPOINTS.NOTIFICATION_SETTINGS, 'POST', {
+        send_public_notifications: sendPublic,
+        notification_preference: preference
+    });
+
+    if (result.success) {
+        localStorage.setItem('currentUser', JSON.stringify(result.user));
+        webix.message({
+            type: "success",
+            text: "Notification settings saved successfully!"
+        });
+    } else {
+        webix.message({
+            type: "error",
+            text: result.message || "Failed to save notification settings"
+        });
+    }
 }
 
 // Handler: Save Account Details

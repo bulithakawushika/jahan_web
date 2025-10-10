@@ -11,7 +11,10 @@ const API_CONFIG = {
         UPDATE_ACCOUNT: '/api/users/update-account/',
         VERIFY_PASSWORD: '/api/users/verify-password/',
         CHANGE_PASSWORD: '/api/users/change-password/',
-        UPDATE_PRIVACY: '/api/users/update-privacy/'
+        UPDATE_PRIVACY: '/api/users/update-privacy/',
+        NOTIFICATIONS: '/api/users/notifications/',
+        MARK_NOTIFICATION_READ: '/api/users/notifications/',
+        NOTIFICATION_SETTINGS: '/api/users/notification-settings/'
     }
 };
 

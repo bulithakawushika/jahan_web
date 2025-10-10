@@ -15,6 +15,14 @@ function createHomePage() {
                     {},
                     {
                         view: "button",
+                        id: "notificationBadge",
+                        value: "Notifications",
+                        width: 140,
+                        badge: 0,
+                        click: showNotificationsPage
+                    },
+                    {
+                        view: "button",
                         value: "Profile",
                         width: 100,
                         click: showProfilePage

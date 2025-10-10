@@ -119,3 +119,23 @@ function showSettingsPage() {
         loadSettingsData();
     }, 100);
 }
+
+// Show Notifications Page
+function showNotificationsPage() {
+    if (mainApp) {
+        mainApp.destructor();
+    }
+
+    mainApp = webix.ui({
+        container: "app",
+        id: "mainApp",
+        rows: [createNotificationsPage()]
+    });
+
+    currentPage = "notifications";
+
+    // Load notifications
+    setTimeout(function () {
+        loadNotifications();
+    }, 100);
+}

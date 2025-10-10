@@ -161,6 +161,9 @@ async function handleLogin() {
         // Store user data
         localStorage.setItem('currentUser', JSON.stringify(result.user));
 
+        // Check for unread notifications
+        checkUnreadNotifications();
+
         // Redirect to home page
         showHomePage();
     } else {
