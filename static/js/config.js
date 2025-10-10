@@ -14,7 +14,8 @@ const API_CONFIG = {
         UPDATE_PRIVACY: '/api/users/update-privacy/',
         NOTIFICATIONS: '/api/users/notifications/',
         MARK_NOTIFICATION_READ: '/api/users/notifications/',
-        NOTIFICATION_SETTINGS: '/api/users/notification-settings/'
+        NOTIFICATION_SETTINGS: '/api/users/notification-settings/',
+        ACCESSIBILITY_SETTINGS: '/api/users/accessibility-settings/'
     }
 };
 

@@ -414,3 +414,91 @@ def update_notification_settings(request):
         'message': 'Notification settings updated',
         'user': UserSerializer(user).data
     })
+
+
+@api_view(['POST'])
+def update_accessibility_settings(request):
+    """
+    Update user's accessibility preferences
+    """
+    if not request.user.is_authenticated:
+        return Response({
+            'success': False,
+            'message': 'Not authenticated'
+        }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    user = request.user
+    
+    # Update accessibility settings
+    if 'keyboard_navigation' in request.data:
+        user.keyboard_navigation = request.data['keyboard_navigation']
+    
+    if 'screen_reader' in request.data:
+        user.screen_reader = request.data['screen_reader']
+    
+    if 'font_size' in request.data:
+        font_size = request.data['font_size']
+        if font_size in ['small', 'medium', 'large']:
+            user.font_size = font_size
+    
+    if 'theme' in request.data:
+        theme = request.data['theme']
+        if theme in ['light', 'dark', 'standard']:
+            user.theme = theme
+    
+    if 'contrast_level' in request.data:
+        contrast = request.data['contrast_level']
+        if contrast in ['normal', 'high', 'higher', 'highest']:
+            user.contrast_level = contrast
+    
+    user.save()
+    
+    return Response({
+        'success': True,
+        'message': 'Accessibility settings updated',
+        'user': UserSerializer(request.user).data
+    })
+
+@api_view(['GET'])
+def check_auth(request):
+    """
+    Check if user is authenticated
+    """
+    if request.user.is_authenticated:
+        return Response({
+            'authenticated': True,
+            'user': UserSerializer(request.user).data
+        })
+    return Response({
+        'authenticated': False
+    })
+
+@api_view(['POST'])
+def login_user(request):
+    """
+    Login user
+    """
+    serializer = UserLoginSerializer(data=request.data)
+    if serializer.is_valid():
+        username = serializer.validated_data['username']
+        password = serializer.validated_data['password']
+        
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            return Response({
+                'success': True,
+                'message': 'Login successful',
+                'user': UserSerializer(user).data  # Full user data with settings
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'success': False,
+                'message': 'Invalid username or password'
+            }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    return Response({
+        'success': False,
+        'errors': serializer.errors
+    }, status=status.HTTP_400_BAD_REQUEST)

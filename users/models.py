@@ -24,6 +24,38 @@ class CustomUser(AbstractUser):
         default='all'
     )
     
+    # Accessibility settings
+    keyboard_navigation = models.BooleanField(default=True)  # Changed to True
+    screen_reader = models.BooleanField(default=False)
+    font_size = models.CharField(
+        max_length=20,
+        choices=[
+            ('small', 'Small'),
+            ('medium', 'Medium'),
+            ('large', 'Large'),
+        ],
+        default='medium'
+    )
+    theme = models.CharField(
+        max_length=20,
+        choices=[
+            ('light', 'Light Theme'),
+            ('dark', 'Dark Theme'),
+            ('standard', 'Standard Theme'),
+        ],
+        default='standard'
+    )
+    contrast_level = models.CharField(
+        max_length=20,
+        choices=[
+            ('low', 'Low Contrast'),
+            ('normal', 'Normal Contrast'),
+            ('high', 'High Contrast'),
+            ('highest', 'Highest Contrast'),
+        ],
+        default='normal'
+    )
+    
     # Privacy settings (we'll use this later)
     profile_visibility = models.CharField(
         max_length=20,

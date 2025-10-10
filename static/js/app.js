@@ -16,6 +16,10 @@ async function checkAuthentication() {
 
     if (result.authenticated) {
         localStorage.setItem('currentUser', JSON.stringify(result.user));
+
+        // Load user settings
+        loadUserSettings();
+
         showHomePage();
     } else {
         localStorage.removeItem('currentUser');
@@ -138,4 +142,21 @@ function showNotificationsPage() {
     setTimeout(function () {
         loadNotifications();
     }, 100);
+}
+
+// Load User Settings After Login
+function loadUserSettings() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    if (user) {
+        console.log('Loading user settings:', user);
+
+        // Apply all accessibility settings
+        AccessibilityManager.applyFontSize(user.font_size || 'medium');
+        AccessibilityManager.applyTheme(user.theme || 'standard');
+        AccessibilityManager.applyContrast(user.contrast_level || 'normal');
+        AccessibilityManager.applyKeyboardNavigation(user.keyboard_navigation !== false);
+        AccessibilityManager.applyScreenReader(user.screen_reader || false);
+
+        console.log('User settings loaded and applied');
+    }
 }

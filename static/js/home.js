@@ -321,6 +321,9 @@ async function performSearch() {
             homeContent.addView(createResultsView(result.results, query));
         }
 
+        // Read results for screen reader
+        AccessibilityManager.readSearchResults(result.results);
+
         webix.message({
             type: "success",
             text: `Found ${result.results.length} result(s)`

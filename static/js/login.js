@@ -161,6 +161,9 @@ async function handleLogin() {
         // Store user data
         localStorage.setItem('currentUser', JSON.stringify(result.user));
 
+        // Load user settings immediately
+        loadUserSettings();
+
         // Check for unread notifications
         checkUnreadNotifications();
 

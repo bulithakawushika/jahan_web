@@ -335,8 +335,10 @@ function createPrivacySecuritySection(user) {
     };
 }
 
-// 3. Accessibility Section (Placeholder)
+// 3. Accessibility Section - REAL-TIME UPDATES
 function createAccessibilitySection() {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+
     return {
         rows: [
             {
@@ -346,16 +348,326 @@ function createAccessibilitySection() {
                 borderless: true
             },
             {
-                view: "template",
-                template: "<div style='padding:30px; background:white; border-radius:10px; color:#7f8c8d; font-size:16px; box-shadow:0 2px 5px rgba(0,0,0,0.1); margin:0 20px;'>Accessibility settings coming soon...</div>",
-                height: 100,
-                borderless: true
+                view: "form",
+                id: "accessibilitySettingsForm",
+                css: "settings_form",
+                elements: [
+                    // Keyboard Navigation
+                    {
+                        view: "template",
+                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:5px;'>⌨️ Keyboard Navigation</div>",
+                        height: 35,
+                        borderless: true
+                    },
+                    {
+                        view: "template",
+                        template: "<div style='font-size:14px; color:#7f8c8d; margin-bottom:10px;'>Use arrow keys to navigate between form fields and Enter to click buttons.</div>",
+                        height: 40,
+                        borderless: true
+                    },
+                    {
+                        view: "checkbox",
+                        id: "keyboardNavigation",
+                        labelRight: "Enable keyboard navigation",
+                        value: user.keyboard_navigation !== false,
+                        on: {
+                            onChange: function (newVal) {
+                                handleAccessibilityChange('keyboard_navigation', newVal);
+                            }
+                        }
+                    },
+                    { height: 30 },
+
+                    // Screen Reader
+                    {
+                        view: "template",
+                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:5px;'>🔊 Screen Reader Compatibility</div>",
+                        height: 35,
+                        borderless: true
+                    },
+                    {
+                        view: "template",
+                        template: "<div style='font-size:14px; color:#7f8c8d; margin-bottom:10px;'>Enable audio announcements for search results and important updates.</div>",
+                        height: 40,
+                        borderless: true
+                    },
+                    {
+                        view: "checkbox",
+                        id: "screenReader",
+                        labelRight: "Enable screen reader support",
+                        value: user.screen_reader || false,
+                        on: {
+                            onChange: function (newVal) {
+                                handleAccessibilityChange('screen_reader', newVal);
+                            }
+                        }
+                    },
+                    { height: 30 },
+
+                    // Font Size
+                    {
+                        view: "template",
+                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:15px;'>📏 Font Size</div>",
+                        height: 40,
+                        borderless: true
+                    },
+                    {
+                        view: "segmented",
+                        id: "fontSize",
+                        value: user.font_size || 'medium',
+                        options: [
+                            { id: "small", value: "Small" },
+                            { id: "medium", value: "Medium" },
+                            { id: "large", value: "Large" }
+                        ],
+                        on: {
+                            onChange: function (newVal) {
+                                handleAccessibilityChange('font_size', newVal);
+                            }
+                        }
+                    },
+                    { height: 30 },
+
+                    // Theme
+                    {
+                        view: "template",
+                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:15px;'>🎨 Theme</div>",
+                        height: 40,
+                        borderless: true
+                    },
+                    {
+                        view: "segmented",
+                        id: "theme",
+                        value: user.theme || 'standard',
+                        options: [
+                            { id: "light", value: "☀️ Light" },
+                            { id: "standard", value: "⚙️ Standard" },
+                            { id: "dark", value: "🌙 Dark" }
+                        ],
+                        on: {
+                            onChange: function (newVal) {
+                                handleAccessibilityChange('theme', newVal);
+                            }
+                        }
+                    },
+                    { height: 30 },
+
+                    // Contrast Level - Button Style
+                    {
+                        view: "template",
+                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:15px;'>🔆 Contrast Level</div>",
+                        height: 40,
+                        borderless: true
+                    },
+                    {
+                        cols: [
+                            {},
+                            {
+                                view: "button",
+                                id: "contrastLow",
+                                value: "Low",
+                                width: 100,
+                                css: (user.contrast_level === 'low') ? "webix_primary" : "",
+                                click: function () {
+                                    handleContrastChange('low');
+                                }
+                            },
+                            { width: 15 },
+                            {
+                                view: "button",
+                                id: "contrastNormal",
+                                value: "Normal",
+                                width: 100,
+                                css: (user.contrast_level === 'normal' || !user.contrast_level) ? "webix_primary" : "",
+                                click: function () {
+                                    handleContrastChange('normal');
+                                }
+                            },
+                            { width: 15 },
+                            {
+                                view: "button",
+                                id: "contrastHigh",
+                                value: "High",
+                                width: 100,
+                                css: (user.contrast_level === 'high') ? "webix_primary" : "",
+                                click: function () {
+                                    handleContrastChange('high');
+                                }
+                            },
+                            { width: 15 },
+                            {
+                                view: "button",
+                                id: "contrastHighest",
+                                value: "Highest",
+                                width: 100,
+                                css: (user.contrast_level === 'highest') ? "webix_primary" : "",
+                                click: function () {
+                                    handleContrastChange('highest');
+                                }
+                            },
+                            {}
+                        ]
+                    },
+                    { height: 30 }
+                ]
             }
         ]
     };
 }
 
-// 4. Notifications Section (Placeholder)
+// Helper: Convert contrast level to slider value
+function getContrastValue(level) {
+    const map = {
+        'low': 0,
+        'normal': 1,
+        'high': 2,
+        'highest': 3
+    };
+    return map[level] || 1;
+}
+
+// Helper: Convert slider value to contrast level
+function getContrastLevel(value) {
+    const map = {
+        0: 'low',
+        1: 'normal',
+        2: 'high',
+        3: 'highest'
+    };
+    return map[value] || 'normal';
+}
+
+// Helper: Get contrast label
+function getContrastLabel(value) {
+    const map = {
+        0: 'Low Contrast',
+        1: 'Normal Contrast',
+        2: 'High Contrast',
+        3: 'Highest Contrast'
+    };
+    return map[value] || 'Normal Contrast';
+}
+
+// Handler: Real-time Accessibility Change
+async function handleAccessibilityChange(setting, value) {
+    console.log('Accessibility change:', setting, value);
+
+    // Apply immediately
+    switch (setting) {
+        case 'keyboard_navigation':
+            AccessibilityManager.applyKeyboardNavigation(value);
+            break;
+        case 'screen_reader':
+            AccessibilityManager.applyScreenReader(value);
+            break;
+        case 'font_size':
+            AccessibilityManager.applyFontSize(value);
+            break;
+        case 'theme':
+            AccessibilityManager.applyTheme(value);
+            break;
+        case 'contrast_level':
+            AccessibilityManager.applyContrast(value);
+            // Update label
+            const label = $$("contrastLevelLabel");
+            if (label) {
+                label.setHTML(`<div style='text-align:center; font-size:16px; color:#7f8c8d;'>${getContrastLabel(getContrastValue(value))}</div>`);
+            }
+            break;
+    }
+
+    // Save to backend
+    const data = {};
+    data[setting] = value;
+
+    const result = await apiCall(API_CONFIG.ENDPOINTS.ACCESSIBILITY_SETTINGS, 'POST', data);
+
+    if (result.success) {
+        // Update localStorage
+        localStorage.setItem('currentUser', JSON.stringify(result.user));
+    } else {
+        webix.message({
+            type: "error",
+            text: "Failed to save setting"
+        });
+    }
+}
+
+// Handler: Contrast Change with Button Highlighting
+function handleContrastChange(level) {
+    console.log('Contrast level changed to:', level);
+
+    // Update button styles
+    const buttons = {
+        'low': 'contrastLow',
+        'normal': 'contrastNormal',
+        'high': 'contrastHigh',
+        'highest': 'contrastHighest'
+    };
+
+    // Remove highlight from all buttons
+    Object.values(buttons).forEach(btnId => {
+        const btn = $$(btnId);
+        if (btn) {
+            btn.define("css", "");
+            btn.refresh();
+        }
+    });
+
+    // Highlight selected button
+    const selectedBtn = $$(buttons[level]);
+    if (selectedBtn) {
+        selectedBtn.define("css", "webix_primary");
+        selectedBtn.refresh();
+    }
+
+    // Apply and save
+    handleAccessibilityChange('contrast_level', level);
+}
+
+// Handler: Save Accessibility Settings
+async function handleSaveAccessibilitySettings() {
+    const keyboardNav = $$("keyboardNavigation").getValue();
+    const screenReader = $$("screenReader").getValue();
+    const fontSize = $$("fontSize").getValue();
+    const theme = $$("theme").getValue();
+    const contrastLevel = $$("contrastLevel").getValue();
+
+    webix.message({
+        type: "info",
+        text: "Saving accessibility settings..."
+    });
+
+    const result = await apiCall(API_CONFIG.ENDPOINTS.ACCESSIBILITY_SETTINGS, 'POST', {
+        keyboard_navigation: keyboardNav,
+        screen_reader: screenReader,
+        font_size: fontSize,
+        theme: theme,
+        contrast_level: contrastLevel
+    });
+
+    if (result.success) {
+        localStorage.setItem('currentUser', JSON.stringify(result.user));
+
+        // Apply settings immediately
+        AccessibilityManager.applyFontSize(fontSize);
+        AccessibilityManager.applyTheme(theme);
+        AccessibilityManager.applyContrast(contrastLevel);
+        AccessibilityManager.applyKeyboardNavigation(keyboardNav);
+        AccessibilityManager.applyScreenReader(screenReader);
+
+        webix.message({
+            type: "success",
+            text: "Accessibility settings saved and applied!"
+        });
+    } else {
+        webix.message({
+            type: "error",
+            text: result.message || "Failed to save accessibility settings"
+        });
+    }
+}
+
 // 4. Notifications Section - WITH SETTINGS
 function createNotificationsSection() {
     const user = JSON.parse(localStorage.getItem('currentUser'));

@@ -346,6 +346,9 @@ function handleRegistrationResponse(result) {
         // Store user data
         localStorage.setItem('currentUser', JSON.stringify(result.user));
 
+        // Load default user settings
+        loadUserSettings();
+
         // Redirect to home page after 1 second
         setTimeout(() => {
             showHomePage();
