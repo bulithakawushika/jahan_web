@@ -7,7 +7,11 @@ const API_CONFIG = {
         LOGOUT: '/api/users/logout/',
         CHECK_AUTH: '/api/users/check-auth/',
         SEARCH: '/api/users/search/',
-        PROFILE: '/api/users/profile/'
+        PROFILE: '/api/users/profile/',
+        UPDATE_ACCOUNT: '/api/users/update-account/',
+        VERIFY_PASSWORD: '/api/users/verify-password/',
+        CHANGE_PASSWORD: '/api/users/change-password/',
+        UPDATE_PRIVACY: '/api/users/update-privacy/'
     }
 };
 

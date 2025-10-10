@@ -168,9 +168,7 @@ function displayProfileContent(user) {
                                     value: "Edit Profile",
                                     css: "webix_primary",
                                     height: 50,
-                                    click: function () {
-                                        webix.message("Redirecting to Settings...");
-                                    }
+                                    click: showSettingsPage
                                 },
                                 { height: 50 }
                             ]

@@ -10,4 +10,8 @@ urlpatterns = [
     path('check-auth/', views.check_auth, name='check_auth'),
     path('search/', views.search_users, name='search_users'),
     path('profile/', views.get_profile, name='get_profile'),
+    path('update-account/', views.update_account_details, name='update_account'),
+    path('verify-password/', views.verify_current_password, name='verify_password'),
+    path('change-password/', views.change_password, name='change_password'),
+    path('update-privacy/', views.update_privacy_settings, name='update_privacy'),
 ]

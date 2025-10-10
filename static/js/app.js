@@ -99,3 +99,23 @@ function showProfilePage() {
         fetchProfileFromDatabase();
     }, 100);
 }
+
+// Show Settings Page
+function showSettingsPage() {
+    if (mainApp) {
+        mainApp.destructor();
+    }
+
+    mainApp = webix.ui({
+        container: "app",
+        id: "mainApp",
+        rows: [createSettingsPage()]
+    });
+
+    currentPage = "settings";
+
+    // Load settings data
+    setTimeout(function () {
+        loadSettingsData();
+    }, 100);
+}

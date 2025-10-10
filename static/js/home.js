@@ -21,6 +21,12 @@ function createHomePage() {
                     },
                     {
                         view: "button",
+                        value: "Settings",
+                        width: 100,
+                        click: showSettingsPage
+                    },
+                    {
+                        view: "button",
                         value: "Logout",
                         width: 100,
                         click: handleLogout

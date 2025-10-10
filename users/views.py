@@ -131,3 +131,134 @@ def get_profile(request):
         'success': True,
         'user': UserSerializer(request.user).data
     })
+
+@api_view(['PUT'])
+def update_account_details(request):
+    """
+    Update user account details
+    """
+    if not request.user.is_authenticated:
+        return Response({
+            'success': False,
+            'message': 'Not authenticated'
+        }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    user = request.user
+    
+    # Update fields
+    user.first_name = request.data.get('first_name', user.first_name)
+    user.last_name = request.data.get('last_name', user.last_name)
+    user.username = request.data.get('username', user.username)
+    user.email = request.data.get('email', user.email)
+    user.job_role = request.data.get('job_role', user.job_role)
+    user.birthday = request.data.get('birthday', user.birthday)
+    user.address = request.data.get('address', user.address)
+    
+    try:
+        user.save()
+        return Response({
+            'success': True,
+            'message': 'Account details updated successfully',
+            'user': UserSerializer(user).data
+        })
+    except Exception as e:
+        return Response({
+            'success': False,
+            'message': str(e)
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def verify_current_password(request):
+    """
+    Verify current password
+    """
+    if not request.user.is_authenticated:
+        return Response({
+            'success': False,
+            'message': 'Not authenticated'
+        }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    current_password = request.data.get('current_password')
+    
+    if request.user.check_password(current_password):
+        return Response({
+            'success': True,
+            'message': 'Password verified'
+        })
+    else:
+        return Response({
+            'success': False,
+            'message': 'Current password is incorrect'
+        })
+
+
+@api_view(['POST'])
+def change_password(request):
+    """
+    Change user password
+    """
+    if not request.user.is_authenticated:
+        return Response({
+            'success': False,
+            'message': 'Not authenticated'
+        }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    current_password = request.data.get('current_password')
+    new_password = request.data.get('new_password')
+    confirm_password = request.data.get('confirm_password')
+    
+    # Verify current password
+    if not request.user.check_password(current_password):
+        return Response({
+            'success': False,
+            'message': 'Current password is incorrect'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Check if new passwords match
+    if new_password != confirm_password:
+        return Response({
+            'success': False,
+            'message': 'New passwords do not match'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Update password
+    request.user.set_password(new_password)
+    request.user.save()
+    
+    # Re-login user with new password
+    login(request, request.user)
+    
+    return Response({
+        'success': True,
+        'message': 'Password changed successfully'
+    })
+
+
+@api_view(['POST'])
+def update_privacy_settings(request):
+    """
+    Update privacy settings
+    """
+    if not request.user.is_authenticated:
+        return Response({
+            'success': False,
+            'message': 'Not authenticated'
+        }, status=status.HTTP_401_UNAUTHORIZED)
+    
+    profile_visibility = request.data.get('profile_visibility')
+    
+    if profile_visibility not in ['public', 'private']:
+        return Response({
+            'success': False,
+            'message': 'Invalid privacy setting'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    request.user.profile_visibility = profile_visibility
+    request.user.save()
+    
+    return Response({
+        'success': True,
+        'message': f'Privacy set to {profile_visibility}',
+        'user': UserSerializer(request.user).data
+    })
