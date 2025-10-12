@@ -86,20 +86,20 @@ function createRegisterPage() {
         id: "registerPage",
         rows: [
             {
-                height: isMobile ? 10 : 20
+                view: "template",
+                template: "<div style='text-align:center; font-size:28px; font-weight:bold; color:#34495e; padding:20px;'>Create Account</div>",
+                height: 80,
+                borderless: true
             },
+
             {
+                
                 cols: [
-                    { gravity: 1 },
+                    { gravity: 0.8 },
                     {
                         width: formWidth,
                         rows: [
-                            {
-                                view: "template",
-                                template: "<div style='text-align:center; font-size:28px; font-weight:bold; color:#34495e;'>Create Account</div>",
-                                height: 50,
-                                borderless: true
-                            },
+                            
                             {
                                 view: "form",
                                 id: "registerForm",
@@ -396,8 +396,8 @@ function createRegisterPage() {
                     },
                     { gravity: 1 }
                 ]
-            },
-            { height: isMobile ? 10 : 20 }
+            }
+            
         ]
     };
 }
