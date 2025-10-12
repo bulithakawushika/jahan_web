@@ -212,6 +212,7 @@ function createRegisterPage() {
                                             }
                                         ]
                                     },
+                                    { height: 10 },
                                     // Birthday - Year, Month, Day
                                     {
                                         view: "template",
@@ -228,11 +229,11 @@ function createRegisterPage() {
                                                 label: "Year",
                                                 placeholder: "Year",
                                                 height: 49,
-                                                labelWidth: 150,
+                                                labelWidth: 60,
                                                 css: "label-font-size",
                                                 options: getYearOptions()
                                             },
-                                            { width: 10 },
+                                            { width: 20 },
                                             {
                                                 view: "richselect",
                                                 name: "birth_month",
@@ -243,21 +244,21 @@ function createRegisterPage() {
                                                 css: "label-font-size",
                                                 options: getMonthOptions()
                                             },
-                                            { width: 10 },
+                                            { width: 20 },
                                             {
                                                 view: "richselect",
                                                 name: "birth_day",
                                                 label: "Day",
                                                 placeholder: "Day",
                                                 height: 49,
-                                                labelWidth: 50,
+                                                labelWidth: 60,
                                                 css: "label-font-size",
                                                 options: getDayOptions()
                                             },
                                         ]
                                     },
 
-
+                                    {height:10},
                                     // Address
                                     {
                                         view: "textarea",
