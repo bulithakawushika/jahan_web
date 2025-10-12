@@ -495,7 +495,11 @@ body {
 body,
 html {
     overflow: hidden;
-    /* height: 100vh; */
+    height: 100vh;
     margin: 0;
     padding: 0;
 }
+
+ .webix_template {
+    padding: 0;
+ }

@@ -156,8 +156,34 @@ function createMobileLoginPage() {
         id: "loginPage",
         type: "clean",
         css: "login_page_container",
+        height: window.innerHeight, 
         rows: [
-            { gravity: 1 },
+            {
+                view: "template",
+                template: `
+                         <div class="wave-container">
+                        <svg viewBox="0 0 1440 150" preserveAspectRatio="none" class="wave-svg flipped">
+                            <path d="M0,50 C360,150 1080,0 1440,100 L1440,150 L0,150 Z" fill="#3296d8ff"></path>
+                        </svg>
+                    </div>
+                    <style>
+                        .wave-container {
+                            width: 100%;
+                            overflow: hidden;
+                            line-height: 0;
+                        }
+                        .wave-svg {
+                            display: block;
+                            width: 100%;
+                            height: 200px;
+                        }
+                        .wave-svg.flipped {
+                            transform: scaleY(-1);
+                        }
+                    </style>
+                        `,
+                borderless: true
+            },          
             {
                 cols: [
                     { gravity: 0.1 },
@@ -169,7 +195,38 @@ function createMobileLoginPage() {
                     { gravity: 0.2 }
                     ] 
             },
-            { gravity: 1}
+            {
+                view: "template",
+                template: `
+        <div style="position: relative; height: 100%; width: 100%;">
+            <!-- Other content here -->
+
+            <div class="wave-bottom-container">
+                <svg viewBox="0 0 1440 150" preserveAspectRatio="none" class="wave-bottom-svg">
+                    <path d="M0,50 C360,150 1080,0 1440,100 L1440,150 L0,150 Z" fill="#3296d8ff"></path>
+                </svg>
+            </div>
+
+            <style>
+                .wave-bottom-container {
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 100%;
+                    overflow: hidden;
+                    line-height: 0;
+                }
+                .wave-bottom-svg {
+                    display: block;
+                    width: 100%;
+                    height: 200px;
+                }
+            </style>
+        </div>
+    `,
+                borderless: true,
+            }
+
         ]
     };
 }
