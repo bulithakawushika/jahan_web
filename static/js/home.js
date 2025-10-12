@@ -8,11 +8,14 @@ function createHomePage() {
                 view: "toolbar",
                 height: 60,
                 elements: [
-                    {
-                        view: "label",
-                        label: "Home"
-                    },
                     {},
+                    {
+                        view: "button",
+                        id: "HomeBadge",
+                        value: "Home",
+                        width: 140,
+                        click: showHomePage
+                    },
                     {
                         view: "button",
                         id: "notificationBadge",
@@ -24,21 +27,22 @@ function createHomePage() {
                     {
                         view: "button",
                         value: "Profile",
-                        width: 100,
+                        width: 140,
                         click: showProfilePage
                     },
                     {
                         view: "button",
                         value: "Settings",
-                        width: 100,
+                        width: 140,
                         click: showSettingsPage
                     },
                     {
                         view: "button",
                         value: "Logout",
-                        width: 100,
+                        width: 140,
                         click: handleLogout
-                    }
+                    },
+                    {}
                 ]
             },
             // Main content area
