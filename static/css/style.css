@@ -467,6 +467,10 @@ body {
 .webix_input_icon {
     cursor: pointer;
     color: #7f8c8d;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    /* ensures full height for vertical centering */
 }
 
 .webix_input_icon:hover {
@@ -482,4 +486,16 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+.login_page_container {
+    overflow: hidden !important;
+}
+
+body,
+html {
+    overflow: hidden;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
 }

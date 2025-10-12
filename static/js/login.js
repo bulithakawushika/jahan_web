@@ -1,18 +1,21 @@
 // Toggle password visibility
 function toggleLoginPasswordVisibility() {
-    const input = $$("loginPassword");
-    if (!input) return;
+    const form = $("loginForm");
+    if (!form) return;
 
-    const node = input.getInputNode();
+    const passwordField = form.elements["password"];
+    if (!passwordField) return;
+
+    const node = passwordField.getInputNode();
 
     if (node.type === "password") {
         node.type = "text";
-        input.config.icon = "wxi-eye-slash";
+        passwordField.config.icon = "wxi-eye-slash";
     } else {
         node.type = "password";
-        input.config.icon = "wxi-eye";
+        passwordField.config.icon = "wxi-eye";
     }
-    input.refresh();
+    passwordField.refresh();
 }
 
 // Create Login Form Component
@@ -20,168 +23,153 @@ function createLoginFormUI() {
     return {
         rows: [
             {
-                // Flex-like centering using Webix layout
-                gravity: 1,
-                cols: [
-                    {
+                view: "template",
+                template: "<div style='font-size:32px; font-weight:bold'>Welcome to Jahan.ai</div>",
+                height: 50,
+                borderless: true
+            },
+            {
+                view: "template",
+                template: "<div style='font-size:18px; color:#7f8c8d; margin-top:5px;'>Sign in to continue</div>",
+                height: 40,
+                borderless: true
+            },
 
-                        rows: [
-                            {
-                                rows: [
-                                    {
-                                        view: "template",
-                                        template: `
-                                            <div style="
-                                                display: flex;
-                                                justify-content: center;
-                                                align-items: center;
-                                                height: 100vh;
-                                            "></div>
-                                         `,
-                                        borderless: true,
-                                        height: 95,
-                                    },
-                                    {
-                                        view: "template",
-                                        template: "<div style='text-align:left; font-size:32px; font-weight:bold; color:#2c3e50;'>Welcome to Jahan.ai</div>",
-                                        height: 50,
-                                        borderless: true
-                                    },
-                                    {
-                                        view: "template",
-                                        template: "<div style='text-align:left; font-size:20px; color:#7f8c8d; margin-top:5px;'>Sign in to continue</div>",
-                                        height: 35,
-                                        borderless: true
-                                    },
-                                    { height: 20 },
-                                    {
-                                        view: "form",
-                                        id: "loginForm",
-                                        width: 400,
-                                        height: 300,
-                                        elements: [
-                                            {
-                                                view: "text",
-                                                name: "username",
-                                                label: "Username",
-                                                placeholder: "Enter your username",
-                                                labelPosition: "top",
-                                                required: true
-                                            },
-                                            { height: 15 },
-                                            {
-                                                view: "text",
-                                                type: "password",
-                                                id: "loginPassword",
-                                                name: "password",
-                                                label: "Password",
-                                                placeholder: "Enter your password",
-                                                labelPosition: "top",
-                                                required: true,
-                                                icon: "wxi-eye",
-                                                on: {
-                                                    onIconClick: function () {
-                                                        toggleLoginPasswordVisibility();
-                                                    }
-                                                }
-                                            },
-                                            { height: 25 },
-                                            {
-                                                view: "button",
-                                                value: "Login",
-                                                css: "webix_primary",
-                                                height: 45,
-                                                click: handleLogin
-                                            },
-                                            { height: 20 },
-                                            {
-                                                view: "template",
-                                                template: "<div style='text-align:center; font-size:14px; color:#7f8c8d;'>Don't have an account? <a href='#' onclick='showRegisterPage(); return false;' style='color:#3498db; font-weight:600; text-decoration:none;'>Register here</a></div>",
-                                                height: 30,
-                                                borderless: true
-                                            }
-                                        ],
-                                        rules: {
-                                            username: webix.rules.isNotEmpty,
-                                            password: webix.rules.isNotEmpty
-                                        }
-                                    }
-                                ]
-                            },
-                            {}, // bottom space (for vertical centering)
-                        ]
+            {
+                view: "form",
+                id: "loginForm",
+                maxWidth: 450,
+                padding: 5,
+                elements: [
+                    {
+                        view: "text",
+                        name: "username",
+                        label: "Username",
+                        placeholder: "Enter your username",
+                        labelPosition: "top",
+                        required: true,
+                        height: 80
                     },
-                    {width:130} // right space
-                ]
+                    {
+                        view: "search",
+                        type: "password",
+                        name: "password",
+                        label: "Password",
+                        placeholder: "Enter your password",
+                        labelPosition: "top",
+                        required: true,
+                        icon: "wxi-eye",
+                        on: {
+                            onSearchIconClick: function (e) {
+                                const input = this.getInputNode();
+                                webix.html.removeCss(e.target, "wxi-eye-slash");
+                                webix.html.removeCss(e.target, "wxi-eye");
+                                if (input.type == "text") {
+                                    webix.html.addCss(e.target, "wxi-eye");
+                                    input.type = "password";
+                                } else {
+                                    webix.html.addCss(e.target, "wxi-eye-slash");
+                                    input.type = "text";
+                                }
+                            }
+                        },
+                        height: 80
+                    },
+
+                    {
+                        view: "button",
+                        value: "Login",
+                        css: "webix_primary",
+                        height: 45,
+                        click: handleLogin 
+                    },
+                    {
+                        view: "template",
+                        template: "<div style='font-size:16px; color:#7f8c8d;'>Don't have an account? <a href='#' onclick='showRegisterPage(); return false;' style='color:#3498db; font-weight:600; text-decoration:none;'>Register here</a></div>",
+                        height: 30,
+                        borderless: true
+                    }
+                ],
+                rules: {
+                    username: webix.rules.isNotEmpty,
+                    password: webix.rules.isNotEmpty
+                }
             }
         ]
     };
 }
 
-// Create Desktop Login Page (Split Screen)
+// Create Desktop Login Page (50:50 Split - Image and Form)
 function createDesktopLoginPage() {
     return {
         id: "loginPage",
+        type: "clean",
+        css: "login_page_container",
         cols: [
-            // Left side - Image Only
+            // Left side - Image (50%)
             {
-                width: 740,
+                gravity: 1,
                 rows: [
                     {
                         view: "template",
                         template: `
-                                <div style="
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    height: 100vh;
-                                ">
-                                    <div style="
-                                        width: 530px;
-                                        height: 585px;
-                                        background: url('/static/images/login_image.png');
-                                        background-size: cover;
-                                        background-position: center;
-                                        background-repeat: no-repeat;
-                                    "></div>
-                                </div>
+                            <div style="
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                height: 100%;
+                                width: 100%;
+                            ">
+                                <img src="/static/images/login_image.png" 
+                                     style="max-width: 80%; max-height: 80%; object-fit: contain;" 
+                                     alt="Login Image" />
+                            </div>
                         `,
-                        borderless: true,
-                        height: 700
+                        borderless: true
                     }
                 ]
             },
-            // Right side - Login Form
+            // Right side - Login Form (50%)
             {
                 gravity: 1,
                 rows: [
+                    { gravity: 0.7 },
                     {
                         cols: [
-                            {},
-                            createLoginFormUI(),
-                            {}
+                            {
+                                gravity: 1,
+                                rows: [createLoginFormUI()]
+                            },
+                            { gravity: 0.1 }
                         ]
-                    }
+                    },
+                    { gravity: 1 }
                 ]
             }
         ]
     };
 }
 
-// Create Mobile/Tablet Login Page (Centered)
+// Create Mobile/Tablet Login Page (Centered, No Image)
 function createMobileLoginPage() {
     return {
         id: "loginPage",
+        type: "clean",
+        css: "login_page_container",
         rows: [
-            { height: 20 },
+            { gravity: 1 },
             {
                 cols: [
-                    { width: 20 },
-                    createLoginFormUI(),
-                    { width: 20 }
-                ]
+                    { gravity: 0.1 },
+                        {
+                        maxWidth: 700,
+                        rows: [
+                            createLoginFormUI()
+                        ]},
+                    { gravity: 0.2 }
+                    ] 
             },
-            { height: 20 }
+            { gravity: 1}
         ]
     };
 }
@@ -190,11 +178,11 @@ function createMobileLoginPage() {
 function createLoginPage() {
     const screenWidth = window.innerWidth;
 
-    // Desktop view (> 768px)
-    if (screenWidth > 768) {
+    // Desktop view (> 1024px) - Show 50:50 split
+    if (screenWidth > 1024) {
         return createDesktopLoginPage();
     } else {
-        // Mobile/Tablet view (<= 768px)
+        // Mobile/Tablet view (<= 1024px) - Centered form only
         return createMobileLoginPage();
     }
 }
