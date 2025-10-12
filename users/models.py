@@ -6,12 +6,55 @@ class CustomUser(AbstractUser):
     Extended User model with additional profile fields
     """
     email = models.EmailField(unique=True, blank=False)
+    
+    # Personal Information
+    phone_number = models.CharField(max_length=20, blank=False)
+    department = models.CharField(max_length=100, blank=False)
+    gender = models.CharField(
+        max_length=30,
+        choices=[
+            ('male', 'Male'),
+            ('female', 'Female'),
+            ('not_preferred', 'Prefer not to say'),
+        ],
+        blank=True,
+        null=True
+    )
+    marital_status = models.CharField(
+        max_length=20,
+        choices=[
+            ('single', 'Single'),
+            ('married', 'Married'),
+            ('divorced', 'Divorced'),
+            ('separated', 'Separated'),
+        ],
+        blank=True,
+        null=True
+    )
+    
+    # Birthday stored as separate fields for easier selection
+    birth_year = models.IntegerField(blank=True, null=True)
+    birth_month = models.IntegerField(blank=True, null=True)
+    birth_day = models.IntegerField(blank=True, null=True)
+    
+    # Keep birthday as a computed property
     birthday = models.DateField(null=True, blank=True)
+    
     address = models.TextField(blank=True, null=True)
-    job_role = models.CharField(max_length=100, blank=True, null=True)
     profile_photo = models.ImageField(upload_to='profile_photos/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
-
+    job_role = models.CharField(max_length=100, blank=True, null=True)
+    
+    # Privacy settings
+    profile_visibility = models.CharField(
+        max_length=20,
+        choices=[
+            ('public', 'Public'),
+            ('private', 'Private'),
+        ],
+        default='public'
+    )
+    
     # Notification settings
     send_public_notifications = models.BooleanField(default=True)
     notification_preference = models.CharField(
@@ -25,7 +68,7 @@ class CustomUser(AbstractUser):
     )
     
     # Accessibility settings
-    keyboard_navigation = models.BooleanField(default=True)  # Changed to True
+    keyboard_navigation = models.BooleanField(default=True)
     screen_reader = models.BooleanField(default=False)
     font_size = models.CharField(
         max_length=20,
@@ -56,18 +99,18 @@ class CustomUser(AbstractUser):
         default='normal'
     )
     
-    # Privacy settings (we'll use this later)
-    profile_visibility = models.CharField(
-        max_length=20,
-        choices=[
-            ('public', 'Public'),
-            ('private', 'Private'),
-        ],
-        default='public'
-    )
-    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    def save(self, *args, **kwargs):
+        # Construct birthday from year, month, day if provided
+        if self.birth_year and self.birth_month and self.birth_day:
+            try:
+                from datetime import date
+                self.birthday = date(self.birth_year, self.birth_month, self.birth_day)
+            except ValueError:
+                pass
+        super().save(*args, **kwargs)
     
     def __str__(self):
         return self.username

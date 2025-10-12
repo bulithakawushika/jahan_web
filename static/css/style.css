@@ -419,3 +419,67 @@ body {
 .step-circle:active {
     transform: scale(1.1);
 }
+
+/* Login Page Styles */
+.webix_form .webix_inp_label {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+.webix_form input {
+    font-size: 15px;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.webix_form .webix_el_box input {
+    height: 45px;
+}
+
+/* Login button hover effect */
+.webix_primary:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+.webix_primary:active {
+    transform: translateY(0);
+}
+
+/* Responsive form width */
+@media (max-width: 768px) {
+    #loginForm {
+        width: 100% !important;
+        max-width: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    #loginForm {
+        width: 100% !important;
+        max-width: 350px;
+    }
+}
+
+/* Password icon styling */
+.webix_input_icon {
+    cursor: pointer;
+    color: #7f8c8d;
+}
+
+.webix_input_icon:hover {
+    color: #2c3e50;
+}
+
+/* Login image container */
+
+.login_image {
+    width: 507px;
+    height: 560px;
+    background: url('/static/images/login_image.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

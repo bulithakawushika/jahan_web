@@ -1,3 +1,16 @@
+// Update photo display with filename and green tick
+function updatePhotoDisplay(filename) {
+    const display = $$("photoDisplay");
+    if (display) {
+        display.setHTML(`
+            <div style="display: flex; align-items: center; padding: 5px;">
+                <span style="color: #27ae60; font-size: 20px; margin-right: 8px;">✓</span>
+                <span style="color: #2c3e50; font-size: 14px;">${filename}</span>
+            </div>
+        `);
+    }
+}
+
 // Toggle password visibility
 function togglePasswordVisibility(inputId) {
     const input = $$(inputId);
@@ -15,17 +28,40 @@ function togglePasswordVisibility(inputId) {
     input.refresh();
 }
 
-// Update photo display with filename and green tick
-function updatePhotoDisplay(filename) {
-    const display = $$("photoDisplay");
-    if (display) {
-        display.setHTML(`
-            <div style="display: flex; align-items: center; padding: 5px;">
-                <span style="color: #27ae60; font-size: 20px; margin-right: 8px;">✓</span>
-                <span style="color: #2c3e50; font-size: 14px;">${filename}</span>
-            </div>
-        `);
+// Generate year options (1925 - 2025)
+function getYearOptions() {
+    const years = [];
+    for (let year = 2025; year >= 1925; year--) {
+        years.push({ id: year, value: year.toString() });
     }
+    return years;
+}
+
+// Generate month options
+function getMonthOptions() {
+    return [
+        { id: 1, value: "January" },
+        { id: 2, value: "February" },
+        { id: 3, value: "March" },
+        { id: 4, value: "April" },
+        { id: 5, value: "May" },
+        { id: 6, value: "June" },
+        { id: 7, value: "July" },
+        { id: 8, value: "August" },
+        { id: 9, value: "September" },
+        { id: 10, value: "October" },
+        { id: 11, value: "November" },
+        { id: 12, value: "December" }
+    ];
+}
+
+// Generate day options (1-31)
+function getDayOptions() {
+    const days = [];
+    for (let day = 1; day <= 31; day++) {
+        days.push({ id: day, value: day.toString() });
+    }
+    return days;
 }
 
 // Register Page UI
@@ -34,13 +70,13 @@ function createRegisterPage() {
         id: "registerPage",
         rows: [
             {
-                height: 50
+                height: 30
             },
             {
                 cols: [
                     { width: 20 },
                     {
-                        width: 700,
+                        width: 800,
                         rows: [
                             {
                                 view: "template",
@@ -53,102 +89,144 @@ function createRegisterPage() {
                                 id: "registerForm",
                                 scroll: true,
                                 elements: [
+                                    // Name fields
                                     {
                                         cols: [
                                             {
                                                 view: "text",
                                                 name: "first_name",
-                                                label: "First Name",
+                                                label: "First Name *",
                                                 placeholder: "Enter first name",
                                                 labelWidth: 150,
-                                                required: true,
-                                                invalidMessage: "First name is required"
+                                                required: true
                                             },
+                                            { width: 20 },
                                             {
                                                 view: "text",
                                                 name: "last_name",
-                                                label: "Last Name",
+                                                label: "Last Name *",
                                                 placeholder: "Enter last name",
                                                 labelWidth: 150,
-                                                required: true,
-                                                invalidMessage: "Last name is required"
+                                                required: true
                                             }
                                         ]
                                     },
+                                    // Username and Email
                                     {
                                         view: "text",
                                         name: "username",
-                                        label: "Username",
+                                        label: "Username *",
                                         placeholder: "Choose a username",
                                         labelWidth: 150,
-                                        required: true,
-                                        invalidMessage: "Username is required"
+                                        required: true
                                     },
                                     {
                                         view: "text",
                                         name: "email",
-                                        label: "Email",
+                                        label: "Email *",
                                         placeholder: "Enter your email",
                                         labelWidth: 150,
-                                        required: true,
-                                        invalidMessage: "Valid email is required"
+                                        required: true
                                     },
+                                    // Phone and Department
+                                    {
+                                        cols: [
+                                            {
+                                                view: "text",
+                                                name: "phone_number",
+                                                label: "Phone Number *",
+                                                placeholder: "Enter phone number",
+                                                labelWidth: 150,
+                                                required: true
+                                            },
+                                            { width: 20 },
+                                            {
+                                                view: "text",
+                                                name: "department",
+                                                label: "Department *",
+                                                placeholder: "Enter department",
+                                                labelWidth: 150,
+                                                required: true
+                                            }
+                                        ]
+                                    },
+                                    // Gender and Marital Status
+                                    {
+                                        cols: [
+                                            {
+                                                view: "richselect",
+                                                name: "gender",
+                                                label: "Gender",
+                                                placeholder: "Select gender (Optional)",
+                                                labelWidth: 150,
+                                                options: [
+                                                    { id: "male", value: "Male" },
+                                                    { id: "female", value: "Female" },
+                                                    { id: "not_preferred", value: "Prefer not to say" }
+                                                ]
+                                            },
+                                            { width: 20 },
+                                            {
+                                                view: "richselect",
+                                                name: "marital_status",
+                                                label: "Marital Status",
+                                                placeholder: "Select status (Optional)",
+                                                labelWidth: 150,
+                                                options: [
+                                                    { id: "single", value: "Single" },
+                                                    { id: "married", value: "Married" },
+                                                    { id: "divorced", value: "Divorced" },
+                                                    { id: "separated", value: "Separated" }
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    // Birthday - Year, Month, Day
+                                    {
+                                        view: "template",
+                                        template: "<div style='font-size:14px; color:#7f8c8d; margin:10px 0 5px 0;'>Date of Birth (Optional)</div>",
+                                        height: 30,
+                                        borderless: true
+                                    },
+                                    {
+                                        cols: [
+                                            {
+                                                view: "richselect",
+                                                name: "birth_year",
+                                                label: "Year",
+                                                placeholder: "Year",
+                                                labelWidth: 150,
+                                                options: getYearOptions()
+                                            },
+                                            { width: 10 },
+                                            {
+                                                view: "richselect",
+                                                name: "birth_month",
+                                                label: "Month",
+                                                placeholder: "Month",
+                                                labelWidth: 60,
+                                                options: getMonthOptions()
+                                            },
+                                            { width: 10 },
+                                            {
+                                                view: "richselect",
+                                                name: "birth_day",
+                                                label: "Day",
+                                                placeholder: "Day",
+                                                labelWidth: 50,
+                                                options: getDayOptions()
+                                            }
+                                        ]
+                                    },
+                                    // Job Role
                                     {
                                         view: "text",
-                                        type: "password",
-                                        id: "registerPassword",
-                                        name: "password",
-                                        label: "Password",
-                                        placeholder: "Create a password",
-                                        labelWidth: 150,
-                                        required: true,
-                                        invalidMessage: "Password is required",
-                                        icon: "wxi-eye",
-                                        on: {
-                                            onAfterRender: function () {
-                                                const iconNode = this.$view.querySelector('.webix_input_icon');
-                                                if (iconNode) {
-                                                    iconNode.onclick = function (e) {
-                                                        e.stopPropagation();
-                                                        togglePasswordVisibility("registerPassword");
-                                                    };
-                                                }
-                                            }
-                                        }
+                                        name: "job_role",
+                                        label: "Job Role",
+                                        placeholder: "Enter your job role (Optional)",
+                                        labelWidth: 150
                                     },
-                                    {
-                                        view: "text",
-                                        type: "password",
-                                        id: "registerConfirmPassword",
-                                        name: "re_password",
-                                        label: "Confirm Password",
-                                        placeholder: "Re-enter password",
-                                        labelWidth: 150,
-                                        required: true,
-                                        invalidMessage: "Please confirm your password",
-                                        icon: "wxi-eye",
-                                        on: {
-                                            onAfterRender: function () {
-                                                const iconNode = this.$view.querySelector('.webix_input_icon');
-                                                if (iconNode) {
-                                                    iconNode.onclick = function (e) {
-                                                        e.stopPropagation();
-                                                        togglePasswordVisibility("registerConfirmPassword");
-                                                    };
-                                                }
-                                            }
-                                        }
-                                    },
-                                    {
-                                        view: "datepicker",
-                                        name: "birthday",
-                                        label: "Birthday",
-                                        placeholder: "Select date (Optional)",
-                                        labelWidth: 150,
-                                        format: "%Y-%m-%d",
-                                        stringResult: true,
-                                        editable: true
-                                    },
+                                    // Address
                                     {
                                         view: "textarea",
                                         name: "address",
@@ -157,13 +235,40 @@ function createRegisterPage() {
                                         labelWidth: 150,
                                         height: 80
                                     },
+                                    // Password fields
                                     {
                                         view: "text",
-                                        name: "job_role",
-                                        label: "Job Role",
-                                        placeholder: "Enter your job role (Optional)",
-                                        labelWidth: 150
+                                        type: "password",
+                                        id: "registerPassword",
+                                        name: "password",
+                                        label: "Password *",
+                                        placeholder: "Create a password",
+                                        labelWidth: 150,
+                                        required: true,
+                                        icon: "wxi-eye",
+                                        on: {
+                                            onIconClick: function () {
+                                                togglePasswordVisibility("registerPassword");
+                                            }
+                                        }
                                     },
+                                    {
+                                        view: "text",
+                                        type: "password",
+                                        id: "registerConfirmPassword",
+                                        name: "re_password",
+                                        label: "Confirm Password *",
+                                        placeholder: "Re-enter password",
+                                        labelWidth: 150,
+                                        required: true,
+                                        icon: "wxi-eye",
+                                        on: {
+                                            onIconClick: function () {
+                                                togglePasswordVisibility("registerConfirmPassword");
+                                            }
+                                        }
+                                    },
+                                    // Profile Photo
                                     {
                                         cols: [
                                             {
@@ -192,9 +297,8 @@ function createRegisterPage() {
                                             }
                                         ]
                                     },
-                                    {
-                                        margin: 15
-                                    },
+                                    { height: 20 },
+                                    // Buttons
                                     {
                                         cols: [
                                             {
@@ -204,9 +308,7 @@ function createRegisterPage() {
                                                 height: 45,
                                                 click: handleRegister
                                             },
-                                            {
-                                                width: 10
-                                            },
+                                            { width: 10 },
                                             {
                                                 view: "button",
                                                 value: "Back to Login",
@@ -217,15 +319,15 @@ function createRegisterPage() {
                                             }
                                         ]
                                     },
-                                    {
-                                        margin: 10
-                                    }
+                                    { height: 10 }
                                 ],
                                 rules: {
                                     first_name: webix.rules.isNotEmpty,
                                     last_name: webix.rules.isNotEmpty,
                                     username: webix.rules.isNotEmpty,
                                     email: webix.rules.isEmail,
+                                    phone_number: webix.rules.isNotEmpty,
+                                    department: webix.rules.isNotEmpty,
                                     password: webix.rules.isNotEmpty,
                                     re_password: webix.rules.isNotEmpty
                                 }
@@ -235,9 +337,7 @@ function createRegisterPage() {
                     { width: 20 }
                 ]
             },
-            {
-                height: 50
-            }
+            { height: 30 }
         ]
     };
 }
@@ -273,26 +373,6 @@ async function handleRegister() {
         return;
     }
 
-    // Format birthday to YYYY-MM-DD if it exists
-    if (values.birthday) {
-        // Check if birthday is a Date object
-        if (values.birthday instanceof Date) {
-            const year = values.birthday.getFullYear();
-            const month = String(values.birthday.getMonth() + 1).padStart(2, '0');
-            const day = String(values.birthday.getDate()).padStart(2, '0');
-            values.birthday = `${year}-${month}-${day}`;
-        } else if (typeof values.birthday === 'string' && !values.birthday.match(/^\d{4}-\d{2}-\d{2}$/)) {
-            // If it's a string but not in YYYY-MM-DD format
-            const date = new Date(values.birthday);
-            if (!isNaN(date.getTime())) {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                values.birthday = `${year}-${month}-${day}`;
-            }
-        }
-    }
-
     // Show loading
     webix.message({
         type: "info",
@@ -304,7 +384,6 @@ async function handleRegister() {
     const files = uploader ? uploader.files.data.pull : {};
 
     if (Object.keys(files).length > 0) {
-        // If there's a profile photo, use FormData
         const formData = new FormData();
 
         // Add all form fields
@@ -323,7 +402,6 @@ async function handleRegister() {
         handleRegistrationResponse(result);
     } else {
         // No file, use regular JSON
-        // Remove empty optional fields
         const cleanedValues = {};
         for (let key in values) {
             if (values[key] !== null && values[key] !== undefined && values[key] !== '') {
@@ -343,13 +421,9 @@ function handleRegistrationResponse(result) {
             text: "Registration successful! Redirecting to home..."
         });
 
-        // Store user data
         localStorage.setItem('currentUser', JSON.stringify(result.user));
-
-        // Load default user settings
         loadUserSettings();
 
-        // Redirect to home page after 1 second
         setTimeout(() => {
             showHomePage();
         }, 1000);
@@ -357,7 +431,6 @@ function handleRegistrationResponse(result) {
         let errorMessage = "Registration failed";
 
         if (result.errors) {
-            // Display specific field errors
             const errorList = [];
             for (let field in result.errors) {
                 const fieldErrors = result.errors[field];

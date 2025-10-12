@@ -335,7 +335,7 @@ function createPrivacySecuritySection(user) {
     };
 }
 
-// Create Step Indicator for Contrast Levels
+// Create Step Indicator for Contrast Levels - FIXED VERSION
 function createStepIndicator(selectedLevel) {
     const levels = [
         { value: 'low', label: 'Low' },
@@ -345,27 +345,29 @@ function createStepIndicator(selectedLevel) {
     ];
 
     const selectedIndex = levels.findIndex(l => l.value === selectedLevel);
+    const totalSteps = levels.length - 1;
 
-    let html = '<div style="padding: 20px 40px;">';
+    let html = '<div style="padding: 20px 60px;">';
+    html += '<div style="position: relative;">';
 
-    // Container for the line and circles
-    html += '<div style="position: relative; height: 60px;">';
+    // Wrapper for line and circles at same level
+    html += '<div style="position: relative; height: 24px; margin-bottom: 15px;">';
 
-    // Background line
-    html += '<div style="position: absolute; top: 20px; left: 0; right: 0; height: 4px; background: #e0e0e0; border-radius: 2px;"></div>';
+    // Background line (gray)
+    html += '<div style="position: absolute; top: 10px; left: 12px; right: 12px; height: 4px; background: #e0e0e0; border-radius: 2px;"></div>';
 
-    // Active line (progress)
-    const progressPercent = selectedIndex > 0 ? (selectedIndex / (levels.length - 1)) * 100 : 0;
-    html += `<div style="position: absolute; top: 20px; left: 0; width: ${progressPercent}%; height: 4px; background: #3498db; border-radius: 2px; transition: width 0.3s ease;"></div>`;
+    // Active line (blue) - from start to selected circle
+    if (selectedIndex >= 0) {
+        const activeWidth = (selectedIndex / totalSteps) * 100;
+        html += `<div style="position: absolute; top: 10px; left: 12px; width: calc(${activeWidth}% * (100% - 24px) / 100); height: 4px; background: #3498db; border-radius: 2px; transition: width 0.3s ease;"></div>`;
+    }
 
-    // Circles and labels container
-    html += '<div style="position: relative; display: flex; justify-content: space-between;">';
+    // Container for circles
+    html += '<div style="display: flex; justify-content: space-between; position: relative; z-index: 2;">';
 
     levels.forEach((level, index) => {
         const isActive = index <= selectedIndex;
         const isSelected = level.value === selectedLevel;
-
-        html += '<div style="display: flex; flex-direction: column; align-items: center; flex: 1;">';
 
         // Circle
         html += `<div class="step-circle" data-level="${level.value}" style="
@@ -376,25 +378,29 @@ function createStepIndicator(selectedLevel) {
             border: ${isSelected ? '4px' : '3px'} solid ${isActive ? '#2980b9' : '#bdc3c7'};
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
-            z-index: 2;
             ${isSelected ? 'box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);' : ''}
+            ${isSelected ? 'margin: -2px;' : ''}
         "></div>`;
+    });
 
-        // Label
+    html += '</div>'; // Close circles
+    html += '</div>'; // Close line wrapper
+
+    // Labels below
+    html += '<div style="display: flex; justify-content: space-between;">';
+    levels.forEach((level, index) => {
+        const isSelected = level.value === selectedLevel;
         html += `<div style="
-            margin-top: 12px;
+            flex: 1;
+            text-align: center;
             font-size: 13px;
             font-weight: ${isSelected ? '700' : '500'};
             color: ${isSelected ? '#2c3e50' : '#7f8c8d'};
-            text-align: center;
             transition: all 0.3s ease;
         ">${level.label}</div>`;
-
-        html += '</div>';
     });
+    html += '</div>'; // Close labels
 
-    html += '</div>'; // Close circles container
     html += '</div>'; // Close relative container
     html += '</div>'; // Close padding container
 

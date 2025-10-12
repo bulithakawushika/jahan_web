@@ -4,6 +4,7 @@ from django.contrib.auth.password_validation import validate_password
 
 User = get_user_model()
 
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     re_password = serializers.CharField(write_only=True, required=True)
@@ -11,11 +12,14 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email', 'password', 're_password', 'first_name', 
-          'last_name', 'birthday', 'address', 'job_role', 'profile_photo']
+                  'last_name', 'phone_number', 'department', 'gender', 'marital_status',
+                  'birth_year', 'birth_month', 'birth_day', 'address', 'job_role', 'profile_photo']
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True},
             'email': {'required': True},
+            'phone_number': {'required': True},
+            'department': {'required': True},
         }
     
     def validate(self, attrs):
@@ -38,7 +42,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 
-                  'birthday', 'address', 'job_role', 'profile_photo', 'bio', 
-                  'profile_visibility', 'send_public_notifications', 'notification_preference',
+                  'phone_number', 'department', 'gender', 'marital_status',
+                  'birth_year', 'birth_month', 'birth_day', 'birthday',
+                  'address', 'job_role', 'profile_photo', 'bio', 'profile_visibility',
+                  'send_public_notifications', 'notification_preference',
                   'keyboard_navigation', 'screen_reader', 'font_size', 'theme', 'contrast_level']
-        read_only_fields = ['id']
+        read_only_fields = ['id', 'birthday']
