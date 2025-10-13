@@ -172,7 +172,7 @@ function displayProfileContent(user) {
     console.log('Adding new profile view...');
 
     const screenWidth = window.innerWidth;
-    const isMobile = screenWidth <= 768;
+    const isMobile = screenWidth <= 1024;
 
     // Add profile content with responsive layout
     contentArea.addView({
@@ -180,16 +180,8 @@ function displayProfileContent(user) {
         scroll: "y",
         body: {
             rows: [
-                { height: 15 },
-                // Title
-                {
-                    view: "template",
-                    template: `<div style='text-align:center; font-size:${isMobile ? '28px' : '38px'}; font-weight:bold; color:#2c3e50;'>Profile</div>`,
-                    height: 50,
-                    borderless: true
-                },
-                { height: 25 },
-                // Profile Content
+                { height: 20 },
+                // Main Profile Layout
                 {
                     cols: [
                         { width: isMobile ? 20 : 40 },
@@ -200,7 +192,8 @@ function displayProfileContent(user) {
                         },
                         { width: isMobile ? 20 : 40 }
                     ]
-                }
+                },
+                { height: 20 }
             ]
         }
     });
@@ -208,82 +201,231 @@ function displayProfileContent(user) {
     console.log('Profile displayed successfully!');
 }
 
-// Desktop Profile Layout
+// Desktop Profile Layout - 3 equal columns in Row 1
 function createDesktopProfileLayout(user) {
+    const privacyColor = user.profile_visibility === 'public' ? '#27ae60' : '#e67e22';
+
     return [
+        // ROW 1: Profile Details, Work Details, Profile Picture (3 equal columns)
         {
+            height: 280,
             cols: [
-                // Left - Profile Picture
-                {
-                    width: 260,
-                    rows: [
-                        {
-                            view: "template",
-                            template: `
-                                <div style="text-align:center;">
-                                    <img src="${getProfilePhotoURL(user.profile_photo)}" 
-                                         style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 4px solid #3498db; box-shadow: 0 6px 15px rgba(0,0,0,0.15);" 
-                                         onerror="this.src='https://via.placeholder.com/200/3498db/ffffff?text=No+Photo'" />
-                                </div>
-                            `,
-                            height: 220,
-                            borderless: true
-                        }
-                    ]
-                },
-                { width: 30 },
-                // Right - Details
+                // Column 1 - Profile Details
                 {
                     gravity: 1,
                     rows: [
                         {
                             view: "template",
-                            template: buildProfileDetailsHTML(user),
-                            borderless: true,
-                            height: 500
+                            template: `
+                                <div style="background: white; border-radius: 12px; padding: 25px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); height: 85%;">
+                                    <div style="font-size: 22px; font-weight: 700; color: #2c3e50; margin-bottom: 20px; border-bottom: 3px solid #3498db; padding-bottom: 10px;">
+                                        Profile Details
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                        <div style="width: 130px; font-size: 13px; color: #7f8c8d; font-weight: 600;">First Name:</div>
+                                        <div style="flex: 1; font-size: 16px; color: #2c3e50; font-weight: 500;">${user.first_name || 'Not specified'}</div>
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                        <div style="width: 130px; font-size: 13px; color: #7f8c8d; font-weight: 600;">Last Name:</div>
+                                        <div style="flex: 1; font-size: 16px; color: #2c3e50; font-weight: 500;">${user.last_name || 'Not specified'}</div>
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                        <div style="width: 130px; font-size: 13px; color: #7f8c8d; font-weight: 600;">Username:</div>
+                                        <div style="flex: 1; font-size: 16px; color: #2c3e50; font-weight: 500;">@${user.username}</div>
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: center;">
+                                        <div style="width: 130px; font-size: 13px; color: #7f8c8d; font-weight: 600;">Privacy Status:</div>
+                                        <div style="flex: 1; font-size: 16px; color: ${privacyColor}; font-weight: 600; text-transform: capitalize;">
+                                            ${user.profile_visibility || 'Public'}
+                                        </div>
+                                    </div>
+                                </div>
+                            `,
+                            borderless: true
+                        }
+                    ]
+                },
+                { width: 20 },
+
+                // Column 2 - Work Details
+                {
+                    gravity: 1,
+                    rows: [
+                        {
+                            view: "template",
+                            template: `
+                                <div style="background: white; border-radius: 12px; padding: 25px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); height: 85%;">
+                                    <div style="font-size: 22px; font-weight: 700; color: #2c3e50; margin-bottom: 20px; border-bottom: 3px solid #3498db; padding-bottom: 10px;">
+                                        Work Details
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                                        <div style="width: 100px; font-size: 13px; color: #7f8c8d; font-weight: 600;">Job Role:</div>
+                                        <div style="flex: 1; font-size: 16px; color: #2c3e50; font-weight: 500;">${user.job_role || 'Not specified'}</div>
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: center;">
+                                        <div style="width: 100px; font-size: 13px; color: #7f8c8d; font-weight: 600;">Department:</div>
+                                        <div style="flex: 1; font-size: 16px; color: #2c3e50; font-weight: 500;">${user.department || 'Not specified'}</div>
+                                    </div>
+                                </div>
+                            `,
+                            borderless: true
+                        }
+                    ]
+                },
+                { width: 20 },
+
+                // Column 3 - Profile Picture (no white background)
+                {
+                    gravity: 1,
+                    rows: [
+                        {
+                            view: "template",
+                            template: `
+                                <div style="height: 83%; display: flex; align-items: center; justify-content: center;">
+                                    <img src="${getProfilePhotoURL(user.profile_photo)}" 
+                                         style="width: 220px; height: 220px; border-radius: 50%; object-fit: cover; border: 5px solid #3498db; box-shadow: 0 8px 20px rgba(0,0,0,0.15);" 
+                                         onerror="this.src='https://via.placeholder.com/220/3498db/ffffff?text=No+Photo'" />
+                                </div>
+                            `,
+                            borderless: true
                         }
                     ]
                 }
             ]
         },
-        { height: 40 },
-        // Edit Button
+        // ROW 2: Personal Details (single column with 2 internal columns)
         {
-            view: "button",
-            value: "Edit Profile",
-            css: "webix_primary",
-            height: 50,
-            click: showSettingsPage
+            height: 210,
+            rows: [
+                {
+                    view: "template",
+                    template: buildPersonalDetailsHTML(user),
+                    borderless: true
+                }
+            ]
         },
-        { height: 50 }
+        { height: 30 },
+
+        // ROW 3: Edit Button
+        {
+            height: 50,
+            cols: [
+                {},
+                {
+                    view: "button",
+                    value: "Edit Profile",
+                    css: "webix_primary",
+                    width: 200,
+                    height: 50,
+                    click: showSettingsPage
+                },
+                {}
+            ]
+        }
     ];
 }
 
 // Mobile Profile Layout
 function createMobileProfileLayout(user) {
+    const privacyColor = user.profile_visibility === 'public' ? '#27ae60' : '#e67e22';
+
     return [
         // Profile Picture
         {
             view: "template",
             template: `
-                <div style="text-align:center;">
+                <div style="text-align:center; margin-bottom: 15px;">
                     <img src="${getProfilePhotoURL(user.profile_photo)}" 
                          style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid #3498db; box-shadow: 0 6px 15px rgba(0,0,0,0.15);" 
                          onerror="this.src='https://via.placeholder.com/150/3498db/ffffff?text=No+Photo'" />
                 </div>
             `,
-            height: 170,
+            autoheight: true,
             borderless: true
         },
-        { height: 20 },
-        // Details
+
+        {height:20},
+
+        // Profile Details
         {
             view: "template",
-            template: buildProfileDetailsHTML(user, true),
-            borderless: true,
-            autoheight: true
+            template: `
+                <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 15px;">
+                    <div style="font-size: 20px; font-weight: 700; color: #2c3e50; margin-bottom: 15px; border-bottom: 3px solid #3498db; padding-bottom: 8px;">
+                        Profile Details
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <div style="width: 110px; font-size: 12px; color: #7f8c8d; font-weight: 600;">First Name:</div>
+                        <div style="flex: 1; font-size: 14px; color: #2c3e50; font-weight: 500;">${user.first_name || 'Not specified'}</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <div style="width: 110px; font-size: 12px; color: #7f8c8d; font-weight: 600;">Last Name:</div>
+                        <div style="flex: 1; font-size: 14px; color: #2c3e50; font-weight: 500;">${user.last_name || 'Not specified'}</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <div style="width: 110px; font-size: 12px; color: #7f8c8d; font-weight: 600;">Username:</div>
+                        <div style="flex: 1; font-size: 14px; color: #2c3e50; font-weight: 500;">@${user.username}</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center;">
+                        <div style="width: 110px; font-size: 12px; color: #7f8c8d; font-weight: 600;">Privacy Status:</div>
+                        <div style="flex: 1; font-size: 14px; color: ${privacyColor}; font-weight: 600; text-transform: capitalize;">
+                            ${user.profile_visibility || 'Public'}
+                        </div>
+                    </div>
+                </div>
+            `,
+            autoheight: true,
+            borderless: true
         },
-        { height: 30 },
+
+        { height: 20 },
+
+        // Work Details
+        {
+            view: "template",
+            template: `
+                <div style="background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 15px;">
+                    <div style="font-size: 20px; font-weight: 700; color: #2c3e50; margin-bottom: 15px; border-bottom: 3px solid #3498db; padding-bottom: 8px;">
+                        Work Details
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                        <div style="width: 110px; font-size: 12px; color: #7f8c8d; font-weight: 600;">Job Role:</div>
+                        <div style="flex: 1; font-size: 14px; color: #2c3e50; font-weight: 500;">${user.job_role || 'Not specified'}</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center;">
+                        <div style="width: 110px; font-size: 12px; color: #7f8c8d; font-weight: 600;">Department:</div>
+                        <div style="flex: 1; font-size: 14px; color: #2c3e50; font-weight: 500;">${user.department || 'Not specified'}</div>
+                    </div>
+                </div>
+            `,
+            autoheight: true,
+            borderless: true
+        },
+
+        { height: 20 },
+
+        // Personal Details
+        {
+            view: "template",
+            template: buildPersonalDetailsHTML(user, true),
+            autoheight: true,
+            borderless: true
+        },
+
+        { height: 20 },
+
         // Edit Button
         {
             view: "button",
@@ -296,94 +438,58 @@ function createMobileProfileLayout(user) {
     ];
 }
 
-// Build Profile Details HTML - Inline Layout
-function buildProfileDetailsHTML(user, isMobile = false) {
-    const privacyColor = user.profile_visibility === 'public' ? '#27ae60' : '#e67e22';
+// Build Personal Details HTML - Single box with 2 columns inside
+function buildPersonalDetailsHTML(user, isMobile = false) {
     const birthday = formatBirthday(user.birthday);
-    const padding = isMobile ? '25px 20px' : '35px 40px';
-    const fontSize = isMobile ? '16px' : '18px';
-    const labelWidth = isMobile ? '130px' : '160px';
-    const labelSize = isMobile ? '12px' : '13px';
-
-    // Format gender display
     const genderDisplay = formatGender(user.gender);
-
-    // Format marital status display
     const maritalStatusDisplay = formatMaritalStatus(user.marital_status);
+    const fontSize = isMobile ? '14px' : '16px';
+    const labelWidth = isMobile ? '110px' : '130px';
+    const labelSize = isMobile ? '12px' : '13px';
+    const titleSize = isMobile ? '20px' : '22px';
+    const marginBottom = isMobile ? '15px' : '0';
 
     return `
-        <div style="background: white; border-radius: 12px; padding: ${padding}; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
-            <!-- First Name -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">First Name:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${user.first_name || 'Not specified'}</div>
+        <div style="background: white; border-radius: 12px; padding: 25px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); height: 100%; margin-bottom: ${marginBottom};">
+            <div style="font-size: ${titleSize}; font-weight: 700; color: #2c3e50; margin-bottom: 20px; border-bottom: 3px solid #3498db; padding-bottom: 10px;">
+                Personal Details
             </div>
             
-            <!-- Last Name -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Last Name:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${user.last_name || 'Not specified'}</div>
-            </div>
-            
-            <!-- Username -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Username:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">@${user.username}</div>
-            </div>
-            
-            <!-- Email -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Email:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500; word-break: break-word;">${user.email || 'Not specified'}</div>
-            </div>
-            
-            <!-- Phone Number -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Phone Number:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${user.phone_number || 'Not specified'}</div>
-            </div>
-            
-            <!-- Department -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Department:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${user.department || 'Not specified'}</div>
-            </div>
-            
-            <!-- Job Role -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Job Role:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${user.job_role || 'Not specified'}</div>
-            </div>
-            
-            <!-- Gender -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Gender:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${genderDisplay}</div>
-            </div>
-            
-            <!-- Marital Status -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Marital Status:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${maritalStatusDisplay}</div>
-            </div>
-            
-            <!-- Birthday -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Birthday:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${birthday}</div>
-            </div>
-            
-            <!-- Address -->
-            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Address:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500; line-height: 1.5;">${user.address || 'Not specified'}</div>
-            </div>
-            
-            <!-- Privacy Status -->
-            <div style="display: flex; align-items: center;">
-                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Privacy Status:</div>
-                <div style="flex: 1; font-size: ${fontSize}; color: ${privacyColor}; font-weight: 600; text-transform: capitalize;">
-                    ${user.profile_visibility || 'Public'}
+            <div style="display: ${isMobile ? 'block' : 'flex'}; gap: 30px;">
+                <!-- Left Column -->
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Email:</div>
+                        <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500; word-break: break-word;">${user.email || 'Not specified'}</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Phone Number:</div>
+                        <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${user.phone_number || 'Not specified'}</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center;">
+                        <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Address:</div>
+                        <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500; line-height: 1.5;">${user.address || 'Not specified'}</div>
+                    </div>
+                </div>
+                
+                <!-- Right Column -->
+                <div style="flex: 1; ${isMobile ? 'margin-top: 15px;' : ''}">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Birthday:</div>
+                        <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${birthday}</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Gender:</div>
+                        <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${genderDisplay}</div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center;">
+                        <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Marital Status:</div>
+                        <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${maritalStatusDisplay}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -458,17 +564,4 @@ function showProfileError(message) {
         type: "error",
         text: message
     });
-}
-
-// Format Birthday
-function formatBirthday(birthday) {
-    if (!birthday) return 'Not specified';
-
-    try {
-        const date = new Date(birthday);
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return date.toLocaleDateString('en-US', options);
-    } catch (e) {
-        return 'Not specified';
-    }
 }
