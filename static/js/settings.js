@@ -1,35 +1,16 @@
-// Settings Page UI
-function createSettingsPage() {
+// ==========================================
+// RESPONSIVE PAGE CREATION - WITH NAVBAR
+// ==========================================
+
+// Create Desktop Settings Page (with Toolbar)
+function createDesktopSettingsPage() {
     return {
         id: "settingsPage",
         rows: [
-            // Toolbar
-            {
-                view: "toolbar",
-                height: 60,
-                elements: [
-                    {
-                        view: "button",
-                        value: "← Back to Profile",
-                        width: 150,
-                        click: showProfilePage
-                    },
-                    {
-                        view: "label",
-                        label: "Settings"
-                    },
-                    {},
-                    {
-                        view: "button",
-                        value: "Logout",
-                        width: 100,
-                        click: handleLogout
-                    }
-                ]
-            },
-            // Loading area
+            createNavigationBar('settings'), // ← NAVBAR ADDED HERE
             {
                 id: "settingsContentArea",
+                gravity: 1,
                 rows: [
                     {
                         view: "template",
@@ -42,10 +23,94 @@ function createSettingsPage() {
     };
 }
 
-// Load Settings Data
+// Create Mobile/Tablet Settings Page (with Sidebar)
+function createMobileSettingsPage() {
+    return {
+        id: "settingsPage",
+        width: window.innerWidth,
+        cols: [
+            // Sidebar Navigation
+            {
+                view: "sidebar",
+                id: "mainSidebar",
+                width: 250,
+                css: "mobile_sidebar",
+                hidden: true,
+                data: [
+                    { id: "home", value: "Home", icon: "mdi mdi-home" },
+                    { id: "notifications", value: "Notifications", icon: "mdi mdi-comment" },
+                    { id: "profile", value: "Profile", icon: "wxi-user" },
+                    { id: "settings", value: "Settings", icon: "mdi mdi-cogs" },
+                    { id: "logout", value: "Logout", icon: "wxi-angle-double-right" },
+                ],
+                on: {
+                    onAfterSelect: function (id) {
+                        handleSidebarNavigation(id);
+                        const sidebar = $$("mainSidebar");
+                        if (sidebar) {
+                            sidebar.hide();
+                            removeOutsideClickListener();
+                        }
+                    }
+                }
+            },
+            // Main Content Area
+            {
+                id: "mainContentArea",
+                gravity: 1,
+                rows: [
+                    {
+                        view: "toolbar",
+                        height: 40,
+                        css: "mobile_toolbar",
+                        elements: [
+                            {
+                                view: "button",
+                                id: "menuToggleBtn",
+                                type: "icon",
+                                css: "mobile_menu_button",
+                                icon: "wxi-dots",
+                                width: 50,
+                                click: function () {
+                                    toggleSidebar();
+                                }
+                            },
+                            {}
+                        ]
+                    },
+                    {
+                        id: "settingsContentArea",
+                        gravity: 1,
+                        rows: [
+                            {
+                                view: "template",
+                                template: "<div style='text-align:center; padding:100px;'><div class='loading-spinner'></div><br><br>Loading settings...</div>",
+                                borderless: true
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+}
+
+// Create Responsive Settings Page
+function createSettingsPage() {
+    const screenWidth = window.innerWidth;
+    if (screenWidth > 1024) {
+        return createDesktopSettingsPage();
+    } else {
+        return createMobileSettingsPage();
+    }
+}
+
+// ==========================================
+// LOAD SETTINGS DATA
+// ==========================================
+
 async function loadSettingsData() {
     const result = await apiCall(API_CONFIG.ENDPOINTS.PROFILE, 'GET');
-
     if (result.success && result.user) {
         displaySettingsContent(result.user);
     } else {
@@ -57,69 +122,75 @@ async function loadSettingsData() {
     }
 }
 
-// Display Settings Content - FIXED VERSION
+// ==========================================
+// DISPLAY SETTINGS CONTENT
+// ==========================================
+
 function displaySettingsContent(user) {
     console.log('Displaying settings for user:', user);
-
     const contentArea = $$("settingsContentArea");
-
     if (!contentArea) {
         console.error('settingsContentArea not found');
         return;
     }
 
-    // Remove loading view
     const children = contentArea.getChildViews();
     children.forEach(child => {
         contentArea.removeView(child);
     });
 
-    // Add scrollable content
+    const screenWidth = window.innerWidth;
+    const isMobile = screenWidth <= 768;
+    const padding = isMobile ? 20 : 40;
+
     contentArea.addView({
         view: "scrollview",
         scroll: "y",
         body: {
             rows: [
                 { height: 20 },
-                // Page Title
                 {
                     view: "template",
-                    template: "<div style='text-align:center; font-size:38px; font-weight:bold; color:#2c3e50;'>Settings</div>",
+                    template: `<div style='text-align:center; font-size:${isMobile ? '28px' : '38px'}; font-weight:bold; color:#2c3e50;'>Settings</div>`,
                     height: 60,
                     borderless: true
                 },
                 { height: 30 },
-                // ALL SETTINGS IN ONE COLUMN
                 {
-                    rows: [
-                        // 1. Account Details
-                        createAccountDetailsSection(user),
-                        { height: 40 },
-                        // 2. Privacy & Security
-                        createPrivacySecuritySection(user),
-                        { height: 40 },
-                        // 3. Accessibility
-                        createAccessibilitySection(),
-                        { height: 40 },
-                        // 4. Notifications
-                        createNotificationsSection(),
-                        { height: 50 }
+                    cols: [
+                        { width: padding },
+                        {
+                            rows: [
+                                createAccountDetailsSection(user, isMobile),
+                                { height: 40 },
+                                createPrivacySecuritySection(user, isMobile),
+                                { height: 40 },
+                                createAccessibilitySection(isMobile),
+                                { height: 40 },
+                                createNotificationsSection(isMobile),
+                                { height: 50 }
+                            ]
+                        },
+                        { width: padding }
                     ]
                 }
             ]
         }
     });
-
     console.log('Settings content displayed');
 }
 
-// 1. Account Details Section
-function createAccountDetailsSection(user) {
+// ==========================================
+// SECTION 1: ACCOUNT DETAILS
+// ==========================================
+
+function createAccountDetailsSection(user, isMobile = false) {
+    const labelWidth = isMobile ? 120 : 150;
     return {
         rows: [
             {
                 view: "template",
-                template: "<div style='font-size:28px; font-weight:700; color:#2c3e50; padding:0 30px; border-left:5px solid #3498db;'>📋 Account Details</div>",
+                template: `<div style='font-size:${isMobile ? '22px' : '28px'}; font-weight:700; color:#2c3e50; padding:0 ${isMobile ? '15px' : '30px'}; border-left:5px solid #3498db;'>📋 Account Details</div>`,
                 height: 50,
                 borderless: true
             },
@@ -128,52 +199,71 @@ function createAccountDetailsSection(user) {
                 id: "accountDetailsForm",
                 css: "settings_form",
                 elements: [
-                    {
-                        cols: [
-                            {
-                                view: "text",
-                                name: "first_name",
-                                label: "First Name",
-                                value: user.first_name,
-                                labelWidth: 150
-                            },
-                            { width: 20 },
-                            {
-                                view: "text",
-                                name: "last_name",
-                                label: "Last Name",
-                                value: user.last_name,
-                                labelWidth: 150
-                            }
-                        ]
-                    },
+                    isMobile ?
+                        {
+                            rows: [
+                                {
+                                    view: "text",
+                                    name: "first_name",
+                                    label: "First Name",
+                                    value: user.first_name,
+                                    labelWidth: labelWidth
+                                },
+                                {
+                                    view: "text",
+                                    name: "last_name",
+                                    label: "Last Name",
+                                    value: user.last_name,
+                                    labelWidth: labelWidth
+                                }
+                            ]
+                        } :
+                        {
+                            cols: [
+                                {
+                                    view: "text",
+                                    name: "first_name",
+                                    label: "First Name",
+                                    value: user.first_name,
+                                    labelWidth: labelWidth
+                                },
+                                { width: 20 },
+                                {
+                                    view: "text",
+                                    name: "last_name",
+                                    label: "Last Name",
+                                    value: user.last_name,
+                                    labelWidth: labelWidth
+                                }
+                            ]
+                        },
                     {
                         view: "text",
                         name: "username",
                         label: "Username",
                         value: user.username,
-                        labelWidth: 150
+                        labelWidth: labelWidth
                     },
                     {
                         view: "text",
                         name: "email",
                         label: "Email",
                         value: user.email,
-                        labelWidth: 150
+                        labelWidth: labelWidth
                     },
                     {
                         view: "text",
                         name: "job_role",
                         label: "Job Role",
                         value: user.job_role,
-                        labelWidth: 150
+                        labelWidth: labelWidth
                     },
                     {
                         view: "datepicker",
                         name: "birthday",
                         label: "Birthday",
                         value: user.birthday,
-                        labelWidth: 150,
+                        labelWidth: labelWidth,
                         format: "%Y-%m-%d",
                         stringResult: true
                     },
@@ -182,46 +272,70 @@ function createAccountDetailsSection(user) {
                         name: "address",
                         label: "Address",
                         value: user.address,
-                        labelWidth: 150,
+                        labelWidth: labelWidth,
                         height: 100
                     },
                     { height: 20 },
-                    {
-                        cols: [
-                            {},
-                            {
-                                view: "button",
-                                value: "Save Changes",
-                                css: "webix_primary",
-                                width: 150,
-                                click: handleSaveAccountDetails
-                            },
-                            { width: 15 },
-                            {
-                                view: "button",
-                                value: "Cancel",
-                                width: 120,
-                                click: function () {
-                                    $$("accountDetailsForm").setValues(user);
-                                    webix.message("Changes discarded");
+                    isMobile ?
+                        {
+                            rows: [
+                                {
+                                    view: "button",
+                                    value: "Save Changes",
+                                    css: "webix_primary",
+                                    click: handleSaveAccountDetails
+                                },
+                                { height: 10 },
+                                {
+                                    view: "button",
+                                    value: "Cancel",
+                                    click: function () {
+                                        $$("accountDetailsForm").setValues(user);
+                                        webix.message("Changes discarded");
+                                    }
                                 }
-                            },
-                            {}
-                        ]
-                    }
+                            ]
+                        } :
+                        {
+                            cols: [
+                                {},
+                                {
+                                    view: "button",
+                                    value: "Save Changes",
+                                    css: "webix_primary",
+                                    width: 150,
+                                    click: handleSaveAccountDetails
+                                },
+                                { width: 15 },
+                                {
+                                    view: "button",
+                                    value: "Cancel",
+                                    width: 120,
+                                    click: function () {
+                                        $$("accountDetailsForm").setValues(user);
+                                        webix.message("Changes discarded");
+                                    }
+                                },
+                                {}
+                            ]
+                        }
                 ]
             }
         ]
     };
 }
 
-// 2. Privacy & Security Section
-function createPrivacySecuritySection(user) {
+// ==========================================
+// SECTION 2: PRIVACY & SECURITY
+// ==========================================
+
+function createPrivacySecuritySection(user, isMobile = false) {
+    const labelWidth = isMobile ? 140 : 170;
     return {
         rows: [
             {
                 view: "template",
-                template: "<div style='font-size:28px; font-weight:700; color:#2c3e50; padding:0 30px; border-left:5px solid #e74c3c;'>🔒 Privacy & Security</div>",
+                template: `<div style='font-size:${isMobile ? '22px' : '28px'}; font-weight:700; color:#2c3e50; padding:0 ${isMobile ? '15px' : '30px'}; border-left:5px solid #e74c3c;'>🔒 Privacy & Security</div>`,
                 height: 50,
                 borderless: true
             },
@@ -232,7 +346,7 @@ function createPrivacySecuritySection(user) {
                 elements: [
                     {
                         view: "template",
-                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:10px;'>Change Password</div>",
+                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:10px;'>Change Password</div>`,
                         height: 40,
                         borderless: true
                     },
@@ -243,7 +357,7 @@ function createPrivacySecuritySection(user) {
                         name: "current_password",
                         label: "Current Password",
                         placeholder: "Enter current password",
-                        labelWidth: 170
+                        labelWidth: labelWidth
                     },
                     {
                         cols: [
@@ -251,7 +365,7 @@ function createPrivacySecuritySection(user) {
                             {
                                 view: "button",
                                 value: "Verify Password",
-                                width: 150,
+                                width: isMobile ? undefined : 150,
                                 click: handleVerifyPassword
                             },
                             {}
@@ -265,7 +379,7 @@ function createPrivacySecuritySection(user) {
                         name: "new_password",
                         label: "New Password",
                         placeholder: "Enter new password",
-                        labelWidth: 170,
+                        labelWidth: labelWidth,
                         disabled: true
                     },
                     {
@@ -275,7 +389,7 @@ function createPrivacySecuritySection(user) {
                         name: "confirm_password",
                         label: "Confirm Password",
                         placeholder: "Re-enter new password",
-                        labelWidth: 170,
+                        labelWidth: labelWidth,
                         disabled: true
                     },
                     { height: 15 },
@@ -287,7 +401,7 @@ function createPrivacySecuritySection(user) {
                                 id: "changePasswordBtn",
                                 value: "Change Password",
                                 css: "webix_primary",
-                                width: 180,
+                                width: isMobile ? undefined : 180,
                                 disabled: true,
                                 click: handleChangePassword
                             },
@@ -295,47 +409,74 @@ function createPrivacySecuritySection(user) {
                         ]
                     },
                     { height: 30 },
-                    // Profile Visibility
                     {
                         view: "template",
-                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:10px;'>Profile Visibility</div>",
+                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:10px;'>Profile Visibility</div>`,
                         height: 40,
                         borderless: true
                     },
-                    {
-                        cols: [
-                            {},
-                            {
-                                view: "button",
-                                id: "publicBtn",
-                                value: "🌐 Public",
-                                width: 150,
-                                css: user.profile_visibility === 'public' ? "webix_primary" : "",
-                                click: function () {
-                                    handlePrivacyChange('public');
+                    isMobile ?
+                        {
+                            rows: [
+                                {
+                                    view: "button",
+                                    id: "publicBtn",
+                                    value: "🌐 Public",
+                                    css: user.profile_visibility === 'public' ? "webix_primary" : "",
+                                    click: function () {
+                                        handlePrivacyChange('public');
+                                    }
+                                },
+                                { height: 15 },
+                                {
+                                    view: "button",
+                                    id: "privateBtn",
+                                    value: "🔒 Private",
+                                    css: user.profile_visibility === 'private' ? "webix_danger" : "",
+                                    click: function () {
+                                        handlePrivacyChange('private');
+                                    }
                                 }
-                            },
-                            { width: 30 },
-                            {
-                                view: "button",
-                                id: "privateBtn",
-                                value: "🔒 Private",
-                                width: 150,
-                                css: user.profile_visibility === 'private' ? "webix_danger" : "",
-                                click: function () {
-                                    handlePrivacyChange('private');
-                                }
-                            },
-                            {}
-                        ]
-                    }
+                            ]
+                        } :
+                        {
+                            cols: [
+                                {},
+                                {
+                                    view: "button",
+                                    id: "publicBtn",
+                                    value: "🌐 Public",
+                                    width: 150,
+                                    css: user.profile_visibility === 'public' ? "webix_primary" : "",
+                                    click: function () {
+                                        handlePrivacyChange('public');
+                                    }
+                                },
+                                { width: 30 },
+                                {
+                                    view: "button",
+                                    id: "privateBtn",
+                                    value: "🔒 Private",
+                                    width: 150,
+                                    css: user.profile_visibility === 'private' ? "webix_danger" : "",
+                                    click: function () {
+                                        handlePrivacyChange('private');
+                                    }
+                                },
+                                {}
+                            ]
+                        }
                 ]
             }
         ]
     };
 }
 
-// Create Step Indicator for Contrast Levels - FIXED VERSION
+// ==========================================
+// SECTION 3: ACCESSIBILITY SETTINGS
+// ==========================================
+
+// Create Step Indicator for Contrast Levels
 function createStepIndicator(selectedLevel) {
     const levels = [
         { value: 'low', label: 'Low' },
@@ -343,33 +484,23 @@ function createStepIndicator(selectedLevel) {
         { value: 'high', label: 'High' },
         { value: 'highest', label: 'Highest' }
     ];
-
     const selectedIndex = levels.findIndex(l => l.value === selectedLevel);
     const totalSteps = levels.length - 1;
 
     let html = '<div style="padding: 20px 60px;">';
     html += '<div style="position: relative;">';
-
-    // Wrapper for line and circles at same level
     html += '<div style="position: relative; height: 24px; margin-bottom: 15px;">';
-
-    // Background line (gray)
     html += '<div style="position: absolute; top: 10px; left: 12px; right: 12px; height: 4px; background: #e0e0e0; border-radius: 2px;"></div>';
 
-    // Active line (blue) - from start to selected circle
     if (selectedIndex >= 0) {
         const activeWidth = (selectedIndex / totalSteps) * 100;
         html += `<div style="position: absolute; top: 10px; left: 12px; width: calc(${activeWidth}% * (100% - 24px) / 100); height: 4px; background: #3498db; border-radius: 2px; transition: width 0.3s ease;"></div>`;
     }
 
-    // Container for circles
     html += '<div style="display: flex; justify-content: space-between; position: relative; z-index: 2;">';
-
     levels.forEach((level, index) => {
         const isActive = index <= selectedIndex;
         const isSelected = level.value === selectedLevel;
-
-        // Circle
         html += `<div class="step-circle" data-level="${level.value}" style="
             width: ${isSelected ? '24px' : '20px'};
             height: ${isSelected ? '24px' : '20px'};
@@ -382,40 +513,24 @@ function createStepIndicator(selectedLevel) {
             ${isSelected ? 'margin: -2px;' : ''}
         "></div>`;
     });
+    html += '</div></div>';
 
-    html += '</div>'; // Close circles
-    html += '</div>'; // Close line wrapper
-
-    // Labels below
     html += '<div style="display: flex; justify-content: space-between;">';
     levels.forEach((level, index) => {
         const isSelected = level.value === selectedLevel;
-        html += `<div style="
-            flex: 1;
-            text-align: center;
-            font-size: 13px;
-            font-weight: ${isSelected ? '700' : '500'};
-            color: ${isSelected ? '#2c3e50' : '#7f8c8d'};
-            transition: all 0.3s ease;
-        ">${level.label}</div>`;
+        html += `<div style="flex: 1; text-align: center; font-size: 13px; font-weight: ${isSelected ? '700' : '500'}; color: ${isSelected ? '#2c3e50' : '#7f8c8d'}; transition: all 0.3s ease;">${level.label}</div>`;
     });
-    html += '</div>'; // Close labels
-
-    html += '</div>'; // Close relative container
-    html += '</div>'; // Close padding container
-
+    html += '</div></div></div>';
     return html;
 }
 
-// 3. Accessibility Section - REAL-TIME UPDATES
-function createAccessibilitySection() {
+function createAccessibilitySection(isMobile = false) {
     const user = JSON.parse(localStorage.getItem('currentUser'));
-
     return {
         rows: [
             {
                 view: "template",
-                template: "<div style='font-size:28px; font-weight:700; color:#2c3e50; padding:0 30px; border-left:5px solid #9b59b6;'>♿ Accessibility Settings</div>",
+                template: `<div style='font-size:${isMobile ? '22px' : '28px'}; font-weight:700; color:#2c3e50; padding:0 ${isMobile ? '15px' : '30px'}; border-left:5px solid #9b59b6;'>♿ Accessibility Settings</div>`,
                 height: 50,
                 borderless: true
             },
@@ -424,16 +539,15 @@ function createAccessibilitySection() {
                 id: "accessibilitySettingsForm",
                 css: "settings_form",
                 elements: [
-                    // Keyboard Navigation
                     {
                         view: "template",
-                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:5px;'>⌨️ Keyboard Navigation</div>",
+                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>⌨️ Keyboard Navigation</div>`,
                         height: 35,
                         borderless: true
                     },
                     {
                         view: "template",
-                        template: "<div style='font-size:14px; color:#7f8c8d; margin-bottom:10px;'>Use arrow keys to navigate between form fields and Enter to click buttons.</div>",
+                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:10px;'>Use arrow keys to navigate between form fields and Enter to click buttons.</div>`,
                         height: 40,
                         borderless: true
                     },
@@ -449,17 +563,15 @@ function createAccessibilitySection() {
                         }
                     },
                     { height: 30 },
-
-                    // Screen Reader
                     {
                         view: "template",
-                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:5px;'>🔊 Screen Reader Compatibility</div>",
+                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>🔊 Screen Reader Compatibility</div>`,
                         height: 35,
                         borderless: true
                     },
                     {
                         view: "template",
-                        template: "<div style='font-size:14px; color:#7f8c8d; margin-bottom:10px;'>Enable audio announcements for search results and important updates.</div>",
+                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:10px;'>Enable audio announcements for search results and important updates.</div>`,
                         height: 40,
                         borderless: true
                     },
@@ -475,11 +587,9 @@ function createAccessibilitySection() {
                         }
                     },
                     { height: 30 },
-
-                    // Font Size
                     {
                         view: "template",
-                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:15px;'>📏 Font Size</div>",
+                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>📏 Font Size</div>`,
                         height: 40,
                         borderless: true
                     },
@@ -499,11 +609,9 @@ function createAccessibilitySection() {
                         }
                     },
                     { height: 30 },
-
-                    // Theme
                     {
                         view: "template",
-                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:15px;'>🎨 Theme</div>",
+                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>🎨 Theme</div>`,
                         height: 40,
                         borderless: true
                     },
@@ -523,11 +631,9 @@ function createAccessibilitySection() {
                         }
                     },
                     { height: 30 },
-
-                    // Contrast Level - Step Indicator
                     {
                         view: "template",
-                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:20px;'>🔆 Contrast Level</div>",
+                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:20px;'>🔆 Contrast Level</div>`,
                         height: 40,
                         borderless: true
                     },
@@ -544,18 +650,260 @@ function createAccessibilitySection() {
                                 const level = e.target.getAttribute('data-level');
                                 if (level) {
                                     handleContrastChange(level);
-                                    // Update visual
                                     this.setHTML(createStepIndicator(level));
                                 }
                             }
                         }
                     },
-                    { height: 20 },
+                    { height: 20 }
                 ]
             }
         ]
     };
 }
+
+// ==========================================
+// SECTION 4: NOTIFICATION SETTINGS
+// ==========================================
+
+function createNotificationsSection(isMobile = false) {
+    const user = JSON.parse(localStorage.getItem('currentUser'));
+    return {
+        rows: [
+            {
+                view: "template",
+                template: `<div style='font-size:${isMobile ? '22px' : '28px'}; font-weight:700; color:#2c3e50; padding:0 ${isMobile ? '15px' : '30px'}; border-left:5px solid #f39c12;'>🔔 Notification Settings</div>`,
+                height: 50,
+                borderless: true
+            },
+            {
+                view: "form",
+                id: "notificationSettingsForm",
+                css: "settings_form",
+                elements: [
+                    {
+                        view: "template",
+                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>Public Notifications</div>`,
+                        height: 30,
+                        borderless: true
+                    },
+                    {
+                        view: "template",
+                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:15px; line-height:1.6;'>If you don't want to send notifications to others about your personal details changes (like address changes), you can disable it. Company notifications (job role changes) will always be sent.</div>`,
+                        height: isMobile ? 80 : 60,
+                        borderless: true
+                    },
+                    {
+                        view: "checkbox",
+                        id: "sendPublicNotifications",
+                        labelRight: "Send public notifications when I update my address",
+                        value: user.send_public_notifications
+                    },
+                    { height: 30 },
+                    {
+                        view: "template",
+                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>Notification Preferences</div>`,
+                        height: 40,
+                        borderless: true
+                    },
+                    {
+                        view: "radio",
+                        id: "notificationPreference",
+                        vertical: true,
+                        value: user.notification_preference,
+                        options: [
+                            { id: "all", value: "All Notifications - Receive both company and public updates" },
+                            { id: "company", value: "Company Only - Only receive job role change notifications" },
+                            { id: "none", value: "None - Don't receive any notifications" }
+                        ]
+                    },
+                    { height: 20 },
+                    {
+                        cols: [
+                            {},
+                            {
+                                view: "button",
+                                value: "Save Notification Settings",
+                                css: "webix_primary",
+                                width: isMobile ? undefined : 220,
+                                click: handleSaveNotificationSettings
+                            },
+                            {}
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+}
+
+// ==========================================
+// EVENT HANDLERS
+// ==========================================
+
+// Handler: Save Notification Settings
+async function handleSaveNotificationSettings() {
+    const sendPublic = $$("sendPublicNotifications").getValue();
+    const preference = $$("notificationPreference").getValue();
+    webix.message({ type: "info", text: "Saving notification settings..." });
+    const result = await apiCall(API_CONFIG.ENDPOINTS.NOTIFICATION_SETTINGS, 'POST', {
+        send_public_notifications: sendPublic,
+        notification_preference: preference
+    });
+    if (result.success) {
+        localStorage.setItem('currentUser', JSON.stringify(result.user));
+        webix.message({ type: "success", text: "Notification settings saved successfully!" });
+    } else {
+        webix.message({ type: "error", text: result.message || "Failed to save notification settings" });
+    }
+}
+
+// Handler: Save Account Details
+async function handleSaveAccountDetails() {
+    const form = $$("accountDetailsForm");
+    const values = form.getValues();
+    webix.message({ type: "info", text: "Saving changes..." });
+    const result = await apiCall(API_CONFIG.ENDPOINTS.UPDATE_ACCOUNT, 'PUT', values);
+    if (result.success) {
+        localStorage.setItem('currentUser', JSON.stringify(result.user));
+        webix.message({ type: "success", text: "Account details updated successfully!" });
+    } else {
+        webix.message({ type: "error", text: result.message || "Failed to update account" });
+    }
+}
+
+// Handler: Verify Current Password
+async function handleVerifyPassword() {
+    const currentPassword = $$("currentPassword").getValue();
+    if (!currentPassword) {
+        webix.message({ type: "error", text: "Please enter your current password" });
+        return;
+    }
+    const result = await apiCall(API_CONFIG.ENDPOINTS.VERIFY_PASSWORD, 'POST', {
+        current_password: currentPassword
+    });
+    if (result.success) {
+        webix.message({ type: "success", text: "Password verified! You can now change it." });
+        $$("newPassword").enable();
+        $$("confirmPassword").enable();
+        $$("changePasswordBtn").enable();
+    } else {
+        webix.message({ type: "error", text: result.message || "Incorrect password" });
+    }
+}
+
+// Handler: Change Password
+async function handleChangePassword() {
+    const form = $$("passwordForm");
+    const values = form.getValues();
+    if (!values.new_password || !values.confirm_password) {
+        webix.message({ type: "error", text: "Please fill in all password fields" });
+        return;
+    }
+    if (values.new_password !== values.confirm_password) {
+        webix.message({ type: "error", text: "New passwords do not match!" });
+        return;
+    }
+    const result = await apiCall(API_CONFIG.ENDPOINTS.CHANGE_PASSWORD, 'POST', values);
+    if (result.success) {
+        webix.message({ type: "success", text: "Password changed successfully!" });
+        form.clear();
+        $$("newPassword").disable();
+        $$("confirmPassword").disable();
+        $$("changePasswordBtn").disable();
+    } else {
+        webix.message({ type: "error", text: result.message || "Failed to change password" });
+    }
+}
+
+// Handler: Privacy Change
+function handlePrivacyChange(visibility) {
+    if (visibility === 'private') {
+        webix.confirm({
+            title: "Change Privacy Setting",
+            text: "Do you want to make your account private?<br><br>If you set your account to private, your profile will be hidden from search results and your data will not be visible to others.",
+            ok: "Yes, Make Private",
+            cancel: "No, Keep Public",
+            callback: function (result) {
+                if (result) {
+                    updatePrivacySetting('private');
+                }
+            }
+        });
+    } else {
+        updatePrivacySetting('public');
+    }
+}
+
+// Update Privacy Setting
+async function updatePrivacySetting(visibility) {
+    const result = await apiCall(API_CONFIG.ENDPOINTS.UPDATE_PRIVACY, 'POST', {
+        profile_visibility: visibility
+    });
+    if (result.success) {
+        localStorage.setItem('currentUser', JSON.stringify(result.user));
+        if (visibility === 'public') {
+            $$("publicBtn").define("css", "webix_primary");
+            $$("privateBtn").define("css", "");
+        } else {
+            $$("publicBtn").define("css", "");
+            $$("privateBtn").define("css", "webix_danger");
+        }
+        $("publicBtn").refresh();
+        $("privateBtn").refresh();
+        webix.message({ type: "success", text: `Privacy set to ${visibility}` });
+    } else {
+        webix.message({ type: "error", text: "Failed to update privacy setting" });
+    }
+}
+
+// Handler: Real-time Accessibility Change
+async function handleAccessibilityChange(setting, value) {
+    console.log('Accessibility change:', setting, value);
+    switch (setting) {
+        case 'keyboard_navigation':
+            AccessibilityManager.applyKeyboardNavigation(value);
+            break;
+        case 'screen_reader':
+            AccessibilityManager.applyScreenReader(value);
+            break;
+        case 'font_size':
+            AccessibilityManager.applyFontSize(value);
+            break;
+        case 'theme':
+            AccessibilityManager.applyTheme(value);
+            break;
+        case 'contrast_level':
+            AccessibilityManager.applyContrast(value);
+            const label = $("contrastLevelLabel");
+            if (label) {
+                label.setHTML(`<div style='text-align:center; font-size:16px; color:#7f8c8d;'>${getContrastLabel(getContrastValue(value))}</div>`);
+            }
+            break;
+    }
+    const data = {};
+    data[setting] = value;
+    const result = await apiCall(API_CONFIG.ENDPOINTS.ACCESSIBILITY_SETTINGS, 'POST', data);
+    if (result.success) {
+        localStorage.setItem('currentUser', JSON.stringify(result.user));
+    } else {
+        webix.message({ type: "error", text: "Failed to save setting" });
+    }
+}
+
+// Handler: Contrast Change with Step Indicator Update
+function handleContrastChange(level) {
+    console.log('Contrast level changed to:', level);
+    const indicator = $("contrastStepIndicator");
+    if (indicator) {
+        indicator.setHTML(createStepIndicator(level));
+    }
+    handleAccessibilityChange('contrast_level', level);
+}
+
+// ==========================================
+// HELPER FUNCTIONS
+// ==========================================
 
 // Helper: Convert contrast level to slider value
 function getContrastValue(level) {

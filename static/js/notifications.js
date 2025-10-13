@@ -267,9 +267,20 @@ function createNotificationCard(notification) {
                     <div style="background:${bgColor}; border-left:4px solid ${borderColor}; border-radius:8px; padding:20px; box-shadow:0 2px 8px rgba(0,0,0,0.1); ${!isRead ? 'border:2px solid ' + borderColor + ';' : ''}">
                         <div style="display:flex; justify-content:space-between; align-items:start;">
                             <div style="flex:1;">
-                                <div style="font-size:20px; font-weight:700; color:#2c3e50; margin-bottom:8px;">
-                                    ${icon} ${notification.title}
-                                    ${!isRead ? '<span style="background:#e74c3c; color:white; font-size:11px; padding:3px 8px; border-radius:12px; margin-left:10px;">NEW</span>' : ''}
+                                <div style="display:flex; align-items:center; font-size:20px; font-weight:700; color:#2c3e50; margin-bottom:8px;">
+                                    <span>${icon} ${notification.title}</span>
+                                    ${!isRead ? `<span style="
+                                        background:#e74c3c;
+                                        color:white;
+                                        font-size:11px;
+                                        padding:3px 8px;
+                                        border-radius:12px;
+                                        margin-left:10px;
+                                        display:flex;
+                                        align-items:center;
+                                        justify-content:center;
+                                        height:20px;
+                                    ">NEW</span>` : ''}
                                 </div>
                                 <div style="font-size:16px; color:#555; margin-bottom:12px; line-height:1.6;">
                                     ${notification.message}
