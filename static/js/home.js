@@ -3,51 +3,11 @@ function createHomePage() {
     return {
         id: "homePage",
         rows: [
-            // Toolbar
-            {
-                view: "toolbar",
-                height: 60,
-                elements: [
-                    {},
-                    {
-                        view: "button",
-                        id: "HomeBadge",
-                        value: "Home",
-                        width: 140,
-                        click: showHomePage
-                    },
-                    {
-                        view: "button",
-                        id: "notificationBadge",
-                        value: "Notifications",
-                        width: 140,
-                        badge: 0,
-                        click: showNotificationsPage
-                    },
-                    {
-                        view: "button",
-                        value: "Profile",
-                        width: 140,
-                        click: showProfilePage
-                    },
-                    {
-                        view: "button",
-                        value: "Settings",
-                        width: 140,
-                        click: showSettingsPage
-                    },
-                    {
-                        view: "button",
-                        value: "Logout",
-                        width: 140,
-                        click: handleLogout
-                    },
-                    {}
-                ]
-            },
-            // Main content area
+            createNavigationBar('home'),
+            // Main content area with proper sizing
             {
                 id: "homeContent",
+                gravity: 1,
                 rows: [
                     createSearchView()
                 ]
@@ -56,10 +16,79 @@ function createHomePage() {
     };
 }
 
+// Reusable Navigation Bar
+function createNavigationBar(activePage) {
+    return {
+        view: "toolbar",
+        height: 45,
+        css: "main_toolbar",
+        elements: [
+            {},
+            {
+                view: "button",
+                id: "HomeBadge",
+                value: "Home",
+                width: 140,
+                css: activePage === 'home' ? "webix_primary nav_button" : "nav_button",
+                click: function () {
+                    showHomePage();
+                }
+            },
+            { width: 5 },
+            {
+                view: "button",
+                id: "notificationBadge", // Keep original ID for badge functionality
+                value: "Notifications",
+                width: 140,
+                badge: 0,
+                css: activePage === 'notifications' ? "webix_primary nav_button" : "nav_button",
+                click: function () {
+                    showNotificationsPage();
+                }
+            },
+            { width: 5 },
+            {
+                view: "button",
+                id: "profileBtn",
+                value: "Profile",
+                width: 140,
+                css: activePage === 'profile' ? "webix_primary nav_button" : "nav_button",
+                click: function () {
+                    showProfilePage();
+                }
+            },
+            { width: 5 },
+            {
+                view: "button",
+                id: "settingsBtn",
+                value: "Settings",
+                width: 140,
+                css: activePage === 'settings' ? "webix_primary nav_button" : "nav_button",
+                click: function () {
+                    showSettingsPage();
+                }
+            },
+            { width: 5 },
+            {
+                view: "button",
+                id: "logoutBtn",
+                value: "Logout",
+                width: 140,
+                css: "nav_button",
+                click: function () {
+                    handleLogout();
+                }
+            },
+            {}
+        ]
+    };
+}
+
 // Initial Search View (before search)
 function createSearchView() {
     return {
         id: "searchView",
+        gravity: 1,
         rows: [
             { height: 100 },
             {
@@ -108,7 +137,7 @@ function createSearchView() {
                     {}
                 ]
             },
-            {}
+            { gravity: 1 }
         ]
     };
 }
@@ -116,6 +145,7 @@ function createSearchView() {
 // Results View (after search)
 function createResultsView(results, query = '') {
     return {
+        gravity: 1,
         rows: [
             {
                 height: 130,
@@ -152,11 +182,12 @@ function createResultsView(results, query = '') {
                             { width: 50 }
                         ]
                     },
-                    { height: 20 }  // Margin between search and results
+                    { height: 20 }
                 ]
             },
             {
                 view: "scrollview",
+                gravity: 1,
                 scroll: "y",
                 body: {
                     rows: results.length > 0 ?
@@ -326,7 +357,9 @@ async function performSearch() {
         }
 
         // Read results for screen reader
-        AccessibilityManager.readSearchResults(result.results);
+        if (typeof AccessibilityManager !== 'undefined') {
+            AccessibilityManager.readSearchResults(result.results);
+        }
 
         webix.message({
             type: "success",
