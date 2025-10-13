@@ -529,6 +529,12 @@ function formatBirthday(birthday) {
 
     try {
         const date = new Date(birthday);
+
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+            return 'Not specified';
+        }
+
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
         return date.toLocaleDateString('en-US', options);
     } catch (e) {
@@ -564,4 +570,20 @@ function showProfileError(message) {
         type: "error",
         text: message
     });
+}
+
+// Export functions for testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        formatGender,
+        formatMaritalStatus,
+        formatBirthday,
+        displayProfileContent,
+        showProfileError,
+        fetchProfileFromDatabase,
+        createProfilePage,
+        createDesktopProfilePage,
+        createMobileProfilePage,
+        buildPersonalDetailsHTML
+    };
 }
