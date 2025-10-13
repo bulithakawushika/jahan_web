@@ -216,7 +216,7 @@ function createRegisterPage() {
                                     // Birthday - Year, Month, Day
                                     {
                                         view: "template",
-                                        template: "<div style='font-size:14px; color:#2c3e50; margin-left:-11px; font-weight:bold;'>Date of Birth</div>",
+                                        template: "<div style='font-size:14px; color:#2c3e50;  font-weight:bold;'>Date of Birth</div>",
                                         height: 30,
                                         borderless: true
                                     },
