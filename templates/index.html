@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,11 +10,11 @@
     <link rel="stylesheet" href="https://cdn.webix.com/edge/webix.css" type="text/css">
     
     <!-- Your custom CSS -->
-    <link rel="stylesheet" href="/static/css/style.css">
-
-    <link rel="stylesheet" 
-          href="//cdn.webix.com/materialdesignicons/5.8.95/css/materialdesignicons.min.css" 
-          type="text/css" 
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <link rel="stylesheet"
+          href="//cdn.webix.com/materialdesignicons/5.8.95/css/materialdesignicons.min.css"
+          type="text/css"
           charset="utf-8">
 </head>
 <body>
@@ -21,22 +22,29 @@
     
     <!-- Webix JS -->
     <script src="https://cdn.webix.com/edge/webix.js" type="text/javascript"></script>
-
+    
     <!-- App Configuration -->
-    <script src="/static/js/config.js"></script>
-
+    <script src="{% static 'js/config.js' %}"></script>
+    
     <!-- Accessibility Manager (LOAD EARLY) -->
-    <script src="/static/js/accessibility.js"></script>
-
+    <script src="{% static 'js/accessibility.js' %}"></script>
+    
     <!-- Page Scripts -->
-    <script src="/static/js/login.js"></script>
-    <script src="/static/js/register.js"></script>
-    <script src="/static/js/home.js"></script>
-    <script src="/static/js/profile.js"></script>
-    <script src="/static/js/settings.js"></script>
-    <script src="/static/js/notifications.js"></script>
-
+    <script src="{% static 'js/login.js' %}"></script>
+    <script src="{% static 'js/register.js' %}"></script>
+    <script src="{% static 'js/home.js' %}"></script>
+    <script src="{% static 'js/profile.js' %}"></script>
+    
+    <!-- Settings Module Files -->
+    <script src="{% static 'js/settings_account.js' %}"></script>
+    <script src="{% static 'js/settings_privacy.js' %}"></script>
+    <script src="{% static 'js/settings_accessibility.js' %}"></script>
+    <script src="{% static 'js/settings_notification.js' %}"></script>
+    <script src="{% static 'js/settings.js' %}"></script>
+    
+    <script src="{% static 'js/notifications.js' %}"></script>
+    
     <!-- Main App -->
-    <script src="/static/js/app.js"></script>
+    <script src="{% static 'js/app.js' %}"></script>
 </body>
 </html>

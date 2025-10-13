@@ -1,29 +1,109 @@
 // ==========================================
-// RESPONSIVE PAGE CREATION - WITH NAVBAR
+// MAIN SETTINGS PAGE - WITH TAB NAVIGATION
+// File: static/settings.js
 // ==========================================
 
-// Create Desktop Settings Page (with Toolbar)
+// Create Desktop Settings Page (with Navbar and Tabs)
 function createDesktopSettingsPage() {
     return {
         id: "settingsPage",
         rows: [
-            createNavigationBar('settings'), // ← NAVBAR ADDED HERE
+            createNavigationBar('settings'),
             {
                 id: "settingsContentArea",
                 gravity: 1,
                 rows: [
+                    { height: 20 },
                     {
-                        view: "template",
-                        template: "<div style='text-align:center; padding:100px;'><div class='loading-spinner'></div><br><br>Loading settings...</div>",
-                        borderless: true
-                    }
+                        cols: [
+                            { width: 40 },
+                            {
+                                view: "template",
+                                template: "<div style='text-align:center; font-size:38px; font-weight:bold; color:#2c3e50;'>Settings</div>",
+                                height: 60,
+                                borderless: true
+                            },
+                            { width: 40 }
+                        ]
+                    },
+                    { height: 20 },
+                    {
+                        cols: [
+                            { width: 40 },
+                            {
+                                view: "tabview",
+                                id: "settingsTabView",
+                                animate: false,
+                                tabbar: {
+                                    optionWidth: 200,
+                                    height: 50
+                                },
+                                cells: [
+                                    {
+                                        header: "📋 Account Details",
+                                        body: {
+                                            id: "accountDetailsTab",
+                                            rows: [
+                                                {
+                                                    view: "template",
+                                                    template: "<div style='text-align:center; padding:100px;'><div class='loading-spinner'></div><br><br>Loading account details...</div>",
+                                                    borderless: true
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        header: "🔒 Privacy & Security",
+                                        body: {
+                                            id: "privacySecurityTab",
+                                            rows: [
+                                                {
+                                                    view: "template",
+                                                    template: "<div style='text-align:center; padding:100px;'><div class='loading-spinner'></div><br><br>Loading privacy settings...</div>",
+                                                    borderless: true
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        header: "♿ Accessibility",
+                                        body: {
+                                            id: "accessibilityTab",
+                                            rows: [
+                                                {
+                                                    view: "template",
+                                                    template: "<div style='text-align:center; padding:100px;'><div class='loading-spinner'></div><br><br>Loading accessibility settings...</div>",
+                                                    borderless: true
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        header: "🔔 Notifications",
+                                        body: {
+                                            id: "notificationsTab",
+                                            rows: [
+                                                {
+                                                    view: "template",
+                                                    template: "<div style='text-align:center; padding:100px;'><div class='loading-spinner'></div><br><br>Loading notification settings...</div>",
+                                                    borderless: true
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            { width: 40 }
+                        ]
+                    },
+                    { height: 20 }
                 ]
             }
         ]
     };
 }
 
-// Create Mobile/Tablet Settings Page (with Sidebar)
+// Create Mobile/Tablet Settings Page (with Sidebar and Tabs)
 function createMobileSettingsPage() {
     return {
         id: "settingsPage",
@@ -82,10 +162,75 @@ function createMobileSettingsPage() {
                         id: "settingsContentArea",
                         gravity: 1,
                         rows: [
+                            { height: 10 },
                             {
                                 view: "template",
-                                template: "<div style='text-align:center; padding:100px;'><div class='loading-spinner'></div><br><br>Loading settings...</div>",
+                                template: "<div style='text-align:center; font-size:28px; font-weight:bold; color:#2c3e50;'>Settings</div>",
+                                height: 50,
                                 borderless: true
+                            },
+                            { height: 10 },
+                            {
+                                view: "tabview",
+                                id: "settingsTabView",
+                                animate: false,
+                                tabbar: {
+                                    height: 45
+                                },
+                                cells: [
+                                    {
+                                        header: "📋 Account",
+                                        body: {
+                                            id: "accountDetailsTab",
+                                            rows: [
+                                                {
+                                                    view: "template",
+                                                    template: "<div style='text-align:center; padding:50px;'><div class='loading-spinner'></div><br><br>Loading...</div>",
+                                                    borderless: true
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        header: "🔒 Privacy",
+                                        body: {
+                                            id: "privacySecurityTab",
+                                            rows: [
+                                                {
+                                                    view: "template",
+                                                    template: "<div style='text-align:center; padding:50px;'><div class='loading-spinner'></div><br><br>Loading...</div>",
+                                                    borderless: true
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        header: "♿ Access",
+                                        body: {
+                                            id: "accessibilityTab",
+                                            rows: [
+                                                {
+                                                    view: "template",
+                                                    template: "<div style='text-align:center; padding:50px;'><div class='loading-spinner'></div><br><br>Loading...</div>",
+                                                    borderless: true
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        header: "🔔 Notify",
+                                        body: {
+                                            id: "notificationsTab",
+                                            rows: [
+                                                {
+                                                    view: "template",
+                                                    template: "<div style='text-align:center; padding:50px;'><div class='loading-spinner'></div><br><br>Loading...</div>",
+                                                    borderless: true
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
                             }
                         ]
                     }
@@ -97,6 +242,7 @@ function createMobileSettingsPage() {
 
 // Create Responsive Settings Page
 function createSettingsPage() {
+    console.log('Creating settings page...');
     const screenWidth = window.innerWidth;
     if (screenWidth > 1024) {
         return createDesktopSettingsPage();
@@ -110,1190 +256,164 @@ function createSettingsPage() {
 // ==========================================
 
 async function loadSettingsData() {
-    const result = await apiCall(API_CONFIG.ENDPOINTS.PROFILE, 'GET');
-    if (result.success && result.user) {
-        displaySettingsContent(result.user);
-    } else {
+    console.log('Loading settings data...');
+
+    try {
+        const result = await apiCall(API_CONFIG.ENDPOINTS.PROFILE, 'GET');
+
+        if (result.success && result.user) {
+            console.log('User data loaded:', result.user);
+
+            // Load all tab contents
+            loadAccountDetailsTab(result.user);
+            loadPrivacySecurityTab(result.user);
+            loadAccessibilityTab(result.user);
+            loadNotificationsTab(result.user);
+        } else {
+            console.error('Failed to load user data:', result);
+            webix.message({
+                type: "error",
+                text: "Failed to load settings"
+            });
+            showProfilePage();
+        }
+    } catch (error) {
+        console.error('Error loading settings:', error);
         webix.message({
             type: "error",
-            text: "Failed to load settings"
+            text: "Error loading settings"
         });
-        showProfilePage();
     }
 }
 
 // ==========================================
-// DISPLAY SETTINGS CONTENT
+// LOAD EACH TAB CONTENT
 // ==========================================
 
-function displaySettingsContent(user) {
-    console.log('Displaying settings for user:', user);
-    const contentArea = $$("settingsContentArea");
-    if (!contentArea) {
-        console.error('settingsContentArea not found');
+function loadAccountDetailsTab(user) {
+    console.log('Loading account details tab...');
+    const tab = $$("accountDetailsTab");
+    if (!tab) {
+        console.error('accountDetailsTab not found');
         return;
     }
 
-    const children = contentArea.getChildViews();
-    children.forEach(child => {
-        contentArea.removeView(child);
-    });
+    const children = tab.getChildViews();
+    children.forEach(child => tab.removeView(child));
 
     const screenWidth = window.innerWidth;
     const isMobile = screenWidth <= 768;
-    const padding = isMobile ? 20 : 40;
 
-    contentArea.addView({
-        view: "scrollview",
-        scroll: "y",
-        body: {
-            rows: [
-                { height: 20 },
-                {
-                    view: "template",
-                    template: `<div style='text-align:center; font-size:${isMobile ? '28px' : '38px'}; font-weight:bold; color:#2c3e50;'>Settings</div>`,
-                    height: 60,
-                    borderless: true
-                },
-                { height: 30 },
-                {
-                    cols: [
-                        { width: padding },
-                        {
-                            rows: [
-                                createAccountDetailsSection(user, isMobile),
-                                { height: 40 },
-                                createPrivacySecuritySection(user, isMobile),
-                                { height: 40 },
-                                createAccessibilitySection(isMobile),
-                                { height: 40 },
-                                createNotificationsSection(isMobile),
-                                { height: 50 }
-                            ]
-                        },
-                        { width: padding }
-                    ]
-                }
-            ]
-        }
-    });
-    console.log('Settings content displayed');
-}
-
-// ==========================================
-// SECTION 1: ACCOUNT DETAILS
-// ==========================================
-
-function createAccountDetailsSection(user, isMobile = false) {
-    const labelWidth = isMobile ? 120 : 150;
-    return {
-        rows: [
-            {
-                view: "template",
-                template: `<div style='font-size:${isMobile ? '22px' : '28px'}; font-weight:700; color:#2c3e50; padding:0 ${isMobile ? '15px' : '30px'}; border-left:5px solid #3498db;'>📋 Account Details</div>`,
-                height: 50,
-                borderless: true
-            },
-            {
-                view: "form",
-                id: "accountDetailsForm",
-                css: "settings_form",
-                elements: [
-                    isMobile ?
-                        {
-                            rows: [
-                                {
-                                    view: "text",
-                                    name: "first_name",
-                                    label: "First Name",
-                                    value: user.first_name,
-                                    labelWidth: labelWidth
-                                },
-                                {
-                                    view: "text",
-                                    name: "last_name",
-                                    label: "Last Name",
-                                    value: user.last_name,
-                                    labelWidth: labelWidth
-                                }
-                            ]
-                        } :
-                        {
-                            cols: [
-                                {
-                                    view: "text",
-                                    name: "first_name",
-                                    label: "First Name",
-                                    value: user.first_name,
-                                    labelWidth: labelWidth
-                                },
-                                { width: 20 },
-                                {
-                                    view: "text",
-                                    name: "last_name",
-                                    label: "Last Name",
-                                    value: user.last_name,
-                                    labelWidth: labelWidth
-                                }
-                            ]
-                        },
-                    {
-                        view: "text",
-                        name: "username",
-                        label: "Username",
-                        value: user.username,
-                        labelWidth: labelWidth
-                    },
-                    {
-                        view: "text",
-                        name: "email",
-                        label: "Email",
-                        value: user.email,
-                        labelWidth: labelWidth
-                    },
-                    {
-                        view: "text",
-                        name: "job_role",
-                        label: "Job Role",
-                        value: user.job_role,
-                        labelWidth: labelWidth
-                    },
-                    {
-                        view: "datepicker",
-                        name: "birthday",
-                        label: "Birthday",
-                        value: user.birthday,
-                        labelWidth: labelWidth,
-                        format: "%Y-%m-%d",
-                        stringResult: true
-                    },
-                    {
-                        view: "textarea",
-                        name: "address",
-                        label: "Address",
-                        value: user.address,
-                        labelWidth: labelWidth,
-                        height: 100
-                    },
-                    { height: 20 },
-                    isMobile ?
-                        {
-                            rows: [
-                                {
-                                    view: "button",
-                                    value: "Save Changes",
-                                    css: "webix_primary",
-                                    click: handleSaveAccountDetails
-                                },
-                                { height: 10 },
-                                {
-                                    view: "button",
-                                    value: "Cancel",
-                                    click: function () {
-                                        $$("accountDetailsForm").setValues(user);
-                                        webix.message("Changes discarded");
-                                    }
-                                }
-                            ]
-                        } :
-                        {
-                            cols: [
-                                {},
-                                {
-                                    view: "button",
-                                    value: "Save Changes",
-                                    css: "webix_primary",
-                                    width: 150,
-                                    click: handleSaveAccountDetails
-                                },
-                                { width: 15 },
-                                {
-                                    view: "button",
-                                    value: "Cancel",
-                                    width: 120,
-                                    click: function () {
-                                        $$("accountDetailsForm").setValues(user);
-                                        webix.message("Changes discarded");
-                                    }
-                                },
-                                {}
-                            ]
-                        }
-                ]
-            }
-        ]
-    };
-}
-
-// ==========================================
-// SECTION 2: PRIVACY & SECURITY
-// ==========================================
-
-function createPrivacySecuritySection(user, isMobile = false) {
-    const labelWidth = isMobile ? 140 : 170;
-    return {
-        rows: [
-            {
-                view: "template",
-                template: `<div style='font-size:${isMobile ? '22px' : '28px'}; font-weight:700; color:#2c3e50; padding:0 ${isMobile ? '15px' : '30px'}; border-left:5px solid #e74c3c;'>🔒 Privacy & Security</div>`,
-                height: 50,
-                borderless: true
-            },
-            {
-                view: "form",
-                id: "passwordForm",
-                css: "settings_form",
-                elements: [
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:10px;'>Change Password</div>`,
-                        height: 40,
-                        borderless: true
-                    },
-                    {
-                        view: "text",
-                        type: "password",
-                        id: "currentPassword",
-                        name: "current_password",
-                        label: "Current Password",
-                        placeholder: "Enter current password",
-                        labelWidth: labelWidth
-                    },
-                    {
-                        cols: [
-                            {},
-                            {
-                                view: "button",
-                                value: "Verify Password",
-                                width: isMobile ? undefined : 150,
-                                click: handleVerifyPassword
-                            },
-                            {}
-                        ]
-                    },
-                    { height: 15 },
-                    {
-                        view: "text",
-                        type: "password",
-                        id: "newPassword",
-                        name: "new_password",
-                        label: "New Password",
-                        placeholder: "Enter new password",
-                        labelWidth: labelWidth,
-                        disabled: true
-                    },
-                    {
-                        view: "text",
-                        type: "password",
-                        id: "confirmPassword",
-                        name: "confirm_password",
-                        label: "Confirm Password",
-                        placeholder: "Re-enter new password",
-                        labelWidth: labelWidth,
-                        disabled: true
-                    },
-                    { height: 15 },
-                    {
-                        cols: [
-                            {},
-                            {
-                                view: "button",
-                                id: "changePasswordBtn",
-                                value: "Change Password",
-                                css: "webix_primary",
-                                width: isMobile ? undefined : 180,
-                                disabled: true,
-                                click: handleChangePassword
-                            },
-                            {}
-                        ]
-                    },
-                    { height: 30 },
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:10px;'>Profile Visibility</div>`,
-                        height: 40,
-                        borderless: true
-                    },
-                    isMobile ?
-                        {
-                            rows: [
-                                {
-                                    view: "button",
-                                    id: "publicBtn",
-                                    value: "🌐 Public",
-                                    css: user.profile_visibility === 'public' ? "webix_primary" : "",
-                                    click: function () {
-                                        handlePrivacyChange('public');
-                                    }
-                                },
-                                { height: 15 },
-                                {
-                                    view: "button",
-                                    id: "privateBtn",
-                                    value: "🔒 Private",
-                                    css: user.profile_visibility === 'private' ? "webix_danger" : "",
-                                    click: function () {
-                                        handlePrivacyChange('private');
-                                    }
-                                }
-                            ]
-                        } :
-                        {
-                            cols: [
-                                {},
-                                {
-                                    view: "button",
-                                    id: "publicBtn",
-                                    value: "🌐 Public",
-                                    width: 150,
-                                    css: user.profile_visibility === 'public' ? "webix_primary" : "",
-                                    click: function () {
-                                        handlePrivacyChange('public');
-                                    }
-                                },
-                                { width: 30 },
-                                {
-                                    view: "button",
-                                    id: "privateBtn",
-                                    value: "🔒 Private",
-                                    width: 150,
-                                    css: user.profile_visibility === 'private' ? "webix_danger" : "",
-                                    click: function () {
-                                        handlePrivacyChange('private');
-                                    }
-                                },
-                                {}
-                            ]
-                        }
-                ]
-            }
-        ]
-    };
-}
-
-// ==========================================
-// SECTION 3: ACCESSIBILITY SETTINGS
-// ==========================================
-
-// Create Step Indicator for Contrast Levels
-function createStepIndicator(selectedLevel) {
-    const levels = [
-        { value: 'low', label: 'Low' },
-        { value: 'normal', label: 'Normal' },
-        { value: 'high', label: 'High' },
-        { value: 'highest', label: 'Highest' }
-    ];
-    const selectedIndex = levels.findIndex(l => l.value === selectedLevel);
-    const totalSteps = levels.length - 1;
-
-    let html = '<div style="padding: 20px 60px;">';
-    html += '<div style="position: relative;">';
-    html += '<div style="position: relative; height: 24px; margin-bottom: 15px;">';
-    html += '<div style="position: absolute; top: 10px; left: 12px; right: 12px; height: 4px; background: #e0e0e0; border-radius: 2px;"></div>';
-
-    if (selectedIndex >= 0) {
-        const activeWidth = (selectedIndex / totalSteps) * 100;
-        html += `<div style="position: absolute; top: 10px; left: 12px; width: calc(${activeWidth}% * (100% - 24px) / 100); height: 4px; background: #3498db; border-radius: 2px; transition: width 0.3s ease;"></div>`;
-    }
-
-    html += '<div style="display: flex; justify-content: space-between; position: relative; z-index: 2;">';
-    levels.forEach((level, index) => {
-        const isActive = index <= selectedIndex;
-        const isSelected = level.value === selectedLevel;
-        html += `<div class="step-circle" data-level="${level.value}" style="
-            width: ${isSelected ? '24px' : '20px'};
-            height: ${isSelected ? '24px' : '20px'};
-            border-radius: 50%;
-            background: ${isActive ? '#3498db' : '#ffffff'};
-            border: ${isSelected ? '4px' : '3px'} solid ${isActive ? '#2980b9' : '#bdc3c7'};
-            cursor: pointer;
-            transition: all 0.3s ease;
-            ${isSelected ? 'box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.2);' : ''}
-            ${isSelected ? 'margin: -2px;' : ''}
-        "></div>`;
-    });
-    html += '</div></div>';
-
-    html += '<div style="display: flex; justify-content: space-between;">';
-    levels.forEach((level, index) => {
-        const isSelected = level.value === selectedLevel;
-        html += `<div style="flex: 1; text-align: center; font-size: 13px; font-weight: ${isSelected ? '700' : '500'}; color: ${isSelected ? '#2c3e50' : '#7f8c8d'}; transition: all 0.3s ease;">${level.label}</div>`;
-    });
-    html += '</div></div></div>';
-    return html;
-}
-
-function createAccessibilitySection(isMobile = false) {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    return {
-        rows: [
-            {
-                view: "template",
-                template: `<div style='font-size:${isMobile ? '22px' : '28px'}; font-weight:700; color:#2c3e50; padding:0 ${isMobile ? '15px' : '30px'}; border-left:5px solid #9b59b6;'>♿ Accessibility Settings</div>`,
-                height: 50,
-                borderless: true
-            },
-            {
-                view: "form",
-                id: "accessibilitySettingsForm",
-                css: "settings_form",
-                elements: [
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>⌨️ Keyboard Navigation</div>`,
-                        height: 35,
-                        borderless: true
-                    },
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:10px;'>Use arrow keys to navigate between form fields and Enter to click buttons.</div>`,
-                        height: 40,
-                        borderless: true
-                    },
-                    {
-                        view: "checkbox",
-                        id: "keyboardNavigation",
-                        labelRight: "Enable keyboard navigation",
-                        value: user.keyboard_navigation !== false,
-                        on: {
-                            onChange: function (newVal) {
-                                handleAccessibilityChange('keyboard_navigation', newVal);
-                            }
-                        }
-                    },
-                    { height: 30 },
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>🔊 Screen Reader Compatibility</div>`,
-                        height: 35,
-                        borderless: true
-                    },
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:10px;'>Enable audio announcements for search results and important updates.</div>`,
-                        height: 40,
-                        borderless: true
-                    },
-                    {
-                        view: "checkbox",
-                        id: "screenReader",
-                        labelRight: "Enable screen reader support",
-                        value: user.screen_reader || false,
-                        on: {
-                            onChange: function (newVal) {
-                                handleAccessibilityChange('screen_reader', newVal);
-                            }
-                        }
-                    },
-                    { height: 30 },
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>📏 Font Size</div>`,
-                        height: 40,
-                        borderless: true
-                    },
-                    {
-                        view: "segmented",
-                        id: "fontSize",
-                        value: user.font_size || 'medium',
-                        options: [
-                            { id: "small", value: "Small" },
-                            { id: "medium", value: "Medium" },
-                            { id: "large", value: "Large" }
-                        ],
-                        on: {
-                            onChange: function (newVal) {
-                                handleAccessibilityChange('font_size', newVal);
-                            }
-                        }
-                    },
-                    { height: 30 },
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>🎨 Theme</div>`,
-                        height: 40,
-                        borderless: true
-                    },
-                    {
-                        view: "segmented",
-                        id: "theme",
-                        value: user.theme || 'standard',
-                        options: [
-                            { id: "light", value: "☀️ Light" },
-                            { id: "standard", value: "⚙️ Standard" },
-                            { id: "dark", value: "🌙 Dark" }
-                        ],
-                        on: {
-                            onChange: function (newVal) {
-                                handleAccessibilityChange('theme', newVal);
-                            }
-                        }
-                    },
-                    { height: 30 },
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:20px;'>🔆 Contrast Level</div>`,
-                        height: 40,
-                        borderless: true
-                    },
-                    {
-                        view: "template",
-                        id: "contrastStepIndicator",
-                        template: function () {
-                            return createStepIndicator(user.contrast_level || 'normal');
-                        }(),
-                        height: 100,
-                        borderless: true,
-                        onClick: {
-                            "step-circle": function (e, id) {
-                                const level = e.target.getAttribute('data-level');
-                                if (level) {
-                                    handleContrastChange(level);
-                                    this.setHTML(createStepIndicator(level));
-                                }
-                            }
-                        }
-                    },
-                    { height: 20 }
-                ]
-            }
-        ]
-    };
-}
-
-// ==========================================
-// SECTION 4: NOTIFICATION SETTINGS
-// ==========================================
-
-function createNotificationsSection(isMobile = false) {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-    return {
-        rows: [
-            {
-                view: "template",
-                template: `<div style='font-size:${isMobile ? '22px' : '28px'}; font-weight:700; color:#2c3e50; padding:0 ${isMobile ? '15px' : '30px'}; border-left:5px solid #f39c12;'>🔔 Notification Settings</div>`,
-                height: 50,
-                borderless: true
-            },
-            {
-                view: "form",
-                id: "notificationSettingsForm",
-                css: "settings_form",
-                elements: [
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>Public Notifications</div>`,
-                        height: 30,
-                        borderless: true
-                    },
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:15px; line-height:1.6;'>If you don't want to send notifications to others about your personal details changes (like address changes), you can disable it. Company notifications (job role changes) will always be sent.</div>`,
-                        height: isMobile ? 80 : 60,
-                        borderless: true
-                    },
-                    {
-                        view: "checkbox",
-                        id: "sendPublicNotifications",
-                        labelRight: "Send public notifications when I update my address",
-                        value: user.send_public_notifications
-                    },
-                    { height: 30 },
-                    {
-                        view: "template",
-                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>Notification Preferences</div>`,
-                        height: 40,
-                        borderless: true
-                    },
-                    {
-                        view: "radio",
-                        id: "notificationPreference",
-                        vertical: true,
-                        value: user.notification_preference,
-                        options: [
-                            { id: "all", value: "All Notifications - Receive both company and public updates" },
-                            { id: "company", value: "Company Only - Only receive job role change notifications" },
-                            { id: "none", value: "None - Don't receive any notifications" }
-                        ]
-                    },
-                    { height: 20 },
-                    {
-                        cols: [
-                            {},
-                            {
-                                view: "button",
-                                value: "Save Notification Settings",
-                                css: "webix_primary",
-                                width: isMobile ? undefined : 220,
-                                click: handleSaveNotificationSettings
-                            },
-                            {}
-                        ]
-                    }
-                ]
-            }
-        ]
-    };
-}
-
-// ==========================================
-// EVENT HANDLERS
-// ==========================================
-
-// Handler: Save Notification Settings
-async function handleSaveNotificationSettings() {
-    const sendPublic = $$("sendPublicNotifications").getValue();
-    const preference = $$("notificationPreference").getValue();
-    webix.message({ type: "info", text: "Saving notification settings..." });
-    const result = await apiCall(API_CONFIG.ENDPOINTS.NOTIFICATION_SETTINGS, 'POST', {
-        send_public_notifications: sendPublic,
-        notification_preference: preference
-    });
-    if (result.success) {
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
-        webix.message({ type: "success", text: "Notification settings saved successfully!" });
-    } else {
-        webix.message({ type: "error", text: result.message || "Failed to save notification settings" });
-    }
-}
-
-// Handler: Save Account Details
-async function handleSaveAccountDetails() {
-    const form = $$("accountDetailsForm");
-    const values = form.getValues();
-    webix.message({ type: "info", text: "Saving changes..." });
-    const result = await apiCall(API_CONFIG.ENDPOINTS.UPDATE_ACCOUNT, 'PUT', values);
-    if (result.success) {
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
-        webix.message({ type: "success", text: "Account details updated successfully!" });
-    } else {
-        webix.message({ type: "error", text: result.message || "Failed to update account" });
-    }
-}
-
-// Handler: Verify Current Password
-async function handleVerifyPassword() {
-    const currentPassword = $$("currentPassword").getValue();
-    if (!currentPassword) {
-        webix.message({ type: "error", text: "Please enter your current password" });
-        return;
-    }
-    const result = await apiCall(API_CONFIG.ENDPOINTS.VERIFY_PASSWORD, 'POST', {
-        current_password: currentPassword
-    });
-    if (result.success) {
-        webix.message({ type: "success", text: "Password verified! You can now change it." });
-        $$("newPassword").enable();
-        $$("confirmPassword").enable();
-        $$("changePasswordBtn").enable();
-    } else {
-        webix.message({ type: "error", text: result.message || "Incorrect password" });
-    }
-}
-
-// Handler: Change Password
-async function handleChangePassword() {
-    const form = $$("passwordForm");
-    const values = form.getValues();
-    if (!values.new_password || !values.confirm_password) {
-        webix.message({ type: "error", text: "Please fill in all password fields" });
-        return;
-    }
-    if (values.new_password !== values.confirm_password) {
-        webix.message({ type: "error", text: "New passwords do not match!" });
-        return;
-    }
-    const result = await apiCall(API_CONFIG.ENDPOINTS.CHANGE_PASSWORD, 'POST', values);
-    if (result.success) {
-        webix.message({ type: "success", text: "Password changed successfully!" });
-        form.clear();
-        $$("newPassword").disable();
-        $$("confirmPassword").disable();
-        $$("changePasswordBtn").disable();
-    } else {
-        webix.message({ type: "error", text: result.message || "Failed to change password" });
-    }
-}
-
-// Handler: Privacy Change
-function handlePrivacyChange(visibility) {
-    if (visibility === 'private') {
-        webix.confirm({
-            title: "Change Privacy Setting",
-            text: "Do you want to make your account private?<br><br>If you set your account to private, your profile will be hidden from search results and your data will not be visible to others.",
-            ok: "Yes, Make Private",
-            cancel: "No, Keep Public",
-            callback: function (result) {
-                if (result) {
-                    updatePrivacySetting('private');
-                }
-            }
+    // Check if function exists
+    if (typeof createAccountDetailsContent === 'function') {
+        tab.addView({
+            view: "scrollview",
+            scroll: "y",
+            body: createAccountDetailsContent(user, isMobile)
         });
+        console.log('Account details tab loaded');
     } else {
-        updatePrivacySetting('public');
-    }
-}
-
-// Update Privacy Setting
-async function updatePrivacySetting(visibility) {
-    const result = await apiCall(API_CONFIG.ENDPOINTS.UPDATE_PRIVACY, 'POST', {
-        profile_visibility: visibility
-    });
-    if (result.success) {
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
-        if (visibility === 'public') {
-            $$("publicBtn").define("css", "webix_primary");
-            $$("privateBtn").define("css", "");
-        } else {
-            $$("publicBtn").define("css", "");
-            $$("privateBtn").define("css", "webix_danger");
-        }
-        $("publicBtn").refresh();
-        $("privateBtn").refresh();
-        webix.message({ type: "success", text: `Privacy set to ${visibility}` });
-    } else {
-        webix.message({ type: "error", text: "Failed to update privacy setting" });
-    }
-}
-
-// Handler: Real-time Accessibility Change
-async function handleAccessibilityChange(setting, value) {
-    console.log('Accessibility change:', setting, value);
-    switch (setting) {
-        case 'keyboard_navigation':
-            AccessibilityManager.applyKeyboardNavigation(value);
-            break;
-        case 'screen_reader':
-            AccessibilityManager.applyScreenReader(value);
-            break;
-        case 'font_size':
-            AccessibilityManager.applyFontSize(value);
-            break;
-        case 'theme':
-            AccessibilityManager.applyTheme(value);
-            break;
-        case 'contrast_level':
-            AccessibilityManager.applyContrast(value);
-            const label = $("contrastLevelLabel");
-            if (label) {
-                label.setHTML(`<div style='text-align:center; font-size:16px; color:#7f8c8d;'>${getContrastLabel(getContrastValue(value))}</div>`);
-            }
-            break;
-    }
-    const data = {};
-    data[setting] = value;
-    const result = await apiCall(API_CONFIG.ENDPOINTS.ACCESSIBILITY_SETTINGS, 'POST', data);
-    if (result.success) {
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
-    } else {
-        webix.message({ type: "error", text: "Failed to save setting" });
-    }
-}
-
-// Handler: Contrast Change with Step Indicator Update
-function handleContrastChange(level) {
-    console.log('Contrast level changed to:', level);
-    const indicator = $("contrastStepIndicator");
-    if (indicator) {
-        indicator.setHTML(createStepIndicator(level));
-    }
-    handleAccessibilityChange('contrast_level', level);
-}
-
-// ==========================================
-// HELPER FUNCTIONS
-// ==========================================
-
-// Helper: Convert contrast level to slider value
-function getContrastValue(level) {
-    const map = {
-        'low': 0,
-        'normal': 1,
-        'high': 2,
-        'highest': 3
-    };
-    return map[level] || 1;
-}
-
-// Helper: Convert slider value to contrast level
-function getContrastLevel(value) {
-    const map = {
-        0: 'low',
-        1: 'normal',
-        2: 'high',
-        3: 'highest'
-    };
-    return map[value] || 'normal';
-}
-
-// Helper: Get contrast label
-function getContrastLabel(value) {
-    const map = {
-        0: 'Low Contrast',
-        1: 'Normal Contrast',
-        2: 'High Contrast',
-        3: 'Highest Contrast'
-    };
-    return map[value] || 'Normal Contrast';
-}
-
-// Handler: Real-time Accessibility Change
-async function handleAccessibilityChange(setting, value) {
-    console.log('Accessibility change:', setting, value);
-
-    // Apply immediately
-    switch (setting) {
-        case 'keyboard_navigation':
-            AccessibilityManager.applyKeyboardNavigation(value);
-            break;
-        case 'screen_reader':
-            AccessibilityManager.applyScreenReader(value);
-            break;
-        case 'font_size':
-            AccessibilityManager.applyFontSize(value);
-            break;
-        case 'theme':
-            AccessibilityManager.applyTheme(value);
-            break;
-        case 'contrast_level':
-            AccessibilityManager.applyContrast(value);
-            // Update label
-            const label = $$("contrastLevelLabel");
-            if (label) {
-                label.setHTML(`<div style='text-align:center; font-size:16px; color:#7f8c8d;'>${getContrastLabel(getContrastValue(value))}</div>`);
-            }
-            break;
-    }
-
-    // Save to backend
-    const data = {};
-    data[setting] = value;
-
-    const result = await apiCall(API_CONFIG.ENDPOINTS.ACCESSIBILITY_SETTINGS, 'POST', data);
-
-    if (result.success) {
-        // Update localStorage
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
-    } else {
-        webix.message({
-            type: "error",
-            text: "Failed to save setting"
+        console.error('createAccountDetailsContent function not found');
+        tab.addView({
+            view: "template",
+            template: "<div style='padding:50px; text-align:center; color:red;'>Error: Account details module not loaded</div>",
+            borderless: true
         });
     }
 }
 
-// Handler: Contrast Change with Step Indicator Update
-function handleContrastChange(level) {
-    console.log('Contrast level changed to:', level);
-
-    // Update visual indicator
-    const indicator = $$("contrastStepIndicator");
-    if (indicator) {
-        indicator.setHTML(createStepIndicator(level));
-    }
-
-    // Apply and save
-    handleAccessibilityChange('contrast_level', level);
-}
-
-// Handler: Save Accessibility Settings
-async function handleSaveAccessibilitySettings() {
-    const keyboardNav = $$("keyboardNavigation").getValue();
-    const screenReader = $$("screenReader").getValue();
-    const fontSize = $$("fontSize").getValue();
-    const theme = $$("theme").getValue();
-    const contrastLevel = $$("contrastLevel").getValue();
-
-    webix.message({
-        type: "info",
-        text: "Saving accessibility settings..."
-    });
-
-    const result = await apiCall(API_CONFIG.ENDPOINTS.ACCESSIBILITY_SETTINGS, 'POST', {
-        keyboard_navigation: keyboardNav,
-        screen_reader: screenReader,
-        font_size: fontSize,
-        theme: theme,
-        contrast_level: contrastLevel
-    });
-
-    if (result.success) {
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
-
-        // Apply settings immediately
-        AccessibilityManager.applyFontSize(fontSize);
-        AccessibilityManager.applyTheme(theme);
-        AccessibilityManager.applyContrast(contrastLevel);
-        AccessibilityManager.applyKeyboardNavigation(keyboardNav);
-        AccessibilityManager.applyScreenReader(screenReader);
-
-        webix.message({
-            type: "success",
-            text: "Accessibility settings saved and applied!"
-        });
-    } else {
-        webix.message({
-            type: "error",
-            text: result.message || "Failed to save accessibility settings"
-        });
-    }
-}
-
-// 4. Notifications Section - WITH SETTINGS
-function createNotificationsSection() {
-    const user = JSON.parse(localStorage.getItem('currentUser'));
-
-    return {
-        rows: [
-            {
-                view: "template",
-                template: "<div style='font-size:28px; font-weight:700; color:#2c3e50; padding:0 30px; border-left:5px solid #f39c12;'>🔔 Notification Settings</div>",
-                height: 50,
-                borderless: true
-            },
-            {
-                view: "form",
-                id: "notificationSettingsForm",
-                css: "settings_form",
-                elements: [
-                    // Send Public Notifications Toggle
-                    {
-                        view: "template",
-                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:5px;'>Public Notifications</div>",
-                        height: 30,
-                        borderless: true
-                    },
-                    {
-                        view: "template",
-                        template: "<div style='font-size:14px; color:#7f8c8d; margin-bottom:15px; line-height:1.6;'>If you don't want to send notifications to others about your personal details changes (like address changes), you can disable it. Company notifications (job role changes) will always be sent.</div>",
-                        height: 60,
-                        borderless: true
-                    },
-                    {
-                        view: "checkbox",
-                        id: "sendPublicNotifications",
-                        labelRight: "Send public notifications when I update my address",
-                        value: user.send_public_notifications
-                    },
-                    { height: 30 },
-                    // Notification Preferences
-                    {
-                        view: "template",
-                        template: "<div style='font-size:18px; font-weight:600; color:#34495e; margin-bottom:15px;'>Notification Preferences</div>",
-                        height: 40,
-                        borderless: true
-                    },
-                    {
-                        view: "radio",
-                        id: "notificationPreference",
-                        vertical: true,
-                        value: user.notification_preference,
-                        options: [
-                            { id: "all", value: "All Notifications - Receive both company and public updates" },
-                            { id: "company", value: "Company Only - Only receive job role change notifications" },
-                            { id: "none", value: "None - Don't receive any notifications" }
-                        ]
-                    },
-                    { height: 20 },
-                    {
-                        cols: [
-                            {},
-                            {
-                                view: "button",
-                                value: "Save Notification Settings",
-                                css: "webix_primary",
-                                width: 220,
-                                click: handleSaveNotificationSettings
-                            },
-                            {}
-                        ]
-                    }
-                ]
-            }
-        ]
-    };
-}
-
-// Handler: Save Notification Settings
-async function handleSaveNotificationSettings() {
-    const sendPublic = $$("sendPublicNotifications").getValue();
-    const preference = $$("notificationPreference").getValue();
-
-    webix.message({
-        type: "info",
-        text: "Saving notification settings..."
-    });
-
-    const result = await apiCall(API_CONFIG.ENDPOINTS.NOTIFICATION_SETTINGS, 'POST', {
-        send_public_notifications: sendPublic,
-        notification_preference: preference
-    });
-
-    if (result.success) {
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
-        webix.message({
-            type: "success",
-            text: "Notification settings saved successfully!"
-        });
-    } else {
-        webix.message({
-            type: "error",
-            text: result.message || "Failed to save notification settings"
-        });
-    }
-}
-
-// Handler: Save Account Details
-async function handleSaveAccountDetails() {
-    const form = $$("accountDetailsForm");
-    const values = form.getValues();
-
-    webix.message({
-        type: "info",
-        text: "Saving changes..."
-    });
-
-    const result = await apiCall(API_CONFIG.ENDPOINTS.UPDATE_ACCOUNT, 'PUT', values);
-
-    if (result.success) {
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
-        webix.message({
-            type: "success",
-            text: "Account details updated successfully!"
-        });
-    } else {
-        webix.message({
-            type: "error",
-            text: result.message || "Failed to update account"
-        });
-    }
-}
-
-// Handler: Verify Current Password
-async function handleVerifyPassword() {
-    const currentPassword = $$("currentPassword").getValue();
-
-    if (!currentPassword) {
-        webix.message({
-            type: "error",
-            text: "Please enter your current password"
-        });
+function loadPrivacySecurityTab(user) {
+    console.log('Loading privacy security tab...');
+    const tab = $$("privacySecurityTab");
+    if (!tab) {
+        console.error('privacySecurityTab not found');
         return;
     }
 
-    const result = await apiCall(API_CONFIG.ENDPOINTS.VERIFY_PASSWORD, 'POST', {
-        current_password: currentPassword
-    });
+    const children = tab.getChildViews();
+    children.forEach(child => tab.removeView(child));
 
-    if (result.success) {
-        webix.message({
-            type: "success",
-            text: "Password verified! You can now change it."
+    const screenWidth = window.innerWidth;
+    const isMobile = screenWidth <= 768;
+
+    // Check if function exists
+    if (typeof createPrivacySecurityContent === 'function') {
+        tab.addView({
+            view: "scrollview",
+            scroll: "y",
+            body: createPrivacySecurityContent(user, isMobile)
         });
-
-        // Enable new password fields
-        $$("newPassword").enable();
-        $$("confirmPassword").enable();
-        $$("changePasswordBtn").enable();
+        console.log('Privacy security tab loaded');
     } else {
-        webix.message({
-            type: "error",
-            text: result.message || "Incorrect password"
+        console.error('createPrivacySecurityContent function not found');
+        tab.addView({
+            view: "template",
+            template: "<div style='padding:50px; text-align:center; color:red;'>Error: Privacy module not loaded</div>",
+            borderless: true
         });
     }
 }
 
-// Handler: Change Password
-async function handleChangePassword() {
-    const form = $$("passwordForm");
-    const values = form.getValues();
-
-    if (!values.new_password || !values.confirm_password) {
-        webix.message({
-            type: "error",
-            text: "Please fill in all password fields"
-        });
+function loadAccessibilityTab(user) {
+    console.log('Loading accessibility tab...');
+    const tab = $$("accessibilityTab");
+    if (!tab) {
+        console.error('accessibilityTab not found');
         return;
     }
 
-    if (values.new_password !== values.confirm_password) {
-        webix.message({
-            type: "error",
-            text: "New passwords do not match!"
+    const children = tab.getChildViews();
+    children.forEach(child => tab.removeView(child));
+
+    const screenWidth = window.innerWidth;
+    const isMobile = screenWidth <= 768;
+
+    // Check if function exists
+    if (typeof createAccessibilityContent === 'function') {
+        tab.addView({
+            view: "scrollview",
+            scroll: "y",
+            body: createAccessibilityContent(user, isMobile)
         });
+        console.log('Accessibility tab loaded');
+    } else {
+        console.error('createAccessibilityContent function not found');
+        tab.addView({
+            view: "template",
+            template: "<div style='padding:50px; text-align:center; color:red;'>Error: Accessibility module not loaded</div>",
+            borderless: true
+        });
+    }
+}
+
+function loadNotificationsTab(user) {
+    console.log('Loading notifications tab...');
+    const tab = $$("notificationsTab");
+    if (!tab) {
+        console.error('notificationsTab not found');
         return;
     }
 
-    const result = await apiCall(API_CONFIG.ENDPOINTS.CHANGE_PASSWORD, 'POST', values);
+    const children = tab.getChildViews();
+    children.forEach(child => tab.removeView(child));
 
-    if (result.success) {
-        webix.message({
-            type: "success",
-            text: "Password changed successfully!"
+    const screenWidth = window.innerWidth;
+    const isMobile = screenWidth <= 768;
+
+    // Check if function exists
+    if (typeof createNotificationsContent === 'function') {
+        tab.addView({
+            view: "scrollview",
+            scroll: "y",
+            body: createNotificationsContent(user, isMobile)
         });
-
-        // Reset form
-        form.clear();
-        $$("newPassword").disable();
-        $$("confirmPassword").disable();
-        $$("changePasswordBtn").disable();
+        console.log('Notifications tab loaded');
     } else {
-        webix.message({
-            type: "error",
-            text: result.message || "Failed to change password"
-        });
-    }
-}
-
-// Handler: Privacy Change
-function handlePrivacyChange(visibility) {
-    if (visibility === 'private') {
-        // Show confirmation dialog
-        webix.confirm({
-            title: "Change Privacy Setting",
-            text: "Do you want to make your account private?<br><br>If you set your account to private, your profile will be hidden from search results and your data will not be visible to others.",
-            ok: "Yes, Make Private",
-            cancel: "No, Keep Public",
-            callback: function (result) {
-                if (result) {
-                    updatePrivacySetting('private');
-                }
-            }
-        });
-    } else {
-        updatePrivacySetting('public');
-    }
-}
-
-// Update Privacy Setting
-async function updatePrivacySetting(visibility) {
-    const result = await apiCall(API_CONFIG.ENDPOINTS.UPDATE_PRIVACY, 'POST', {
-        profile_visibility: visibility
-    });
-
-    if (result.success) {
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
-
-        // Update button styles
-        if (visibility === 'public') {
-            $$("publicBtn").define("css", "webix_primary");
-            $$("privateBtn").define("css", "");
-        } else {
-            $$("publicBtn").define("css", "");
-            $$("privateBtn").define("css", "webix_danger");
-        }
-        $$("publicBtn").refresh();
-        $$("privateBtn").refresh();
-
-        webix.message({
-            type: "success",
-            text: `Privacy set to ${visibility}`
-        });
-    } else {
-        webix.message({
-            type: "error",
-            text: "Failed to update privacy setting"
+        console.error('createNotificationsContent function not found');
+        tab.addView({
+            view: "template",
+            template: "<div style='padding:50px; text-align:center; color:red;'>Error: Notifications module not loaded</div>",
+            borderless: true
         });
     }
 }
