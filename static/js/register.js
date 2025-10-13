@@ -1,4 +1,5 @@
 // Add CSS for consistent label font size
+
 if (!document.getElementById('label-font-style')) {
     const style = document.createElement('style');
     style.id = 'label-font-style';

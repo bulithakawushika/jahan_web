@@ -135,7 +135,7 @@ def get_profile(request):
         'user': UserSerializer(request.user).data
     })
 
-@api_view(['PUT'])
+@api_view(['POST', 'PUT'])
 def update_account_details(request):
     """
     Update user account details and send notifications
@@ -148,18 +148,46 @@ def update_account_details(request):
     
     user = request.user
     
-    # Track old values
+    # Track old values for notifications
     old_job_role = user.job_role
     old_address = user.address
     
-    # Update fields
+    # Update basic fields
     user.first_name = request.data.get('first_name', user.first_name)
     user.last_name = request.data.get('last_name', user.last_name)
     user.username = request.data.get('username', user.username)
     user.email = request.data.get('email', user.email)
     user.job_role = request.data.get('job_role', user.job_role)
-    user.birthday = request.data.get('birthday', user.birthday)
     user.address = request.data.get('address', user.address)
+    
+    # Update NEW fields - Phone, Department, Gender, Marital Status
+    user.phone_number = request.data.get('phone_number', user.phone_number)
+    user.department = request.data.get('department', user.department)
+    user.gender = request.data.get('gender', user.gender)
+    user.marital_status = request.data.get('marital_status', user.marital_status)
+    
+    # Update birthday fields safely
+    if 'birth_year' in request.data:
+        try:
+            user.birth_year = int(request.data.get('birth_year'))
+        except (ValueError, TypeError):
+            return Response({'success': False, 'message': 'Invalid birth year'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if 'birth_month' in request.data:
+        try:
+            user.birth_month = int(request.data.get('birth_month'))
+        except (ValueError, TypeError):
+            return Response({'success': False, 'message': 'Invalid birth month'}, status=status.HTTP_400_BAD_REQUEST)
+
+    if 'birth_day' in request.data:
+        try:
+            user.birth_day = int(request.data.get('birth_day'))
+        except (ValueError, TypeError):
+            return Response({'success': False, 'message': 'Invalid birth day'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Handle profile photo if uploaded
+    if 'profile_photo' in request.FILES:
+        user.profile_photo = request.FILES['profile_photo']
     
     try:
         user.save()
@@ -201,7 +229,6 @@ def update_account_details(request):
             'success': False,
             'message': str(e)
         }, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['POST'])
 def verify_current_password(request):
