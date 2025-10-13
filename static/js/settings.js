@@ -18,19 +18,6 @@ function createDesktopSettingsPage() {
                         cols: [
                             { width: 40 },
                             {
-                                view: "template",
-                                template: "<div style='text-align:center; font-size:38px; font-weight:bold; color:#2c3e50;'>Settings</div>",
-                                height: 60,
-                                borderless: true
-                            },
-                            { width: 40 }
-                        ]
-                    },
-                    { height: 20 },
-                    {
-                        cols: [
-                            { width: 40 },
-                            {
                                 view: "tabview",
                                 id: "settingsTabView",
                                 animate: false,
