@@ -1,10 +1,9 @@
-// Home Page UI
-function createHomePage() {
+// Create Desktop Home Page (with Toolbar)
+function createDesktopHomePage() {
     return {
         id: "homePage",
         rows: [
             createNavigationBar('home'),
-            // Main content area with proper sizing
             {
                 id: "homeContent",
                 gravity: 1,
@@ -16,7 +15,112 @@ function createHomePage() {
     };
 }
 
-// Reusable Navigation Bar
+// Create Mobile/Tablet Home Page (with Sidebar)
+function createMobileHomePage() {
+    return {
+        id: "homePage",
+        width: window.innerWidth,
+        cols: [
+            // Sidebar Navigation
+            {
+                view: "sidebar",
+                id: "mainSidebar",
+                width: 250,
+                css: "mobile_sidebar",
+                hidden: true,
+                data: [
+                    { id: "home", value: "Home", icon: "mdi mdi-home"},
+                    { id: "notifications", value: "Notifications", icon: "mdi mdi-comment"},
+                    { id: "profile", value: "Profile", icon: "wxi-user" },
+                    { id: "settings", value: "Settings", icon: "mdi mdi-cogs"},
+                    { id: "logout", value: "Logout", icon: "wxi-angle-double-right"},
+                ],
+                on: {
+                    onAfterSelect: function (id) {
+                        handleSidebarNavigation(id);
+                        // Hide sidebar after selection on mobile
+                        const sidebar = $$("mainSidebar");
+                        if (sidebar) {
+                            sidebar.hide();
+                            removeOutsideClickListener();
+                        }
+                    }
+                }
+            },
+            // Main Content Area
+            {
+                id: "mainContentArea",
+                gravity: 1,
+                rows: [
+                    // Top Bar with Menu Toggle
+                    {
+                        view: "toolbar",
+                        height: 45,
+                        css: "mobile_toolbar",
+                        elements: [
+                            {
+                                view: "button",
+                                id: "menuToggleBtn",
+                                type: "icon",
+                                css: "mobile_menu_button",
+                                icon: "wxi-dots",
+                                width: 50,
+                                click: function () {
+                                    toggleSidebar();
+                                }
+                            },
+                            {}
+                        ]
+                    },
+                    // Content Area
+                    {
+                        id: "homeContent",
+                        gravity: 1,
+                        rows: [
+                            createSearchView()
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+}
+
+// Create Responsive Home Page
+function createHomePage() {
+    const screenWidth = window.innerWidth;
+
+    // Desktop view (> 1024px) - Show Toolbar
+    if (screenWidth > 1024) {
+        return createDesktopHomePage();
+    } else {
+        // Mobile/Tablet view (<= 1024px) - Show Sidebar
+        return createMobileHomePage();
+    }
+}
+
+// Handle Sidebar Navigation
+function handleSidebarNavigation(id) {
+    switch (id) {
+        case 'home':
+            showHomePage();
+            break;
+        case 'notifications':
+            showNotificationsPage();
+            break;
+        case 'profile':
+            showProfilePage();
+            break;
+        case 'settings':
+            showSettingsPage();
+            break;
+        case 'logout':
+            handleLogout();
+            break;
+    }
+}
+
+// Reusable Navigation Bar (Desktop Only)
 function createNavigationBar(activePage) {
     return {
         view: "toolbar",
@@ -37,7 +141,7 @@ function createNavigationBar(activePage) {
             { width: 5 },
             {
                 view: "button",
-                id: "notificationBadge", // Keep original ID for badge functionality
+                id: "notificationBadge",
                 value: "Notifications",
                 width: 140,
                 badge: 0,
@@ -86,27 +190,31 @@ function createNavigationBar(activePage) {
 
 // Initial Search View (before search)
 function createSearchView() {
+    const screenWidth = window.innerWidth;
+    const isMobile = screenWidth <= 768;
+    const searchWidth = isMobile ? screenWidth - 40 : 700;
+
     return {
         id: "searchView",
         gravity: 1,
         rows: [
-            { height: 100 },
+            { height: isMobile ? 50 : 100 },
             {
                 cols: [
                     {},
                     {
-                        width: 700,
+                        width: searchWidth,
                         rows: [
                             {
                                 view: "template",
-                                template: "<div style='text-align:center; font-size:42px; font-weight:bold; color:#2c3e50; margin-bottom:15px;'>Who Are You Looking For Today?</div>",
-                                height: 80,
+                                template: `<div style='text-align:center; font-size:${isMobile ? '28px' : '42px'}; font-weight:bold; color:#2c3e50; margin-bottom:15px;'>Who Are You Looking For Today?</div>`,
+                                height: isMobile ? 70 : 80,
                                 borderless: true
                             },
                             {
                                 view: "template",
-                                template: "<div style='text-align:center; font-size:18px; color:#7f8c8d; margin-bottom:30px;'>Type a name or job role to discover team members across our organization</div>",
-                                height: 50,
+                                template: `<div style='text-align:center; font-size:${isMobile ? '14px' : '18px'}; color:#7f8c8d; margin-bottom:30px;'>Type a name or job role to discover team members across our organization</div>`,
+                                height: isMobile ? 40 : 50,
                                 borderless: true
                             },
                             {
@@ -117,7 +225,7 @@ function createSearchView() {
                                         placeholder: "Enter name or job role...",
                                         on: {
                                             onKeyPress: function (code, e) {
-                                                if (code === 13) { // Enter key
+                                                if (code === 13) {
                                                     performSearch();
                                                 }
                                             }
@@ -144,6 +252,9 @@ function createSearchView() {
 
 // Results View (after search)
 function createResultsView(results, query = '') {
+    const screenWidth = window.innerWidth;
+    const isMobile = screenWidth <= 768;
+
     return {
         gravity: 1,
         rows: [
@@ -152,13 +263,13 @@ function createResultsView(results, query = '') {
                 rows: [
                     {
                         view: "template",
-                        template: "<div style='text-align:center; font-size:28px; font-weight:bold; color:#2c3e50; padding-top:20px;'>Meet the people who fit your search</div>",
+                        template: `<div style='text-align:center; font-size:${isMobile ? '20px' : '28px'}; font-weight:bold; color:#2c3e50; padding-top:20px;'>Meet the people who fit your search</div>`,
                         height: 60,
                         borderless: true
                     },
                     {
                         cols: [
-                            { width: 50 },
+                            { width: isMobile ? 20 : 50 },
                             {
                                 view: "text",
                                 id: "topSearchInput",
@@ -179,7 +290,7 @@ function createResultsView(results, query = '') {
                                 css: "webix_primary",
                                 click: performSearch
                             },
-                            { width: 50 }
+                            { width: isMobile ? 20 : 50 }
                         ]
                     },
                     { height: 20 }
@@ -250,7 +361,7 @@ function createUserGrid(results) {
                     rows: [createUserCardContent(results[i + 1])]
                 });
             } else {
-                cols.push({ gravity: 1 });  // Empty space if odd number
+                cols.push({ gravity: 1 });
             }
 
             cols.push({ width: 20 });
@@ -316,7 +427,6 @@ function createUserCard(user) {
 
 // Perform Search Function
 async function performSearch() {
-    // Get search value
     let query = '';
     const searchInput = $$("searchInput");
     const topSearchInput = $$("topSearchInput");
@@ -343,20 +453,16 @@ async function performSearch() {
     const result = await apiCall(API_CONFIG.ENDPOINTS.SEARCH + `?query=${encodeURIComponent(query)}`, 'GET');
 
     if (result.success) {
-        // Get home content area
         const homeContent = $$("homeContent");
 
         if (homeContent) {
-            // Remove all existing views from homeContent
             while (homeContent.getChildViews().length > 0) {
                 homeContent.removeView(homeContent.getChildViews()[0]);
             }
 
-            // Add new results view
             homeContent.addView(createResultsView(result.results, query));
         }
 
-        // Read results for screen reader
         if (typeof AccessibilityManager !== 'undefined') {
             AccessibilityManager.readSearchResults(result.results);
         }
@@ -370,6 +476,18 @@ async function performSearch() {
             type: "error",
             text: "Search failed. Please try again."
         });
+    }
+}
+
+// Update Notification Badge on Sidebar (Mobile/Tablet)
+function updateSidebarNotificationBadge(count) {
+    const sidebar = $$("mainSidebar");
+    if (sidebar) {
+        const item = sidebar.getItem("notifications");
+        if (item) {
+            item.badge = count;
+            sidebar.updateItem("notifications", item);
+        }
     }
 }
 
@@ -389,3 +507,73 @@ async function handleLogout() {
         showLoginPage();
     }
 }
+
+// Toggle Sidebar Function
+function toggleSidebar() {
+    const sidebar = $$("mainSidebar");
+    if (!sidebar) return;
+
+    if (sidebar.config.hidden) {
+        sidebar.show();
+        // Add click listener to hide sidebar when clicking outside
+        setTimeout(() => {
+            attachOutsideClickListener();
+        }, 100);
+    } else {
+        sidebar.hide();
+        removeOutsideClickListener();
+    }
+}
+
+// Attach click listener to detect clicks outside sidebar
+function attachOutsideClickListener() {
+    const mainContentArea = $$("mainContentArea");
+    if (!mainContentArea) return;
+
+    const contentNode = mainContentArea.getNode();
+    if (contentNode) {
+        contentNode.addEventListener('click', handleOutsideClick);
+    }
+}
+
+// Remove outside click listener
+function removeOutsideClickListener() {
+    const mainContentArea = $$("mainContentArea");
+    if (!mainContentArea) return;
+
+    const contentNode = mainContentArea.getNode();
+    if (contentNode) {
+        contentNode.removeEventListener('click', handleOutsideClick);
+    }
+}
+
+// Handle clicks outside sidebar
+function handleOutsideClick(e) {
+    const sidebar = $$("mainSidebar");
+    if (!sidebar || sidebar.config.hidden) return;
+
+    const sidebarNode = sidebar.getNode();
+    const menuBtn = $$("menuToggleBtn");
+    const menuBtnNode = menuBtn ? menuBtn.getNode() : null;
+
+    // Check if click is outside sidebar and not on menu button
+    if (sidebarNode && !sidebarNode.contains(e.target) &&
+        menuBtnNode && !menuBtnNode.contains(e.target)) {
+        sidebar.hide();
+        removeOutsideClickListener();
+    }
+}
+
+// Handle window resize for responsiveness
+window.addEventListener('resize', function () {
+    const currentPage = $$("homePage");
+    if (currentPage && currentPage.isVisible()) {
+        // Clean up event listeners before destroying
+        removeOutsideClickListener();
+
+        if (mainApp) {
+            mainApp.destructor();
+        }
+        showHomePage();
+    }
+});

@@ -573,3 +573,30 @@ html {
          height: 50px !important;
      }
  }
+
+ /* Style for mobile sidebar */
+ .mobile_sidebar .webix_sidebar {
+     padding-top: 50px !important;
+     /* Add padding from top */
+ }
+
+ .mobile_sidebar .webix_tree_item {
+     font-size: 23px !important;
+     /* Increase text size */
+     padding: 40px 25px !important;
+     /* Increase gap between items */
+     letter-spacing: 0.3px;
+ }
+
+ /* Optional: add slight hover or active background for better UX */
+ .mobile_sidebar .webix_tree_item.webix_selected {
+     background-color: #e8f0fe !important;
+     color: #2c3e50 !important;
+     border-radius: 8px;
+ }
+
+ .mobile_sidebar .webix_tree_icon {
+     font-size: 20px !important;
+     /* Make icons slightly larger */
+     margin-right: 10px;
+ }
