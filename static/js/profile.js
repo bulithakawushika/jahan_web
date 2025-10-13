@@ -302,8 +302,14 @@ function buildProfileDetailsHTML(user, isMobile = false) {
     const birthday = formatBirthday(user.birthday);
     const padding = isMobile ? '25px 20px' : '35px 40px';
     const fontSize = isMobile ? '16px' : '18px';
-    const labelWidth = isMobile ? '110px' : '140px';
+    const labelWidth = isMobile ? '130px' : '160px';
     const labelSize = isMobile ? '12px' : '13px';
+
+    // Format gender display
+    const genderDisplay = formatGender(user.gender);
+
+    // Format marital status display
+    const maritalStatusDisplay = formatMaritalStatus(user.marital_status);
 
     return `
         <div style="background: white; border-radius: 12px; padding: ${padding}; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
@@ -331,10 +337,34 @@ function buildProfileDetailsHTML(user, isMobile = false) {
                 <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500; word-break: break-word;">${user.email || 'Not specified'}</div>
             </div>
             
+            <!-- Phone Number -->
+            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
+                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Phone Number:</div>
+                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${user.phone_number || 'Not specified'}</div>
+            </div>
+            
+            <!-- Department -->
+            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
+                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Department:</div>
+                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${user.department || 'Not specified'}</div>
+            </div>
+            
             <!-- Job Role -->
             <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
                 <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Job Role:</div>
                 <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${user.job_role || 'Not specified'}</div>
+            </div>
+            
+            <!-- Gender -->
+            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
+                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Gender:</div>
+                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${genderDisplay}</div>
+            </div>
+            
+            <!-- Marital Status -->
+            <div style="display: flex; align-items: center; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid #ecf0f1;">
+                <div style="width: ${labelWidth}; font-size: ${labelSize}; color: #7f8c8d; font-weight: 600;">Marital Status:</div>
+                <div style="flex: 1; font-size: ${fontSize}; color: #2c3e50; font-weight: 500;">${maritalStatusDisplay}</div>
             </div>
             
             <!-- Birthday -->
@@ -358,6 +388,46 @@ function buildProfileDetailsHTML(user, isMobile = false) {
             </div>
         </div>
     `;
+}
+
+// Format Gender
+function formatGender(gender) {
+    if (!gender) return 'Not specified';
+
+    const genderMap = {
+        'male': 'Male',
+        'female': 'Female',
+        'not_preferred': 'Prefer not to say'
+    };
+
+    return genderMap[gender] || 'Not specified';
+}
+
+// Format Marital Status
+function formatMaritalStatus(status) {
+    if (!status) return 'Not specified';
+
+    const statusMap = {
+        'single': 'Single',
+        'married': 'Married',
+        'divorced': 'Divorced',
+        'separated': 'Separated'
+    };
+
+    return statusMap[status] || 'Not specified';
+}
+
+// Format Birthday
+function formatBirthday(birthday) {
+    if (!birthday) return 'Not specified';
+
+    try {
+        const date = new Date(birthday);
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+    } catch (e) {
+        return 'Not specified';
+    }
 }
 
 // Show Error Message
