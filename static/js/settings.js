@@ -20,7 +20,7 @@ function createDesktopSettingsPage() {
                             {
                                 view: "tabview",
                                 id: "settingsTabView",
-                                animate: false,
+                                animate: true,
                                 tabbar: {
                                     optionWidth: 200,
                                     height: 50
