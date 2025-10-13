@@ -339,7 +339,8 @@ function createRegisterPage() {
                                                 height: 49,
                                                 value: "Choose File",
                                                 width: 350,
-                                                css: "label-font-size",
+                                                // css: "label-font-size",
+                                                css: "webix_primary",
                                                 accept: "image/*",
                                                 multiple: false,
                                                 autosend: false,
@@ -373,6 +374,7 @@ function createRegisterPage() {
                                             {
                                                 view: "button",
                                                 value: "Back to Login",
+                                                // css: "custom-border-button",
                                                 height: 45,
                                                 click: function () {
                                                     showLoginPage();

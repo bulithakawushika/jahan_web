@@ -1,5 +1,5 @@
 // ==========================================
-// ACCOUNT DETAILS TAB
+// ACCOUNT DETAILS TAB - RESTRUCTURED LAYOUT
 // File: static/settings_account.js
 // ==========================================
 
@@ -16,6 +16,14 @@ if (!document.getElementById('settings-label-font-style')) {
         }
         .webix_list {
             background-color: white !important;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding: 10px 0;
+            border-bottom: 2px solid #3498db;
+            margin-bottom: 15px;
         }
     `;
     document.head.appendChild(style);
@@ -88,333 +96,490 @@ function createAccountDetailsContent(user, isMobile = false) {
                 cols: [
                     { width: padding },
                     {
-                        rows: [
-                            {
-                                view: "form",
-                                id: "accountDetailsForm",
-                                css: "settings_form",
-                                elements: [
-                                    // Name fields
-                                    isMobile ?
+                        view: "form",
+                        id: "accountDetailsForm",
+                        css: "settings_form",
+                        elements: [
+                            // ROW 1: Profile Details (Left) and Work Details (Right)
+                            isMobile ?
+                                {
+                                    rows: [
+                                        // Profile Details Section (Mobile)
                                         {
-                                            rows: [
-                                                {
-                                                    view: "text",
-                                                    name: "first_name",
-                                                    label: "First Name",
-                                                    value: user.first_name,
-                                                    labelWidth: labelWidth,
-                                                    height: 49
-                                                },
-                                                {
-                                                    view: "text",
-                                                    name: "last_name",
-                                                    label: "Last Name",
-                                                    value: user.last_name,
-                                                    labelWidth: labelWidth,
-                                                    height: 49
-                                                }
-                                            ]
-                                        } :
+                                            template: "<div class='section-title'>Profile Details</div>",
+                                            height: 50,
+                                            borderless: true
+                                        },
+                                        {
+                                            view: "text",
+                                            name: "first_name",
+                                            label: "First Name",
+                                            value: user.first_name,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            icon: "wxi-pencil",
+                                            required: true
+                                        },
+                                        {
+                                            view: "text",
+                                            name: "last_name",
+                                            label: "Last Name",
+                                            value: user.last_name,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            icon: "wxi-pencil",
+                                            required: true
+                                        },
+                                        {
+                                            view: "text",
+                                            name: "username",
+                                            label: "Username",
+                                            value: user.username,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            icon: "wxi-pencil",
+                                            required: true
+                                        },
                                         {
                                             cols: [
                                                 {
-                                                    view: "text",
-                                                    name: "first_name",
-                                                    label: "First Name",
-                                                    value: user.first_name,
-                                                    labelWidth: labelWidth,
-                                                    height: 49
-                                                },
-                                                { width: 20 },
-                                                {
-                                                    view: "text",
-                                                    name: "last_name",
-                                                    label: "Last Name",
-                                                    value: user.last_name,
-                                                    labelWidth: labelWidth,
-                                                    height: 49
-                                                }
-                                            ]
-                                        },
-                                    // Username and Email
-                                    {
-                                        view: "text",
-                                        name: "username",
-                                        label: "Username",
-                                        value: user.username,
-                                        labelWidth: labelWidth,
-                                        height: 49
-                                    },
-                                    {
-                                        view: "text",
-                                        name: "email",
-                                        label: "Email",
-                                        value: user.email,
-                                        labelWidth: labelWidth,
-                                        height: 49
-                                    },
-                                    // Phone Number
-                                    {
-                                        view: "text",
-                                        name: "phone_number",
-                                        label: "Phone Number",
-                                        value: user.phone_number,
-                                        labelWidth: labelWidth,
-                                        height: 49
-                                    },
-                                    // Job Role and Department
-                                    {
-                                        view: "text",
-                                        name: "job_role",
-                                        label: "Job Role",
-                                        value: user.job_role,
-                                        labelWidth: labelWidth,
-                                        height: 49
-                                    },
-                                    {
-                                        view: "text",
-                                        name: "department",
-                                        label: "Department",
-                                        value: user.department,
-                                        labelWidth: labelWidth,
-                                        height: 49
-                                    },
-                                    // Gender and Marital Status
-                                    isMobile ?
-                                        {
-                                            rows: [
-                                                {
-                                                    view: "richselect",
-                                                    name: "gender",
-                                                    label: "Gender",
-                                                    value: user.gender,
+                                                    view: "uploader",
+                                                    id: "settingsProfilePhotoUploader",
+                                                    name: "profile_photo",
+                                                    label: "Profile Photo",
                                                     labelWidth: labelWidth,
                                                     height: 49,
-                                                    options: [
-                                                        { id: "male", value: "Male" },
-                                                        { id: "female", value: "Female" },
-                                                        { id: "not_preferred", value: "Prefer not to say" }
-                                                    ]
-                                                },
-                                                {
-                                                    view: "richselect",
-                                                    name: "marital_status",
-                                                    label: "Marital Status",
-                                                    value: user.marital_status,
-                                                    labelWidth: labelWidth,
-                                                    height: 49,
-                                                    options: [
-                                                        { id: "single", value: "Single" },
-                                                        { id: "married", value: "Married" },
-                                                        { id: "divorced", value: "Divorced" },
-                                                        { id: "separated", value: "Separated" }
-                                                    ]
-                                                }
-                                            ]
-                                        } :
-                                        {
-                                            cols: [
-                                                {
-                                                    view: "richselect",
-                                                    name: "gender",
-                                                    label: "Gender",
-                                                    value: user.gender,
-                                                    labelWidth: labelWidth,
-                                                    height: 49,
-                                                    options: [
-                                                        { id: "male", value: "Male" },
-                                                        { id: "female", value: "Female" },
-                                                        { id: "not_preferred", value: "Prefer not to say" }
-                                                    ]
-                                                },
-                                                { width: 20 },
-                                                {
-                                                    view: "richselect",
-                                                    name: "marital_status",
-                                                    label: "Marital Status",
-                                                    value: user.marital_status,
-                                                    labelWidth: labelWidth,
-                                                    height: 49,
-                                                    options: [
-                                                        { id: "single", value: "Single" },
-                                                        { id: "married", value: "Married" },
-                                                        { id: "divorced", value: "Divorced" },
-                                                        { id: "separated", value: "Separated" }
-                                                    ]
-                                                }
-                                            ]
-                                        },
-                                    { height: 10 },
-                                    // Birthday - Year, Month, Day
-                                    {
-                                        view: "template",
-                                        template: "<div style='font-size:14px; color:#2c3e50; font-weight:bold;'>Date of Birth</div>",
-                                        height: 30,
-                                        borderless: true
-                                    },
-                                    isMobile ?
-                                        {
-                                            rows: [
-                                                {
-                                                    view: "richselect",
-                                                    name: "birth_year",
-                                                    label: "Year",
-                                                    value: user.birth_year,
-                                                    labelWidth: labelWidth,
-                                                    height: 49,
-                                                    options: getYearOptions()
-                                                },
-                                                {
-                                                    view: "richselect",
-                                                    name: "birth_month",
-                                                    label: "Month",
-                                                    value: user.birth_month,
-                                                    labelWidth: labelWidth,
-                                                    height: 49,
-                                                    options: getMonthOptions()
-                                                },
-                                                {
-                                                    view: "richselect",
-                                                    name: "birth_day",
-                                                    label: "Day",
-                                                    value: user.birth_day,
-                                                    labelWidth: labelWidth,
-                                                    height: 49,
-                                                    options: getDayOptions()
-                                                }
-                                            ]
-                                        } :
-                                        {
-                                            cols: [
-                                                { gravity: 0.1 },
-                                                {
-                                                    view: "richselect",
-                                                    name: "birth_year",
-                                                    label: "Year",
-                                                    value: user.birth_year,
-                                                    labelWidth: 60,
-                                                    height: 49,
-                                                    options: getYearOptions()
-                                                },
-                                                { width: 20 },
-                                                {
-                                                    view: "richselect",
-                                                    name: "birth_month",
-                                                    label: "Month",
-                                                    value: user.birth_month,
-                                                    labelWidth: 60,
-                                                    height: 49,
-                                                    options: getMonthOptions()
-                                                },
-                                                { width: 20 },
-                                                {
-                                                    view: "richselect",
-                                                    name: "birth_day",
-                                                    label: "Day",
-                                                    value: user.birth_day,
-                                                    labelWidth: 60,
-                                                    height: 49,
-                                                    options: getDayOptions()
-                                                }
-                                            ]
-                                        },
-                                    { height: 10 },
-                                    // Address
-                                    {
-                                        view: "textarea",
-                                        name: "address",
-                                        label: "Address",
-                                        value: user.address,
-                                        labelWidth: labelWidth,
-                                        height: 80
-                                    },
-                                    { height: 10 },
-                                    // Profile Photo Upload
-                                    {
-                                        cols: [
-                                            {
-                                                view: "uploader",
-                                                id: "settingsProfilePhotoUploader",
-                                                name: "profile_photo",
-                                                label: "Profile Photo",
-                                                labelWidth: labelWidth,
-                                                height: 49,
-                                                value: "Choose File",
-                                                width: isMobile ? 280 : 350,
-                                                accept: "image/*",
-                                                multiple: false,
-                                                autosend: false,
-                                                on: {
-                                                    onBeforeFileAdd: function (file) {
-                                                        updateSettingsPhotoDisplay(file.name);
-                                                        return true;
+                                                    value: "Choose File",
+                                                    width: 280,
+                                                    accept: "image/*",
+                                                    multiple: false,
+                                                    autosend: false,
+                                                    on: {
+                                                        onBeforeFileAdd: function (file) {
+                                                            updateSettingsPhotoDisplay(file.name);
+                                                            return true;
+                                                        }
                                                     }
-                                                }
-                                            },
-                                            {
-                                                view: "template",
-                                                id: "settingsPhotoDisplay",
-                                                template: user.profile_photo ?
-                                                    `<div style="display: flex; align-items: center; padding: 5px;">
+                                                },
+                                                {
+                                                    view: "template",
+                                                    id: "settingsPhotoDisplay",
+                                                    template: user.profile_photo ?
+                                                        `<div style="display: flex; align-items: center; padding: 5px;">
                                                         <span style="color: #27ae60; font-size: 20px; margin-right: 8px;">✓</span>
                                                         <span style="color: #2c3e50; font-size: 14px;">${currentPhotoName}</span>
                                                     </div>` : "",
-                                                borderless: true
-                                            }
-                                        ]
-                                    },
-                                    { height: 20 },
-                                    // Action Buttons
-                                    isMobile ?
+                                                    borderless: true
+                                                }
+                                            ]
+                                        },
+                                        { height: 20 },
+                                        // Work Details Section (Mobile)
+                                        {
+                                            template: "<div class='section-title'>Work Details</div>",
+                                            height: 50,
+                                            borderless: true
+                                        },
+                                        {
+                                            view: "text",
+                                            name: "job_role",
+                                            label: "Job Role",
+                                            value: user.job_role,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            icon: "wxi-pencil"
+                                        },
+                                        {
+                                            view: "text",
+                                            name: "department",
+                                            label: "Department",
+                                            value: user.department,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            icon: "wxi-pencil"
+                                        },
+                                        { height: 20 }
+                                    ]
+                                } :
+                                {
+                                    cols: [
+                                        // Left Column: Profile Details
                                         {
                                             rows: [
                                                 {
-                                                    view: "button",
-                                                    value: "Save Changes",
-                                                    css: "webix_primary",
-                                                    height: 45,
-                                                    click: handleSaveAccountDetails
+                                                    template: "<div class='section-title'>Profile Details</div>",
+                                                    height: 60,
+                                                    borderless: true
+                                                },
+                                                {
+                                                    view: "text",
+                                                    name: "first_name",
+                                                    label: "First Name",
+                                                    value: user.first_name,
+                                                    labelWidth: labelWidth,
+                                                    height: 49,
+                                                    icon: "wxi-pencil",
+                                                    required: true
                                                 },
                                                 { height: 10 },
                                                 {
-                                                    view: "button",
-                                                    value: "Cancel",
-                                                    height: 45,
-                                                    click: function () {
-                                                        loadSettingsData();
-                                                        webix.message("Changes discarded");
-                                                    }
-                                                }
-                                            ]
-                                        } :
-                                        {
-                                            cols: [
-                                                {},
-                                                {
-                                                    view: "button",
-                                                    value: "Save Changes",
-                                                    css: "webix_primary",
-                                                    width: 150,
-                                                    height: 45,
-                                                    click: handleSaveAccountDetails
+                                                    view: "text",
+                                                    name: "last_name",
+                                                    label: "Last Name",
+                                                    value: user.last_name,
+                                                    labelWidth: labelWidth,
+                                                    height: 49,
+                                                    icon: "wxi-pencil",
+                                                    required: true
                                                 },
-                                                { width: 15 },
+                                                { height: 10 },
                                                 {
-                                                    view: "button",
-                                                    value: "Cancel",
-                                                    width: 120,
-                                                    height: 45,
-                                                    click: function () {
-                                                        loadSettingsData();
-                                                        webix.message("Changes discarded");
-                                                    }
+                                                    view: "text",
+                                                    name: "username",
+                                                    label: "Username",
+                                                    value: user.username,
+                                                    labelWidth: labelWidth,
+                                                    height: 49,
+                                                    icon: "wxi-pencil",
+                                                    required: true
+                                                },
+                                                {}
+                                            ]
+                                        },
+                                        { width: 30 },
+                                        // Right Column: Work Details
+                                        {
+                                            rows: [
+                                                {
+                                                    template: "<div class='section-title'>Work Details</div>",
+                                                    height: 60,
+                                                    borderless: true
+                                                },
+                                                {
+                                                    view: "text",
+                                                    name: "job_role",
+                                                    label: "Job Role",
+                                                    value: user.job_role,
+                                                    labelWidth: labelWidth,
+                                                    height: 49,
+                                                    icon: "wxi-pencil"
+                                                },
+                                                { height: 10 },
+                                                {
+                                                    view: "text",
+                                                    name: "department",
+                                                    label: "Department",
+                                                    value: user.department,
+                                                    labelWidth: labelWidth,
+                                                    height: 49,
+                                                    icon: "wxi-pencil"
                                                 },
                                                 {}
                                             ]
                                         }
+                                    ]
+                                },
+                            { height: 10 },
+                            {
+                                cols: [
+                                    {
+                                        view: "uploader",
+                                        id: "settingsProfilePhotoUploader",
+                                        name: "profile_photo",
+                                        label: "Profile Photo",
+                                        labelWidth: labelWidth,
+                                        height: 40,
+                                        value: "Choose File",
+                                        width: 350,
+                                        accept: "image/*",
+                                        multiple: false,
+                                        autosend: false,
+                                        on: {
+                                            onBeforeFileAdd: function (file) {
+                                                updateSettingsPhotoDisplay(file.name);
+                                                return true;
+                                            }
+                                        }
+                                    },
+                                    { width: 20 },
+                                    {
+                                        view: "template",
+                                        id: "settingsPhotoDisplay",
+                                        template: user.profile_photo ?
+                                            `<div style="display: flex; align-items: center; padding: 5px;">
+                                                                    <span style="color: #27ae60; font-size: 20px; margin-right: 8px;">✓</span>
+                                                                    <span style="color: #2c3e50; font-size: 14px;">${currentPhotoName}</span>
+                                                                </div>` : "",
+                                        borderless: true
+                                    }
                                 ]
-                            }
+                            },
+                            { height: 20 },
+
+                            // ROW 2: Personal Details
+                            {
+                                template: "<div class='section-title'>Personal Details</div>",
+                                height: 50,
+                                borderless: true
+                            },
+
+                            // Email and Phone Number
+                            isMobile ?
+                                {
+                                    rows: [
+                                        {
+                                            view: "text",
+                                            name: "email",
+                                            label: "Email",
+                                            value: user.email,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            icon: "wxi-pencil",
+                                            required: true
+                                        },
+                                        {
+                                            view: "text",
+                                            name: "phone_number",
+                                            label: "Phone Number",
+                                            value: user.phone_number,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            icon: "wxi-pencil",
+                                            required: true
+                                        }
+                                    ]
+                                } :
+                                {
+                                    cols: [
+                                        {
+                                            view: "text",
+                                            name: "email",
+                                            label: "Email",
+                                            value: user.email,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            icon: "wxi-pencil",
+                                            required: true
+                                        },
+                                        { width: 20 },
+                                        {
+                                            view: "text",
+                                            name: "phone_number",
+                                            label: "Phone Number",
+                                            value: user.phone_number,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            icon: "wxi-pencil",
+                                            required: true
+                                        }
+                                    ]
+                                },
+
+                            // Gender and Marital Status
+                            isMobile ?
+                                {
+                                    rows: [
+                                        {
+                                            view: "richselect",
+                                            name: "gender",
+                                            label: "Gender",
+                                            value: user.gender,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            options: [
+                                                { id: "male", value: "Male" },
+                                                { id: "female", value: "Female" },
+                                                { id: "not_preferred", value: "Prefer not to say" }
+                                            ]
+                                        },
+                                        {
+                                            view: "richselect",
+                                            name: "marital_status",
+                                            label: "Marital Status",
+                                            value: user.marital_status,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            options: [
+                                                { id: "single", value: "Single" },
+                                                { id: "married", value: "Married" },
+                                                { id: "divorced", value: "Divorced" },
+                                                { id: "separated", value: "Separated" }
+                                            ]
+                                        }
+                                    ]
+                                } :
+                                {
+                                    cols: [
+                                        {
+                                            view: "richselect",
+                                            name: "gender",
+                                            label: "Gender",
+                                            value: user.gender,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            options: [
+                                                { id: "male", value: "Male" },
+                                                { id: "female", value: "Female" },
+                                                { id: "not_preferred", value: "Prefer not to say" }
+                                            ]
+                                        },
+                                        { width: 20 },
+                                        {
+                                            view: "richselect",
+                                            name: "marital_status",
+                                            label: "Marital Status",
+                                            value: user.marital_status,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            options: [
+                                                { id: "single", value: "Single" },
+                                                { id: "married", value: "Married" },
+                                                { id: "divorced", value: "Divorced" },
+                                                { id: "separated", value: "Separated" }
+                                            ]
+                                        }
+                                    ]
+                                },
+
+                            // Date of Birth
+                            { height: 10 },
+                            {
+                                view: "template",
+                                template: "<div style='font-size:14px; color:#2c3e50; font-weight:bold; margin-top: 10px;'>Date of Birth</div>",
+                                height: 30,
+                                borderless: true
+                            },
+                            isMobile ?
+                                {
+                                    rows: [
+                                        {
+                                            view: "richselect",
+                                            name: "birth_year",
+                                            label: "Year",
+                                            value: user.birth_year,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            options: getYearOptions()
+                                        },
+                                        {
+                                            view: "richselect",
+                                            name: "birth_month",
+                                            label: "Month",
+                                            value: user.birth_month,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            options: getMonthOptions()
+                                        },
+                                        {
+                                            view: "richselect",
+                                            name: "birth_day",
+                                            label: "Day",
+                                            value: user.birth_day,
+                                            labelWidth: labelWidth,
+                                            height: 49,
+                                            options: getDayOptions()
+                                        }
+                                    ]
+                                } :
+                                { height: 5 },
+                            {
+                                cols: [
+                                    { gravity: 0.1 },
+                                    {
+                                        view: "richselect",
+                                        name: "birth_year",
+                                        label: "Year",
+                                        value: user.birth_year,
+                                        labelWidth: 60,
+                                        height: 49,
+                                        options: getYearOptions()
+                                    },
+                                    { width: 20 },
+                                    {
+                                        view: "richselect",
+                                        name: "birth_month",
+                                        label: "Month",
+                                        value: user.birth_month,
+                                        labelWidth: 60,
+                                        height: 49,
+                                        options: getMonthOptions()
+                                    },
+                                    { width: 20 },
+                                    {
+                                        view: "richselect",
+                                        name: "birth_day",
+                                        label: "Day",
+                                        value: user.birth_day,
+                                        labelWidth: 60,
+                                        height: 49,
+                                        options: getDayOptions()
+                                    }
+                                ]
+                            },
+
+                            { height: 10 },
+
+                            // Address
+                            {
+                                view: "text",
+                                name: "address",
+                                label: "Address",
+                                value: user.address,
+                                labelWidth: labelWidth,
+                                height: 49,
+                                icon: "wxi-pencil"
+                            },
+
+                            { height: 20 },
+
+                            // ROW 3: Action Buttons
+                            isMobile ?
+                                {
+                                    rows: [
+                                        {
+                                            view: "button",
+                                            value: "Save Changes",
+                                            css: "webix_primary",
+                                            height: 45,
+                                            click: handleSaveAccountDetails
+                                        },
+                                        { height: 10 },
+                                        {
+                                            view: "button",
+                                            value: "Cancel",
+                                            height: 45,
+                                            click: function () {
+                                                loadSettingsData();
+                                                webix.message("Changes discarded");
+                                            }
+                                        }
+                                    ]
+                                } :
+                                {
+                                    cols: [
+                                        {},
+                                        {
+                                            view: "button",
+                                            value: "Save Changes",
+                                            css: "webix_primary",
+                                            width: 150,
+                                            height: 45,
+                                            click: handleSaveAccountDetails
+                                        },
+                                        { width: 15 },
+                                        {
+                                            view: "button",
+                                            value: "Cancel",
+                                            width: 120,
+                                            height: 45,
+                                            click: function () {
+                                                loadSettingsData();
+                                                webix.message("Changes discarded");
+                                            }
+                                        },
+                                        {}
+                                    ]
+                                }
                         ]
                     },
                     { width: padding }
@@ -432,6 +597,31 @@ function createAccountDetailsContent(user, isMobile = false) {
 async function handleSaveAccountDetails() {
     const form = $$("accountDetailsForm");
     const values = form.getValues();
+
+    // Validate required fields
+    const requiredFields = [
+        { name: 'first_name', label: 'First Name' },
+        { name: 'last_name', label: 'Last Name' },
+        { name: 'username', label: 'Username' },
+        { name: 'email', label: 'Email' },
+        { name: 'phone_number', label: 'Phone Number' }
+    ];
+
+    const emptyFields = [];
+    for (let field of requiredFields) {
+        if (!values[field.name] || values[field.name].trim() === '') {
+            emptyFields.push(field.label);
+        }
+    }
+
+    if (emptyFields.length > 0) {
+        webix.message({
+            type: "error",
+            text: `Please fill in the following required fields: ${emptyFields.join(', ')}`,
+            expire: 5000
+        });
+        return;
+    }
 
     webix.message({
         type: "info",
