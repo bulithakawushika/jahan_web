@@ -1,50 +1,15 @@
 // Global variable to store unread count
 let unreadNotificationCount = 0;
 
-// Notifications Page UI
-function createNotificationsPage() {
+// Create Desktop Notifications Page (with Toolbar)
+function createDesktopNotificationsPage() {
     return {
         id: "notificationsPage",
         rows: [
-            // Toolbar
-            {
-                view: "toolbar",
-                height: 60,
-                elements: [
-                    {
-                        view: "button",
-                        value: "← Back to Home",
-                        width: 150,
-                        click: showHomePage
-                    },
-                    {
-                        view: "label",
-                        label: "Notifications"
-                    },
-                    {},
-                    {
-                        view: "button",
-                        value: "Profile",
-                        width: 100,
-                        click: showProfilePage
-                    },
-                    {
-                        view: "button",
-                        value: "Settings",
-                        width: 100,
-                        click: showSettingsPage
-                    },
-                    {
-                        view: "button",
-                        value: "Logout",
-                        width: 100,
-                        click: handleLogout
-                    }
-                ]
-            },
-            // Content area
+            createNavigationBar('notifications'), // Use shared navigation bar
             {
                 id: "notificationsContentArea",
+                gravity: 1,
                 rows: [
                     {
                         view: "template",
@@ -57,6 +22,94 @@ function createNotificationsPage() {
     };
 }
 
+// Create Mobile/Tablet Notifications Page (with Sidebar)
+function createMobileNotificationsPage() {
+    return {
+        id: "notificationsPage",
+        width: window.innerWidth,
+        cols: [
+            // Sidebar Navigation
+            {
+                view: "sidebar",
+                id: "mainSidebar",
+                width: 250,
+                css: "mobile_sidebar",
+                hidden: true,
+                data: [
+                    { id: "home", value: "Home", icon: "mdi mdi-home" },
+                    { id: "notifications", value: "Notifications", icon: "mdi mdi-comment" },
+                    { id: "profile", value: "Profile", icon: "wxi-user" },
+                    { id: "settings", value: "Settings", icon: "mdi mdi-cogs" },
+                    { id: "logout", value: "Logout", icon: "wxi-angle-double-right" },
+                ],
+                on: {
+                    onAfterSelect: function (id) {
+                        handleSidebarNavigation(id);
+                        // Hide sidebar after selection on mobile
+                        const sidebar = $$("mainSidebar");
+                        if (sidebar) {
+                            sidebar.hide();
+                            removeOutsideClickListener();
+                        }
+                    }
+                }
+            },
+            // Main Content Area
+            {
+                id: "mainContentArea",
+                gravity: 1,
+                rows: [
+                    // Top Bar with Menu Toggle
+                    {
+                        view: "toolbar",
+                        height: 40,
+                        css: "mobile_toolbar",
+                        elements: [
+                            {
+                                view: "button",
+                                id: "menuToggleBtn",
+                                type: "icon",
+                                css: "mobile_menu_button",
+                                icon: "wxi-dots",
+                                width: 50,
+                                click: function () {
+                                    toggleSidebar();
+                                }
+                            },
+                            {}
+                        ]
+                    },
+                    // Content Area
+                    {
+                        id: "notificationsContentArea",
+                        gravity: 1,
+                        rows: [
+                            {
+                                view: "template",
+                                template: "<div style='text-align:center; padding:100px;'><div class='loading-spinner'></div><br><br>Loading notifications...</div>",
+                                borderless: true
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+}
+
+// Create Responsive Notifications Page
+function createNotificationsPage() {
+    const screenWidth = window.innerWidth;
+
+    // Desktop view (> 1024px) - Show Toolbar
+    if (screenWidth > 1024) {
+        return createDesktopNotificationsPage();
+    } else {
+        // Mobile/Tablet view (<= 1024px) - Show Sidebar
+        return createMobileNotificationsPage();
+    }
+}
+
 // Load Notifications
 async function loadNotifications() {
     const result = await apiCall(API_CONFIG.ENDPOINTS.NOTIFICATIONS, 'GET');
@@ -65,6 +118,7 @@ async function loadNotifications() {
         unreadNotificationCount = result.unread_count;
         displayNotifications(result.notifications, result.unread_count);
         updateNotificationBadge(result.unread_count);
+        updateSidebarNotificationBadge(result.unread_count); // Update sidebar badge too
     } else {
         webix.message({
             type: "error",
@@ -95,9 +149,33 @@ function displayNotifications(notifications, unreadCount) {
                 {
                     view: "template",
                     template: `
-                        <div style='text-align:center; font-size:38px; font-weight:bold; color:#2c3e50;'>
-                            Notifications
-                            ${unreadCount > 0 ? `<span style='background:#e74c3c; color:white; border-radius:50%; padding:5px 12px; font-size:20px; margin-left:15px;'>${unreadCount}</span>` : ''}
+                        <div style="
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size: 38px;
+                            font-weight: bold;
+                            color: #2c3e50;
+                            height: 100%;
+                        ">
+                            <span>Notifications</span>
+                            ${unreadCount > 0 ? `
+                                <span style="
+                                    background: #e74c3c;
+                                    color: white;
+                                    border-radius: 50%;
+                                    padding: 5px 12px;
+                                    font-size: 20px;
+                                    margin-left: 15px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    min-width: 35px;
+                                    height: 35px;
+                                ">
+                                    ${unreadCount}
+                                </span>
+                            ` : ''}
                         </div>
                     `,
                     height: 70,
@@ -131,7 +209,7 @@ function createNotificationsList(notifications) {
     if (companyNotifications.length > 0) {
         rows.push({
             view: "template",
-            template: "<div style='font-size:24px; font-weight:700; color:#2c3e50; padding:0 40px; border-left:5px solid #3498db; margin-bottom:20px;'>💼 Company Notifications</div>",
+            template: "<div style='font-size:24px; font-weight:700; color:#2c3e50; padding:0 40px; border-left:5px solid #3498db; margin-bottom:20px;'>🏛️ Company Notifications</div>",
             height: 50,
             borderless: true
         });
@@ -250,6 +328,7 @@ async function markAsRead(statusId) {
 
             unreadNotificationCount = result.unread_count;
             updateNotificationBadge(result.unread_count);
+            updateSidebarNotificationBadge(result.unread_count);
 
             // Reload notifications
             loadNotifications();
@@ -268,7 +347,7 @@ async function markAsRead(statusId) {
     }
 }
 
-// Update Notification Badge in Home Page
+// Update Notification Badge in Home Page Toolbar
 function updateNotificationBadge(count) {
     const badge = $$("notificationBadge");
     if (badge) {
@@ -295,5 +374,6 @@ async function checkUnreadNotifications() {
         });
 
         updateNotificationBadge(result.unread_count);
+        updateSidebarNotificationBadge(result.unread_count);
     }
 }

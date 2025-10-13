@@ -55,7 +55,7 @@ function createMobileHomePage() {
                     // Top Bar with Menu Toggle
                     {
                         view: "toolbar",
-                        height: 45,
+                        height: 40,
                         css: "mobile_toolbar",
                         elements: [
                             {
