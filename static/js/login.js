@@ -119,6 +119,7 @@ function createDesktopLoginPage() {
                                 align-items: center;
                                 height: 100%;
                                 width: 100%;
+                                margin-top: 22px;
                             ">
                                 <img src="/static/images/login_image.png" 
                                      style="max-width: 80%; max-height: 80%; object-fit: contain;" 
