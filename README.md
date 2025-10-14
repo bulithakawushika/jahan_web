@@ -6,6 +6,11 @@
 
 ---
 
+## Architecture
+
+![Deployment Architecture](https://github.com/bulithakawushika/jahan_web/raw/main/Deployment_Architecture.png)
+---
+
 ## Functionality
 
 - Fully functional features as per assessment requirements.
