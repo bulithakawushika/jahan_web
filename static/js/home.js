@@ -386,28 +386,58 @@ function createUserCardContent(user) {
         view: "template",
         css: "user_card",
         template: `
-            <div style="display: flex; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); height: 160px; margin: 10px;">
-                <div style="flex-shrink: 0; margin-right: 20px;">
-                    <img src="${profilePhoto}" style="width: 120px; height: 120px; border-radius: 10px; object-fit: cover; border: 3px solid #3498db;" />
+            <div style="display: flex; background: white; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); height: auto; margin: 10px;">
+    <!-- Profile Photo -->
+    <div style="flex-shrink: 0; margin-right: 20px;">
+        <img src="${profilePhoto}" style="width: 120px; height: 120px; border-radius: 10px; object-fit: cover; border: 3px solid #3498db;" />
+    </div>
+
+    <!-- Info Section -->
+    <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; overflow: hidden;">
+        <!-- Name -->
+        <div style="font-size: 22px; font-weight: bold; color: #2c3e50; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+            ${user.first_name} ${user.last_name}
+        </div>
+        <div style="font-size: 15px; color: #3498db; margin-bottom: 8px;">
+                    <strong>Job:</strong> ${user.job_role || 'Not specified'}
+        </div>
+
+        <!-- Two Columns -->
+        <div style="display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap;">
+            
+            <!-- Left Column -->
+            <div style="flex: 1; min-width: 250px;">
+                
+                <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
+                    <strong>Department:</strong> ${user.department || 'Not specified'}
                 </div>
-                <div style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; overflow: hidden;">
-                    <div style="font-size: 22px; font-weight: bold; color: #2c3e50; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        ${user.first_name} ${user.last_name}
-                    </div>
-                    <div style="font-size: 15px; color: #3498db; margin-bottom: 6px;">
-                        <strong>Job:</strong> ${user.job_role || 'Not specified'}
-                    </div>
-                    <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        <strong>Email:</strong> ${user.email}
-                    </div>
-                    <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 4px;">
-                        <strong>Age:</strong> ${calculateAge(user.birthday)}
-                    </div>
-                    <div style="font-size: 13px; color: #7f8c8d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        <strong>Address:</strong> ${user.address || 'Not specified'}
-                    </div>
+                <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
+                    <strong>Email:</strong> ${user.email}
+                </div>
+                <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
+                    <strong>Phone Number:</strong> ${user.phone_number}
+                </div>
+                <div style="font-size: 13px; color: #7f8c8d;">
+                    <strong>Address:</strong> ${user.address || 'Not specified'}
                 </div>
             </div>
+
+            <!-- Right Column -->
+            <div style="flex: 1; min-width: 200px;">
+                <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
+                    <strong>Age:</strong> ${calculateAge(user.birthday)}
+                </div>
+                <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
+                    <strong>Gender:</strong> ${user.gender || 'Not specified'}
+                </div>
+                <div style="font-size: 13px; color: #7f8c8d;">
+                    <strong>Marital Status:</strong> ${user.marital_status || 'Not specified'}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
         `,
         borderless: true
     };

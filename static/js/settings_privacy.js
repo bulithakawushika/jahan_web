@@ -15,6 +15,9 @@ function createPrivacySecurityContent(user, isMobile = false) {
                     { width: padding },
                     {
                         rows: [
+                            // ==========================
+                            // CHANGE PASSWORD SECTION
+                            // ==========================
                             {
                                 view: "form",
                                 id: "passwordForm",
@@ -27,13 +30,23 @@ function createPrivacySecurityContent(user, isMobile = false) {
                                         borderless: true
                                     },
                                     {
-                                        view: "text",
+                                        view: "search",
                                         type: "password",
                                         id: "currentPassword",
+                                        height: 49,
                                         name: "current_password",
                                         label: "Current Password",
                                         placeholder: "Enter current password",
-                                        labelWidth: labelWidth
+                                        labelWidth: labelWidth,
+                                        icon: "wxi-eye",
+                                        attributes: {
+                                            autocomplete: "off"
+                                        },
+                                        on: {
+                                            onSearchIconClick: function (e) {
+                                                togglePasswordVisibility(this, e.target);
+                                            }
+                                        }
                                     },
                                     {
                                         cols: [
@@ -41,34 +54,53 @@ function createPrivacySecurityContent(user, isMobile = false) {
                                             {
                                                 view: "button",
                                                 value: "Verify Password",
-                                                width: isMobile ? undefined : 150,
+                                                css: "webix_primary",
+                                                width: isMobile ? undefined : 180,
                                                 click: handleVerifyPassword
                                             },
                                             {}
                                         ]
                                     },
-                                    { height: 15 },
                                     {
-                                        view: "text",
+                                        view: "search",
                                         type: "password",
                                         id: "newPassword",
                                         name: "new_password",
                                         label: "New Password",
+                                        height: 49,
                                         placeholder: "Enter new password",
                                         labelWidth: labelWidth,
-                                        disabled: true
+                                        icon: "wxi-eye",
+                                        disabled: true,
+                                        attributes: {
+                                            autocomplete: "new-password"
+                                        },
+                                        on: {
+                                            onSearchIconClick: function (e) {
+                                                togglePasswordVisibility(this, e.target);
+                                            }
+                                        }
                                     },
                                     {
-                                        view: "text",
+                                        view: "search",
                                         type: "password",
                                         id: "confirmPassword",
                                         name: "confirm_password",
+                                        height: 49,
                                         label: "Confirm Password",
                                         placeholder: "Re-enter new password",
                                         labelWidth: labelWidth,
-                                        disabled: true
+                                        icon: "wxi-eye",
+                                        disabled: true,
+                                        attributes: {
+                                            autocomplete: "new-password"
+                                        },
+                                        on: {
+                                            onSearchIconClick: function (e) {
+                                                togglePasswordVisibility(this, e.target);
+                                            }
+                                        }
                                     },
-                                    { height: 15 },
                                     {
                                         cols: [
                                             {},
@@ -83,8 +115,18 @@ function createPrivacySecurityContent(user, isMobile = false) {
                                             },
                                             {}
                                         ]
-                                    },
-                                    { height: 40 },
+                                    }
+                                ]
+                            },
+
+                            // ==========================
+                            // PROFILE VISIBILITY SECTION
+                            // ==========================
+                            {
+                                view: "form",
+                                id: "privacyForm",
+                                css: "settings_form",
+                                elements: [
                                     {
                                         view: "template",
                                         template: `<div style='font-size:${isMobile ? '18px' : '20px'}; font-weight:600; color:#34495e; margin-bottom:10px;'>Profile Visibility</div>`,
@@ -93,12 +135,12 @@ function createPrivacySecurityContent(user, isMobile = false) {
                                     },
                                     {
                                         view: "template",
-                                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:15px; line-height:1.6;'>Control who can see your profile information in search results.</div>`,
+                                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; line-height:1.6;'>Control who can see your profile information in search results.</div>`,
                                         height: isMobile ? 60 : 40,
                                         borderless: true
                                     },
-                                    isMobile ?
-                                        {
+                                    isMobile
+                                        ? {
                                             rows: [
                                                 {
                                                     view: "button",
@@ -120,8 +162,8 @@ function createPrivacySecurityContent(user, isMobile = false) {
                                                     }
                                                 }
                                             ]
-                                        } :
-                                        {
+                                        }
+                                        : {
                                             cols: [
                                                 {},
                                                 {
@@ -161,6 +203,24 @@ function createPrivacySecurityContent(user, isMobile = false) {
 }
 
 // ==========================================
+// UTILITY FUNCTIONS
+// ==========================================
+
+function togglePasswordVisibility(field, icon) {
+    const input = field.getInputNode();
+    webix.html.removeCss(icon, "wxi-eye-slash");
+    webix.html.removeCss(icon, "wxi-eye");
+
+    if (input.type === "text") {
+        webix.html.addCss(icon, "wxi-eye");
+        input.type = "password";
+    } else {
+        webix.html.addCss(icon, "wxi-eye-slash");
+        input.type = "text";
+    }
+}
+
+// ==========================================
 // EVENT HANDLERS - PRIVACY & SECURITY
 // ==========================================
 
@@ -168,31 +228,21 @@ async function handleVerifyPassword() {
     const currentPassword = $$("currentPassword").getValue();
 
     if (!currentPassword) {
-        webix.message({
-            type: "error",
-            text: "Please enter your current password"
-        });
+        webix.message({ type: "error", text: "Please enter your current password" });
         return;
     }
 
-    const result = await apiCall(API_CONFIG.ENDPOINTS.VERIFY_PASSWORD, 'POST', {
+    const result = await apiCall(API_CONFIG.ENDPOINTS.VERIFY_PASSWORD, "POST", {
         current_password: currentPassword
     });
 
     if (result.success) {
-        webix.message({
-            type: "success",
-            text: "Password verified! You can now change it."
-        });
-
+        webix.message({ type: "success", text: "Password verified! You can now change it." });
         $$("newPassword").enable();
         $$("confirmPassword").enable();
         $$("changePasswordBtn").enable();
     } else {
-        webix.message({
-            type: "error",
-            text: result.message || "Incorrect password"
-        });
+        webix.message({ type: "error", text: result.message || "Incorrect password" });
     }
 }
 
@@ -201,68 +251,53 @@ async function handleChangePassword() {
     const values = form.getValues();
 
     if (!values.new_password || !values.confirm_password) {
-        webix.message({
-            type: "error",
-            text: "Please fill in all password fields"
-        });
+        webix.message({ type: "error", text: "Please fill in all password fields" });
         return;
     }
 
     if (values.new_password !== values.confirm_password) {
-        webix.message({
-            type: "error",
-            text: "New passwords do not match!"
-        });
+        webix.message({ type: "error", text: "New passwords do not match!" });
         return;
     }
 
-    const result = await apiCall(API_CONFIG.ENDPOINTS.CHANGE_PASSWORD, 'POST', values);
+    const result = await apiCall(API_CONFIG.ENDPOINTS.CHANGE_PASSWORD, "POST", values);
 
     if (result.success) {
-        webix.message({
-            type: "success",
-            text: "Password changed successfully!"
-        });
-
+        webix.message({ type: "success", text: "Password changed successfully!" });
         form.clear();
         $$("newPassword").disable();
         $$("confirmPassword").disable();
         $$("changePasswordBtn").disable();
     } else {
-        webix.message({
-            type: "error",
-            text: result.message || "Failed to change password"
-        });
+        webix.message({ type: "error", text: result.message || "Failed to change password" });
     }
 }
 
 function handlePrivacyChange(visibility) {
-    if (visibility === 'private') {
+    if (visibility === "private") {
         webix.confirm({
             title: "Change Privacy Setting",
             text: "Do you want to make your account private?<br><br>If you set your account to private, your profile will be hidden from search results and your data will not be visible to others.",
             ok: "Yes, Make Private",
             cancel: "No, Keep Public",
             callback: function (result) {
-                if (result) {
-                    updatePrivacySetting('private');
-                }
+                if (result) updatePrivacySetting("private");
             }
         });
     } else {
-        updatePrivacySetting('public');
+        updatePrivacySetting("public");
     }
 }
 
 async function updatePrivacySetting(visibility) {
-    const result = await apiCall(API_CONFIG.ENDPOINTS.UPDATE_PRIVACY, 'POST', {
+    const result = await apiCall(API_CONFIG.ENDPOINTS.UPDATE_PRIVACY, "POST", {
         profile_visibility: visibility
     });
 
     if (result.success) {
-        localStorage.setItem('currentUser', JSON.stringify(result.user));
+        localStorage.setItem("currentUser", JSON.stringify(result.user));
 
-        if (visibility === 'public') {
+        if (visibility === "public") {
             $$("publicBtn").define("css", "webix_primary");
             $$("privateBtn").define("css", "");
         } else {
@@ -272,14 +307,8 @@ async function updatePrivacySetting(visibility) {
         $$("publicBtn").refresh();
         $$("privateBtn").refresh();
 
-        webix.message({
-            type: "success",
-            text: `Privacy set to ${visibility}`
-        });
+        webix.message({ type: "success", text: `Privacy set to ${visibility}` });
     } else {
-        webix.message({
-            type: "error",
-            text: "Failed to update privacy setting"
-        });
+        webix.message({ type: "error", text: "Failed to update privacy setting" });
     }
 }

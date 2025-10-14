@@ -607,3 +607,8 @@ html {
      color: #2980b9;
      font-weight: bold;
  } */
+
+ /* Gap In settings form (bulitha) */
+ .settings_form{
+    padding: 0 !important;
+ }
