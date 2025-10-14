@@ -227,7 +227,7 @@ function createPrivacySecurityContent(user, isMobile = false) {
                                 elements: [
                                     {
                                         view: "template",
-                                        template: `<div style='font-size:${isMobile ? '18px' : '20px'}; font-weight:600; color:#34495e; margin-bottom:10px;'>Field Visibility in Search Results</div>`,
+                                        template: `<div style='font-size:${isMobile ? '18px' : '20px'}; font-weight:600; color:#34495e; margin-bottom:10px;'>Data Visibility</div>`,
                                         height: 40,
                                         borderless: true
                                     },
@@ -423,7 +423,7 @@ function createPrivacySecurityContent(user, isMobile = false) {
                     { width: padding }
                 ]
             },
-            { height: 50 }
+            { height: 80 }
         ]
     };
 }
