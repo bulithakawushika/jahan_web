@@ -101,7 +101,7 @@ function createNotificationsContent(user, isMobile = false) {
                                             {},
                                             {
                                                 view: "button",
-                                                value: "Save Notification Settings",
+                                                value: "Save Changes",
                                                 css: "webix_primary",
                                                 width: isMobile ? undefined : 220,
                                                 click: handleSaveNotificationSettings
