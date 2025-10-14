@@ -37,7 +37,7 @@ function createAccessibilityContent(user, isMobile = false) {
                                                 rows: [
                                                     {
                                                         view: "template",
-                                                        template: `<div style='font-size:15px; font-weight:600; color:#34495e; margin-bottom:5px;'>⌨️ Keyboard Navigation</div>`,
+                                                        template: `<div style='font-size:15px; font-weight:600; color:#34495e; margin-bottom:0px;'>⌨️ Keyboard Navigation</div>`,
                                                         height: 30,
                                                         borderless: true
                                                     },
@@ -119,14 +119,14 @@ function createAccessibilityContent(user, isMobile = false) {
                                                 rows: [
                                                     {
                                                         view: "template",
-                                                        template: `<div style='font-size:16px; font-weight:600; color:#34495e; margin-bottom:5px;'>⌨️ Keyboard Navigation</div>`,
-                                                        height: 30,
+                                                        template: `<div style='font-size:16px; font-weight:600; color:#34495e; margin-bottom:10px;'>⌨️ Keyboard Navigation</div>`,
+                                                        height: 50,
                                                         borderless: true
                                                     },
                                                     {
                                                         view: "template",
                                                         template: `<div style='font-size:13px; color:#7f8c8d; margin-bottom:10px; line-height:1.5;'>Use arrow keys to navigate between form fields and Enter to click buttons.</div>`,
-                                                        height: 50,
+                                                        height: 30,
                                                         borderless: true
                                                     },
                                                     {
@@ -161,14 +161,14 @@ function createAccessibilityContent(user, isMobile = false) {
                                                 rows: [
                                                     {
                                                         view: "template",
-                                                        template: `<div style='font-size:16px; font-weight:600; color:#34495e; margin-bottom:5px;'>🔊 Screen Reader Compatibility</div>`,
-                                                        height: 30,
+                                                        template: `<div style='font-size:16px; font-weight:600; color:#34495e; margin-bottom:10px;'>🔊 Screen Reader Compatibility</div>`,
+                                                        height: 50,
                                                         borderless: true
                                                     },
                                                     {
                                                         view: "template",
                                                         template: `<div style='font-size:13px; color:#7f8c8d; margin-bottom:10px; line-height:1.5;'>Enable audio announcements for search results and important updates.</div>`,
-                                                        height: 50,
+                                                        height: 30,
                                                         borderless: true
                                                     },
                                                     {

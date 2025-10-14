@@ -21,27 +21,27 @@ function createNotificationsContent(user, isMobile = false) {
                                 elements: [
                                     {
                                         view: "template",
-                                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>Public Notifications</div>`,
+                                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>Control Public Notifications</div>`,
                                         height: 30,
                                         borderless: true
                                     },
                                     {
                                         view: "template",
-                                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:15px; line-height:1.6;'>If you don't want to send notifications to others about your personal details changes (like address changes), you can disable it. Company notifications (job role changes) will always be sent.</div>`,
-                                        height: isMobile ? 80 : 60,
+                                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:15px; line-height:1.6;'>If you prefer not to notify others about changes to your personal details, you can disable this option. However, company-related notifications, such as job role updates, will always be sent automatically</div>`,
+                                        height: isMobile ? 60 : 25,
                                         borderless: true
                                     },
                                     {
                                         view: "checkbox",
                                         id: "sendPublicNotifications",
-                                        labelRight: "Send public notifications when I update my address",
+                                        labelRight: "Send public notifications when I update my persoanl data",
                                         value: user.send_public_notifications
                                     },
-                                    { height: 30 },
+                                    { height: 20 },
                                     {
                                         view: "template",
                                         template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>Notification Preferences</div>`,
-                                        height: 40,
+                                        height: 30,
                                         borderless: true
                                     },
                                     {
@@ -50,12 +50,52 @@ function createNotificationsContent(user, isMobile = false) {
                                         vertical: true,
                                         value: user.notification_preference,
                                         options: [
-                                            { id: "all", value: "All Notifications - Receive both company and public updates" },
-                                            { id: "company", value: "Company Only - Only receive job role change notifications" },
-                                            { id: "none", value: "None - Don't receive any notifications" }
+                                            { id: "all", value: "<b>All Notifications</b> - Receive Notifications for Both Company-related Updates and Public Activity of Employees" },
+                                            { id: "company", value: "<b>Company Only</b> - Only Receive Company-related Updates" },
+                                            { id: "none", value: "<b>None</b> - Mute Notifications" }
                                         ]
                                     },
                                     { height: 20 },
+                                    {
+                                        view: "template",
+                                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>Email Notifications</div>`,
+                                        height: 30,
+                                        borderless: true
+                                    },
+                                    {
+                                        cols: [
+                                            {
+                                                view: "template",
+                                                template: `
+                                                    <div style="
+                                                        display: flex;
+                                                        align-items: center;
+                                                        height: 100%;
+                                                        font-size: 14px;
+                                                        color: #7f8c8d;
+                                                    ">
+                                                        Control Email Notifications
+                                                    </div>
+                                                `,
+                                                borderless: true,
+                                                width: 200,
+                                                gravity: 2
+                                            },
+
+                                            { width: 10 },
+                                            {
+                                                view: "switch",
+                                                id: "emailNotificationSwitch",
+                                                onLabel: "Enabled",
+                                                offLabel: "Disabled",
+                                                padding:0,
+                                                value: 0,
+                                                gravity: 1,
+                                                css: "align_switch"
+                                            },
+                                            {}
+                                        ]
+                                    },
                                     {
                                         cols: [
                                             {},

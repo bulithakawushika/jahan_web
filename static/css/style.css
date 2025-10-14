@@ -868,3 +868,431 @@ html {
      outline: 3px solid #3498db !important;
      outline-offset: 3px !important;
  }
+
+ /* ==========================================
+   DARK THEME TEXT FIXES
+   ========================================== */
+
+ /* Make all text white in dark theme */
+ body.theme-dark {
+     background-color: #1a1a1a !important;
+     color: #e0e0e0 !important;
+ }
+
+ body.theme-dark .webix_view {
+     background-color: #2d2d2d !important;
+     color: #e0e0e0 !important;
+ }
+
+ /* Fix form text colors in dark theme */
+ body.theme-dark .webix_form,
+ body.theme-dark .settings_form {
+     background-color: #2d2d2d !important;
+     color: #e0e0e0 !important;
+ }
+
+ /* Template text (titles and descriptions) in dark theme */
+ body.theme-dark .webix_template,
+ body.theme-dark .webix_template div {
+     background-color: transparent !important;
+     color: #FFFFFF !important;
+ }
+
+ /* Labels in dark theme */
+ body.theme-dark .webix_el_label,
+ body.theme-dark .webix_el_label label,
+ body.theme-dark .webix_inp_label {
+     color: #FFFFFF !important;
+ }
+
+ /* Input fields in dark theme */
+ body.theme-dark input,
+ body.theme-dark textarea,
+ body.theme-dark select {
+     background-color: #3a3a3a !important;
+     color: #e0e0e0 !important;
+     border-color: #555555 !important;
+ }
+
+ body.theme-dark .webix_inp_static {
+     color: #e0e0e0 !important;
+ }
+
+ /* Buttons in dark theme */
+ body.theme-dark button,
+ body.theme-dark .webix_button,
+ body.theme-dark .webix_el_button button {
+     background-color: #404040 !important;
+     color: #e0e0e0 !important;
+     border-color: #555555 !important;
+ }
+
+ body.theme-dark button:hover,
+ body.theme-dark .webix_button:hover {
+     background-color: #505050 !important;
+ }
+
+ /* Primary buttons in dark theme */
+ body.theme-dark .webix_primary,
+ body.theme-dark .webix_primary button {
+     background-color: #3498db !important;
+     color: #ffffff !important;
+ }
+
+ /* Segmented buttons in dark theme */
+ body.theme-dark .webix_el_segmented button {
+     background-color: #3a3a3a !important;
+     color: #e0e0e0 !important;
+     border-color: #555555 !important;
+ }
+
+ body.theme-dark .webix_el_segmented button.webix_selected {
+     background-color: #3498db !important;
+     color: #ffffff !important;
+ }
+
+ /* Switch buttons in dark theme */
+ body.theme-dark .webix_el_switch {
+     background-color: #3a3a3a !important;
+     border-color: #555555 !important;
+ }
+
+ body.theme-dark .webix_el_switch .webix_switch_label {
+     color: #e0e0e0 !important;
+ }
+
+ /* Toolbar in dark theme */
+ body.theme-dark .webix_toolbar {
+     background-color: #2d2d2d !important;
+     border-color: #555555 !important;
+ }
+
+ /* Navigation buttons in dark theme */
+ body.theme-dark .nav_button {
+     background-color: #3a3a3a !important;
+     color: #e0e0e0 !important;
+ }
+
+ body.theme-dark .nav_button:hover {
+     background-color: #505050 !important;
+ }
+
+ /* Sidebar in dark theme */
+ body.theme-dark .webix_sidebar,
+ body.theme-dark .mobile_sidebar {
+     background-color: #2d2d2d !important;
+ }
+
+ body.theme-dark .webix_sidebar .webix_list_item {
+     color: #e0e0e0 !important;
+     border-bottom-color: #555555 !important;
+ }
+
+ body.theme-dark .webix_sidebar .webix_list_item:hover {
+     background-color: #3a3a3a !important;
+ }
+
+ body.theme-dark .webix_sidebar .webix_list_item.webix_selected {
+     background-color: #3498db !important;
+     color: #ffffff !important;
+ }
+
+ /* User cards in dark theme */
+ body.theme-dark .user_card,
+ body.theme-dark .user_card div {
+     background-color: #2d2d2d !important;
+     color: #e0e0e0 !important;
+     border-color: #555555 !important;
+ }
+
+ body.theme-dark .user_card strong {
+     color: #ffffff !important;
+ }
+
+ /* Messages in dark theme */
+ body.theme-dark .webix_message {
+     background-color: #2d2d2d !important;
+     color: #e0e0e0 !important;
+     border-color: #555555 !important;
+ }
+
+ /* Step indicator (brightness slider) in dark theme */
+ body.theme-dark .step-circle {
+     background-color: #3a3a3a !important;
+     border-color: #888888 !important;
+ }
+
+ /* Scrollview in dark theme */
+ body.theme-dark .webix_scroll_cont {
+     background-color: #2d2d2d !important;
+ }
+
+ /* Tab view in dark theme */
+ body.theme-dark .webix_item_tab {
+     background-color: #3a3a3a !important;
+     color: #e0e0e0 !important;
+ }
+
+ body.theme-dark .webix_item_tab.webix_selected {
+     background-color: #3498db !important;
+     color: #ffffff !important;
+ }
+
+ /* Ensure all nested divs in templates inherit white color */
+ body.theme-dark div[style*="color:#34495e"],
+ body.theme-dark div[style*="color:#2c3e50"],
+ body.theme-dark div[style*="color:#7f8c8d"] {
+     color: #FFFFFF !important;
+ }
+
+ /* Fix for inline styled text in templates */
+ body.theme-dark .webix_template div[style] {
+     color: #FFFFFF !important;
+ }
+
+ /* Fix for bolded text in dark mode */
+ body.theme-dark strong {
+     color: #FFFFFF !important;
+ }
+
+ /* Fix for any remaining gray text */
+ body.theme-dark * {
+     border-color: #555555 !important;
+ }
+
+ body.theme-dark *:not(input):not(textarea):not(button) {
+     color: inherit;
+ }
+
+ /* ==========================================
+   DARK THEME - SWITCH BUTTON TEXT FIX
+   ========================================== */
+
+ /* Switch button labels should be black on the colored background */
+ body.theme-dark .webix_el_switch .webix_switch_on,
+ body.theme-dark .webix_el_switch .webix_switch_off {
+     color: #000000 !important;
+ }
+
+ /* Switch button circle (handle) should be blue */
+ body.theme-dark .webix_el_switch input:checked+div:before {
+     background-color: #3498db !important;
+ }
+
+ body.theme-dark .webix_el_switch input:not(:checked)+div:before {
+     background-color: #3498db !important;
+ }
+
+ /* ==========================================
+   DARK THEME - SELECT/COMBO BOX FIX
+   ========================================== */
+
+ /* Select dropdown items */
+ body.theme-dark .webix_list_item {
+     background-color: #2d2d2d !important;
+     color: #000000 !important;
+ }
+
+ body.theme-dark .webix_list_item:hover {
+     background-color: #3a3a3a !important;
+     color: #000000 !important;
+ }
+
+ body.theme-dark .webix_list_item.webix_selected {
+     background-color: #3498db !important;
+     color: #000000 !important;
+ }
+
+ /* Combo/Select popup */
+ body.theme-dark .webix_popup {
+     background-color: #ffffff !important;
+ }
+
+ body.theme-dark .webix_list {
+     background-color: #ffffff !important;
+ }
+
+ /* Select box items text should be black */
+ body.theme-dark select option {
+     background-color: #ffffff !important;
+     color: #000000 !important;
+ }
+
+ /* Radio buttons text */
+ body.theme-dark .webix_el_radio .webix_radio_option {
+     color: #e0e0e0 !important;
+ }
+
+ /* ==========================================
+   FONT SIZE SCALING FOR ALL TEXT
+   ========================================== */
+
+ /* Small Font Size */
+ body.font-small {
+     font-size: 12px !important;
+ }
+
+ body.font-small .webix_view,
+ body.font-small input,
+ body.font-small button,
+ body.font-small textarea,
+ body.font-small select {
+     font-size: 12px !important;
+ }
+
+ body.font-small .webix_template div {
+     font-size: inherit !important;
+ }
+
+ /* Title texts scale with font size */
+ body.font-small .webix_template div[style*="font-size:20px"],
+ body.font-small .webix_template div[style*="font-size:18px"] {
+     font-size: 16px !important;
+ }
+
+ body.font-small .webix_template div[style*="font-size:16px"],
+ body.font-small .webix_template div[style*="font-size:15px"] {
+     font-size: 13px !important;
+ }
+
+ body.font-small .webix_template div[style*="font-size:14px"],
+ body.font-small .webix_template div[style*="font-size:13px"] {
+     font-size: 11px !important;
+ }
+
+ /* Medium Font Size (Default) */
+ body.font-medium {
+     font-size: 14px !important;
+ }
+
+ body.font-medium .webix_view,
+ body.font-medium input,
+ body.font-medium button,
+ body.font-medium textarea,
+ body.font-medium select {
+     font-size: 14px !important;
+ }
+
+ body.font-medium .webix_template div {
+     font-size: inherit !important;
+ }
+
+ /* Keep titles proportional */
+ body.font-medium .webix_template div[style*="font-size:20px"],
+ body.font-medium .webix_template div[style*="font-size:18px"] {
+     font-size: 18px !important;
+ }
+
+ body.font-medium .webix_template div[style*="font-size:16px"],
+ body.font-medium .webix_template div[style*="font-size:15px"] {
+     font-size: 15px !important;
+ }
+
+ body.font-medium .webix_template div[style*="font-size:14px"],
+ body.font-medium .webix_template div[style*="font-size:13px"] {
+     font-size: 13px !important;
+ }
+
+ /* Large Font Size */
+ body.font-large {
+     font-size: 18px !important;
+ }
+
+ body.font-large .webix_view,
+ body.font-large input,
+ body.font-large button,
+ body.font-large textarea,
+ body.font-large select {
+     font-size: 18px !important;
+ }
+
+ body.font-large .webix_template div {
+     font-size: inherit !important;
+ }
+
+ /* Scale up title texts */
+ body.font-large .webix_template div[style*="font-size:20px"],
+ body.font-large .webix_template div[style*="font-size:18px"] {
+     font-size: 24px !important;
+ }
+
+ body.font-large .webix_template div[style*="font-size:16px"],
+ body.font-large .webix_template div[style*="font-size:15px"] {
+     font-size: 20px !important;
+ }
+
+ body.font-large .webix_template div[style*="font-size:14px"],
+ body.font-large .webix_template div[style*="font-size:13px"] {
+     font-size: 17px !important;
+ }
+
+ /* Labels also scale with font size */
+ body.font-small .webix_el_label label,
+ body.font-small .webix_inp_label {
+     font-size: 12px !important;
+ }
+
+ body.font-medium .webix_el_label label,
+ body.font-medium .webix_inp_label {
+     font-size: 14px !important;
+ }
+
+ body.font-large .webix_el_label label,
+ body.font-large .webix_inp_label {
+     font-size: 18px !important;
+ }
+
+ /* Switch button text also scales */
+ body.font-small .webix_el_switch .webix_switch_on,
+ body.font-small .webix_el_switch .webix_switch_off {
+     font-size: 11px !important;
+ }
+
+ body.font-medium .webix_el_switch .webix_switch_on,
+ body.font-medium .webix_el_switch .webix_switch_off {
+     font-size: 13px !important;
+ }
+
+ body.font-large .webix_el_switch .webix_switch_on,
+ body.font-large .webix_el_switch .webix_switch_off {
+     font-size: 16px !important;
+ }
+
+ /* Segmented button text scales */
+ body.font-small .webix_el_segmented button {
+     font-size: 12px !important;
+ }
+
+ body.font-medium .webix_el_segmented button {
+     font-size: 14px !important;
+ }
+
+ body.font-large .webix_el_segmented button {
+     font-size: 18px !important;
+ }
+
+ /* All paragraph text and descriptions scale */
+ body.font-small p,
+ body.font-small span,
+ body.font-small div:not([class*="webix"]) {
+     font-size: 12px !important;
+ }
+
+ body.font-medium p,
+ body.font-medium span,
+ body.font-medium div:not([class*="webix"]) {
+     font-size: 14px !important;
+ }
+
+ body.font-large p,
+ body.font-large span,
+ body.font-large div:not([class*="webix"]) {
+     font-size: 18px !important;
+ }
+
+ Align switch vertically with text
+ .webix_el_switch.align_switch .webix_switch_box {
+     margin-top: -23px;
+     padding: 0;
+     
+ }

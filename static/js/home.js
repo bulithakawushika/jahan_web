@@ -207,7 +207,7 @@ function createSearchView() {
                         rows: [
                             {
                                 view: "template",
-                                template: `<div style='text-align:center; font-size:${isMobile ? '28px' : '42px'}; font-weight:bold; color:#2c3e50; margin-bottom:15px;'>Who Are You Looking For Today?</div>`,
+                                template: `<div style='text-align:center; font-size:${isMobile ? '28px' : '42px'} !important; font-weight:bold; color:#2c3e50; margin-bottom:15px;'>Who Are You Looking For Today?</div>`,
                                 height: isMobile ? 70 : 80,
                                 borderless: true
                             },
@@ -263,7 +263,7 @@ function createResultsView(results, query = '') {
                 rows: [
                     {
                         view: "template",
-                        template: `<div style='text-align:center; font-size:${isMobile ? '20px' : '28px'}; font-weight:bold; color:#2c3e50; padding-top:20px;'>Meet the people who fit your search</div>`,
+                        template: `<div style='text-align:center; font-size:${isMobile ? '20px' : '28px'} !important; font-weight:bold; color:#2c3e50; padding-top:20px;'>Meet the people who fit your search</div>`,
                         height: 60,
                         borderless: true
                     },

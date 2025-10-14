@@ -169,6 +169,90 @@ const AccessibilityManager = {
     },
 
     // Apply Font Size
+applyFontSize: function(size) {
+    console.log('Font size:', size);
+    document.body.classList.remove('font-small', 'font-medium', 'font-large');
+    document.body.classList.add(`font-${size}`);
+    
+    // Create or update font size stylesheet
+    let style = document.getElementById('font-size-style');
+    if (!style) {
+        style = document.createElement('style');
+        style.id = 'font-size-style';
+        document.head.appendChild(style);
+    }
+    
+    const fontConfig = {
+        small: {
+            base: '12px',
+            title: '16px',
+            subtitle: '13px',
+            description: '11px'
+        },
+        medium: {
+            base: '14px',
+            title: '18px',
+            subtitle: '15px',
+            description: '13px'
+        },
+        large: {
+            base: '18px',
+            title: '24px',
+            subtitle: '20px',
+            description: '17px'
+        }
+    };
+    
+    const config = fontConfig[size];
+    
+    style.innerHTML = `
+        body.font-${size} {
+            font-size: ${config.base} !important;
+        }
+        body.font-${size} .webix_view,
+        body.font-${size} input,
+        body.font-${size} button,
+        body.font-${size} textarea,
+        body.font-${size} select {
+            font-size: ${config.base} !important;
+        }
+        
+        /* Scale title texts */
+        body.font-${size} .webix_template div[style*="font-size:20px"],
+        body.font-${size} .webix_template div[style*="font-size:18px"] {
+            font-size: ${config.title} !important;
+        }
+        
+        /* Scale subtitle texts */
+        body.font-${size} .webix_template div[style*="font-size:16px"],
+        body.font-${size} .webix_template div[style*="font-size:15px"] {
+            font-size: ${config.subtitle} !important;
+        }
+        
+        /* Scale description texts */
+        body.font-${size} .webix_template div[style*="font-size:14px"],
+        body.font-${size} .webix_template div[style*="font-size:13px"] {
+            font-size: ${config.description} !important;
+        }
+        
+        /* Labels scale */
+        body.font-${size} .webix_el_label label,
+        body.font-${size} .webix_inp_label {
+            font-size: ${config.base} !important;
+        }
+        
+        /* All template content scales */
+        body.font-${size} .webix_template div {
+            font-size: inherit !important;
+        }
+    `;
+    
+    if (this.isScreenReaderEnabled) {
+        this.speak(`Font size changed to ${size}`);
+    }
+  },
+
+    // Apply Font Size
     applyFontSize: function (size) {
         console.log('Font size:', size);
         document.body.classList.remove('font-small', 'font-medium', 'font-large');
@@ -182,20 +266,70 @@ const AccessibilityManager = {
             document.head.appendChild(style);
         }
 
-        const fontSizes = {
-            small: '12px',
-            medium: '14px',
-            large: '18px'
+        const fontConfig = {
+            small: {
+                base: '12px',
+                title: '16px',
+                subtitle: '13px',
+                description: '12px'
+            },
+            medium: {
+                base: '16px',
+                title: '20px',
+                subtitle: '18px',
+                description: '14px'
+            },
+            large: {
+                base: '18px',
+                title: '24px',
+                subtitle: '20px',
+                description: '17px'
+            }
         };
 
+        const config = fontConfig[size];
+
         style.innerHTML = `
-            body.font-${size} {
-                font-size: ${fontSizes[size]} !important;
-            }
-            body.font-${size} .webix_view {
-                font-size: ${fontSizes[size]} !important;
-            }
-        `;
+        body.font-${size} {
+            font-size: ${config.base} !important;
+        }
+        body.font-${size} .webix_view,
+        body.font-${size} input,
+        body.font-${size} button,
+        body.font-${size} textarea,
+        body.font-${size} select {
+            font-size: ${config.base} !important;
+        }
+        
+        /* Scale title texts */
+        body.font-${size} .webix_template div[style*="font-size:20px"],
+        body.font-${size} .webix_template div[style*="font-size:18px"] {
+            font-size: ${config.title};
+        }
+        
+        /* Scale subtitle texts */
+        body.font-${size} .webix_template div[style*="font-size:16px"],
+        body.font-${size} .webix_template div[style*="font-size:15px"] {
+            font-size: ${config.subtitle} !important;
+        }
+        
+        /* Scale description texts */
+        body.font-${size} .webix_template div[style*="font-size:14px"],
+        body.font-${size} .webix_template div[style*="font-size:13px"] {
+            font-size: ${config.description} !important;
+        }
+        
+        /* Labels scale */
+        body.font-${size} .webix_el_label label,
+        body.font-${size} .webix_inp_label {
+            font-size: ${config.base} !important;
+        }
+        
+        /* All template content scales */
+        body.font-${size} .webix_template div {
+            font-size: inherit ;
+        }
+    `;
 
         if (this.isScreenReaderEnabled) {
             this.speak(`Font size changed to ${size}`);
@@ -218,30 +352,138 @@ const AccessibilityManager = {
 
         if (theme === 'light') {
             style.innerHTML = `
-                body.theme-light {
-                    background-color: #f8f9fa !important;
-                }
-                body.theme-light .webix_view {
-                    background-color: #ffffff !important;
-                    color: #212529 !important;
-                }
-            `;
+            body.theme-light {
+                background-color: #f8f9fa !important;
+            }
+            body.theme-light .webix_view {
+                background-color: #ffffff !important;
+                color: #212529 !important;
+            }
+        `;
         } else if (theme === 'dark') {
             style.innerHTML = `
-                body.theme-dark {
-                    background-color: #1a1a1a !important;
-                }
-                body.theme-dark .webix_view {
-                    background-color: #2d2d2d !important;
-                    color: #e0e0e0 !important;
-                }
-                body.theme-dark input,
-                body.theme-dark textarea {
-                    background-color: #3a3a3a !important;
-                    color: #e0e0e0 !important;
-                    border-color: #555 !important;
-                }
-            `;
+            body.theme-dark {
+                background-color: #1a1a1a !important;
+                color: #e0e0e0 !important;
+            }
+            body.theme-dark .webix_view {
+                background-color: #2d2d2d !important;
+                color: #e0e0e0 !important;
+            }
+            body.theme-dark .webix_form,
+            body.theme-dark .settings_form {
+                background-color: #2d2d2d !important;
+                color: #e0e0e0 !important;
+            }
+            body.theme-dark .webix_template,
+            body.theme-dark .webix_template div,
+            body.theme-dark .webix_template strong {
+                background-color: transparent !important;
+                color: #FFFFFF !important;
+            }
+            body.theme-dark .webix_el_label,
+            body.theme-dark .webix_el_label label,
+            body.theme-dark .webix_inp_label {
+                color: #FFFFFF !important;
+            }
+            body.theme-dark input,
+            body.theme-dark textarea,
+            body.theme-dark select {
+                background-color: #3a3a3a !important;
+                color: #e0e0e0 !important;
+                border-color: #555555 !important;
+            }
+            
+            /* Switch button text should be black */
+            body.theme-dark .webix_el_switch .webix_switch_on,
+            body.theme-dark .webix_el_switch .webix_switch_off {
+                color: #000000 !important;
+            }
+            
+            /* Switch circle should be blue */
+            body.theme-dark .webix_el_switch input:checked + div:before,
+            body.theme-dark .webix_el_switch input:not(:checked) + div:before {
+                background-color: #3498db !important;
+            }
+            
+            /* Select dropdown items should have black text */
+            body.theme-dark .webix_list_item {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+            }
+            
+            body.theme-dark .webix_list_item:hover {
+                background-color: #f0f0f0 !important;
+                color: #000000 !important;
+            }
+            
+            body.theme-dark .webix_list_item.webix_selected {
+                background-color: #3498db !important;
+                color: #000000 !important;
+            }
+            
+            body.theme-dark .webix_popup,
+            body.theme-dark .webix_list {
+                background-color: #ffffff !important;
+            }
+            
+            body.theme-dark select option {
+                background-color: #ffffff !important;
+                color: #000000 !important;
+            }
+            
+            body.theme-dark button,
+            body.theme-dark .webix_button,
+            body.theme-dark .webix_el_button button {
+                background-color: #404040 !important;
+                color: #e0e0e0 !important;
+                border-color: #555555 !important;
+            }
+            body.theme-dark button:hover,
+            body.theme-dark .webix_button:hover {
+                background-color: #505050 !important;
+            }
+            body.theme-dark .webix_primary,
+            body.theme-dark .webix_primary button {
+                background-color: #3498db !important;
+                color: #ffffff !important;
+            }
+            body.theme-dark .webix_el_segmented button {
+                background-color: #3a3a3a !important;
+                color: #e0e0e0 !important;
+                border-color: #555555 !important;
+            }
+            body.theme-dark .webix_el_segmented button.webix_selected {
+                background-color: #3498db !important;
+                color: #ffffff !important;
+            }
+            body.theme-dark .user_card,
+            body.theme-dark .user_card div {
+                background-color: #2d2d2d !important;
+                color: #e0e0e0 !important;
+            }
+            body.theme-dark .user_card strong {
+                color: #ffffff !important;
+            }
+            body.theme-dark .webix_toolbar {
+                background-color: #2d2d2d !important;
+                border-color: #555555 !important;
+            }
+            body.theme-dark .nav_button {
+                background-color: #3a3a3a !important;
+                color: #e0e0e0 !important;
+            }
+            
+            body.theme-dark .webix_sidebar .webix_list_item {
+                color: #e0e0e0 !important;
+                border-bottom-color: #555555 !important;
+            }
+            body.theme-dark div[style*="color:#34495e"],
+            body.theme-dark div[style*="color:#2c3e50"],
+            body.theme-dark div[style*="color:#7f8c8d"] {
+                color: #FFFFFF !important;
+            }
+        `;
         } else {
             style.innerHTML = '';
         }
