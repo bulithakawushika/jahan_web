@@ -39,7 +39,6 @@ class UserFactory(DjangoModelFactory):
     screen_reader = False
     font_size = 'medium'
     theme = 'standard'
-    contrast_level = 'normal'
     
     @factory.post_generation
     def password(self, create, extracted, **kwargs):
