@@ -78,6 +78,7 @@ class CustomUser(AbstractUser):
     # Accessibility settings
     keyboard_navigation = models.BooleanField(default=True)
     screen_reader = models.BooleanField(default=False)
+    high_contrast = models.BooleanField(default=False)  # NEW FIELD
     font_size = models.CharField(
         max_length=20,
         choices=[
@@ -96,13 +97,13 @@ class CustomUser(AbstractUser):
         ],
         default='standard'
     )
-    contrast_level = models.CharField(
+    brightness_level = models.CharField(  # RENAMED from contrast_level
         max_length=20,
         choices=[
-            ('low', 'Low Contrast'),
-            ('normal', 'Normal Contrast'),
-            ('high', 'High Contrast'),
-            ('highest', 'Highest Contrast'),
+            ('low', 'Low Brightness'),
+            ('normal', 'Normal Brightness'),
+            ('high', 'High Brightness'),
+            ('highest', 'Highest Brightness'),
         ],
         default='normal'
     )

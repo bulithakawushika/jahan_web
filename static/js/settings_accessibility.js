@@ -4,6 +4,7 @@
 
 function createAccessibilityContent(user, isMobile = false) {
     const padding = isMobile ? 20 : 40;
+    const labelWidth = isMobile ? 180 : 200;
 
     return {
         rows: [
@@ -13,90 +14,259 @@ function createAccessibilityContent(user, isMobile = false) {
                     { width: padding },
                     {
                         rows: [
+                            // ==========================================
+                            // FIRST ROW: INTERACTION & NAVIGATION
+                            // ==========================================
                             {
                                 view: "form",
-                                id: "accessibilitySettingsForm",
+                                id: "interactionNavigationForm",
                                 css: "settings_form",
                                 elements: [
                                     {
                                         view: "template",
-                                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>⌨️ Keyboard Navigation</div>`,
-                                        height: 35,
+                                        template: `<div style='font-size:${isMobile ? '18px' : '20px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>Interaction & Navigation</div>`,
+                                        height: 45,
                                         borderless: true
                                     },
-                                    {
-                                        view: "template",
-                                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:10px;'>Use arrow keys to navigate between form fields and Enter to click buttons.</div>`,
-                                        height: 40,
-                                        borderless: true
-                                    },
-                                    {
-                                        view: "checkbox",
-                                        id: "keyboardNavigation",
-                                        labelRight: "Enable keyboard navigation",
-                                        value: user.keyboard_navigation !== false,
-                                        on: {
-                                            onChange: function (newVal) {
-                                                handleAccessibilityChange('keyboard_navigation', newVal);
+
+                                    // Two columns for mobile/desktop responsiveness
+                                    isMobile ? {
+                                        rows: [
+                                            // Keyboard Navigation (Mobile - Full Width)
+                                            {
+                                                rows: [
+                                                    {
+                                                        view: "template",
+                                                        template: `<div style='font-size:15px; font-weight:600; color:#34495e; margin-bottom:5px;'>⌨️ Keyboard Navigation</div>`,
+                                                        height: 30,
+                                                        borderless: true
+                                                    },
+                                                    {
+                                                        view: "template",
+                                                        template: `<div style='font-size:13px; color:#7f8c8d; margin-bottom:10px; line-height:1.5;'>Use arrow keys to navigate between form fields and Enter to click buttons.</div>`,
+                                                        height: 50,
+                                                        borderless: true
+                                                    },
+                                                    {
+                                                        cols: [
+                                                            {
+                                                                view: "label",
+                                                                label: "Status:",
+                                                                width: 80
+                                                            },
+                                                            {
+                                                                view: "switch",
+                                                                id: "keyboardNavigationSwitch",
+                                                                onLabel: "Enabled",
+                                                                offLabel: "Disabled",
+                                                                value: user.keyboard_navigation !== false ? 1 : 0,
+                                                                on: {
+                                                                    onChange: function (newVal) {
+                                                                        handleAccessibilityChange('keyboard_navigation', newVal === 1);
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            { height: 25 },
+
+                                            // Screen Reader (Mobile - Full Width)
+                                            {
+                                                rows: [
+                                                    {
+                                                        view: "template",
+                                                        template: `<div style='font-size:15px; font-weight:600; color:#34495e; margin-bottom:5px;'>🔊 Screen Reader Compatibility</div>`,
+                                                        height: 30,
+                                                        borderless: true
+                                                    },
+                                                    {
+                                                        view: "template",
+                                                        template: `<div style='font-size:13px; color:#7f8c8d; margin-bottom:10px; line-height:1.5;'>Enable audio announcements for search results and important updates.</div>`,
+                                                        height: 50,
+                                                        borderless: true
+                                                    },
+                                                    {
+                                                        cols: [
+                                                            {
+                                                                view: "label",
+                                                                label: "Status:",
+                                                                width: 80
+                                                            },
+                                                            {
+                                                                view: "switch",
+                                                                id: "screenReaderSwitch",
+                                                                onLabel: "Enabled",
+                                                                offLabel: "Disabled",
+                                                                value: user.screen_reader || false ? 1 : 0,
+                                                                on: {
+                                                                    onChange: function (newVal) {
+                                                                        handleAccessibilityChange('screen_reader', newVal === 1);
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
                                             }
-                                        }
-                                    },
-                                    { height: 30 },
-                                    {
-                                        view: "template",
-                                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:5px;'>🔊 Screen Reader Compatibility</div>`,
-                                        height: 35,
-                                        borderless: true
-                                    },
-                                    {
-                                        view: "template",
-                                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; margin-bottom:10px;'>Enable audio announcements for search results and important updates.</div>`,
-                                        height: 40,
-                                        borderless: true
-                                    },
-                                    {
-                                        view: "checkbox",
-                                        id: "screenReader",
-                                        labelRight: "Enable screen reader support",
-                                        value: user.screen_reader || false,
-                                        on: {
-                                            onChange: function (newVal) {
-                                                handleAccessibilityChange('screen_reader', newVal);
+                                        ]
+                                    } : {
+                                        // Desktop - Two Columns
+                                        cols: [
+                                            // LEFT COLUMN: Keyboard Navigation
+                                            {
+                                                rows: [
+                                                    {
+                                                        view: "template",
+                                                        template: `<div style='font-size:16px; font-weight:600; color:#34495e; margin-bottom:5px;'>⌨️ Keyboard Navigation</div>`,
+                                                        height: 30,
+                                                        borderless: true
+                                                    },
+                                                    {
+                                                        view: "template",
+                                                        template: `<div style='font-size:13px; color:#7f8c8d; margin-bottom:10px; line-height:1.5;'>Use arrow keys to navigate between form fields and Enter to click buttons.</div>`,
+                                                        height: 50,
+                                                        borderless: true
+                                                    },
+                                                    {
+                                                        cols: [
+                                                            {
+                                                                view: "label",
+                                                                label: "Status:",
+                                                                width: 80
+                                                            },
+                                                            {
+                                                                view: "switch",
+                                                                id: "keyboardNavigationSwitch",
+                                                                onLabel: "Enabled",
+                                                                offLabel: "Disabled",
+                                                                value: user.keyboard_navigation !== false ? 1 : 0,
+                                                                width: 150,
+                                                                on: {
+                                                                    onChange: function (newVal) {
+                                                                        handleAccessibilityChange('keyboard_navigation', newVal === 1);
+                                                                    }
+                                                                }
+                                                            },
+                                                            {}
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            { width: 30 },
+
+                                            // RIGHT COLUMN: Screen Reader
+                                            {
+                                                rows: [
+                                                    {
+                                                        view: "template",
+                                                        template: `<div style='font-size:16px; font-weight:600; color:#34495e; margin-bottom:5px;'>🔊 Screen Reader Compatibility</div>`,
+                                                        height: 30,
+                                                        borderless: true
+                                                    },
+                                                    {
+                                                        view: "template",
+                                                        template: `<div style='font-size:13px; color:#7f8c8d; margin-bottom:10px; line-height:1.5;'>Enable audio announcements for search results and important updates.</div>`,
+                                                        height: 50,
+                                                        borderless: true
+                                                    },
+                                                    {
+                                                        cols: [
+                                                            {
+                                                                view: "label",
+                                                                label: "Status:",
+                                                                width: 80
+                                                            },
+                                                            {
+                                                                view: "switch",
+                                                                id: "screenReaderSwitch",
+                                                                onLabel: "Enabled",
+                                                                offLabel: "Disabled",
+                                                                value: user.screen_reader || false ? 1 : 0,
+                                                                width: 150,
+                                                                on: {
+                                                                    onChange: function (newVal) {
+                                                                        handleAccessibilityChange('screen_reader', newVal === 1);
+                                                                    }
+                                                                }
+                                                            },
+                                                            {}
+                                                        ]
+                                                    }
+                                                ]
                                             }
-                                        }
-                                    },
-                                    { height: 30 },
+                                        ]
+                                    }
+                                ]
+                            },
+
+                            { height: 30 },
+
+                            // ==========================================
+                            // SECOND ROW: DISPLAY SETTINGS
+                            // ==========================================
+                            {
+                                view: "form",
+                                id: "displaySettingsForm",
+                                css: "settings_form",
+                                elements: [
                                     {
                                         view: "template",
-                                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>📏 Font Size</div>`,
+                                        template: `<div style='font-size:${isMobile ? '18px' : '20px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>Display Settings</div>`,
+                                        height: 45,
+                                        borderless: true
+                                    },
+
+                                    // HIGH CONTRAST MODE
+                                    {
+                                        view: "template",
+                                        template: `<div style='font-size:16px; font-weight:600; color:#34495e; margin-bottom:5px;'>🖥️ High Contrast Mode</div>`,
+                                        height: 30,
+                                        borderless: true
+                                    },
+                                    {
+                                        view: "template",
+                                        template: `<div style='font-size:13px; color:#7f8c8d; margin-bottom:10px; line-height:1.5;'>Increase visual distinction between text and background for better readability.</div>`,
+                                        height: 25,
+                                        borderless: true
+                                    },
+                                    {
+                                        cols: [
+                                            {
+                                                view: "label",
+                                                label: "Status:",
+                                                width: labelWidth
+                                            },
+                                            {
+                                                view: "switch",
+                                                id: "highContrastSwitch",
+                                                onLabel: "Enabled",
+                                                offLabel: "Disabled",
+                                                value: user.high_contrast || false ? 1 : 0,
+                                                width: isMobile ? undefined : 150,
+                                                on: {
+                                                    onChange: function (newVal) {
+                                                        handleAccessibilityChange('high_contrast', newVal === 1);
+                                                    }
+                                                }
+                                            },
+                                            {}
+                                        ]
+                                    },
+
+                                    { height: 25 },
+
+                                    // THEME
+                                    {
+                                        view: "template",
+                                        template: `<div style='font-size:16px; font-weight:600; color:#34495e; margin-bottom:15px;'>🎨 Theme</div>`,
                                         height: 40,
                                         borderless: true
                                     },
                                     {
                                         view: "segmented",
-                                        id: "fontSize",
-                                        value: user.font_size || 'medium',
-                                        options: [
-                                            { id: "small", value: "Small" },
-                                            { id: "medium", value: "Medium" },
-                                            { id: "large", value: "Large" }
-                                        ],
-                                        on: {
-                                            onChange: function (newVal) {
-                                                handleAccessibilityChange('font_size', newVal);
-                                            }
-                                        }
-                                    },
-                                    { height: 30 },
-                                    {
-                                        view: "template",
-                                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:15px;'>🎨 Theme</div>`,
-                                        height: 40,
-                                        borderless: true
-                                    },
-                                    {
-                                        view: "segmented",
-                                        id: "theme",
+                                        id: "themeSegmented",
                                         value: user.theme || 'standard',
                                         options: [
                                             { id: "light", value: "☀️ Light" },
@@ -109,18 +279,46 @@ function createAccessibilityContent(user, isMobile = false) {
                                             }
                                         }
                                     },
-                                    { height: 30 },
+
+                                    { height: 25 },
+
+                                    // FONT SIZE
                                     {
                                         view: "template",
-                                        template: `<div style='font-size:${isMobile ? '16px' : '18px'}; font-weight:600; color:#34495e; margin-bottom:20px;'>🔆 Contrast Level</div>`,
+                                        template: `<div style='font-size:16px; font-weight:600; color:#34495e; margin-bottom:15px;'>📏 Font Size</div>`,
+                                        height: 40,
+                                        borderless: true
+                                    },
+                                    {
+                                        view: "segmented",
+                                        id: "fontSizeSegmented",
+                                        value: user.font_size || 'medium',
+                                        options: [
+                                            { id: "small", value: "Small" },
+                                            { id: "medium", value: "Medium" },
+                                            { id: "large", value: "Large" }
+                                        ],
+                                        on: {
+                                            onChange: function (newVal) {
+                                                handleAccessibilityChange('font_size', newVal);
+                                            }
+                                        }
+                                    },
+
+                                    { height: 25 },
+
+                                    // BRIGHTNESS LEVEL (formerly Contrast Level)
+                                    {
+                                        view: "template",
+                                        template: `<div style='font-size:16px; font-weight:600; color:#34495e; margin-bottom:20px;'>🔆 Brightness Level</div>`,
                                         height: 40,
                                         borderless: true
                                     },
                                     {
                                         view: "template",
-                                        id: "contrastStepIndicator",
+                                        id: "brightnessStepIndicator",
                                         template: function () {
-                                            return createStepIndicator(user.contrast_level || 'normal');
+                                            return createStepIndicator(user.brightness_level || 'normal');
                                         }(),
                                         height: 100,
                                         borderless: true,
@@ -128,7 +326,7 @@ function createAccessibilityContent(user, isMobile = false) {
                                             "step-circle": function (e, id) {
                                                 const level = e.target.getAttribute('data-level');
                                                 if (level) {
-                                                    handleContrastChange(level);
+                                                    handleBrightnessChange(level);
                                                     this.setHTML(createStepIndicator(level));
                                                 }
                                             }
@@ -148,7 +346,7 @@ function createAccessibilityContent(user, isMobile = false) {
 }
 
 // ==========================================
-// STEP INDICATOR FOR CONTRAST LEVELS
+// STEP INDICATOR FOR BRIGHTNESS LEVELS
 // ==========================================
 
 function createStepIndicator(selectedLevel) {
@@ -212,14 +410,17 @@ async function handleAccessibilityChange(setting, value) {
         case 'screen_reader':
             AccessibilityManager.applyScreenReader(value);
             break;
+        case 'high_contrast':
+            AccessibilityManager.applyHighContrast(value);
+            break;
         case 'font_size':
             AccessibilityManager.applyFontSize(value);
             break;
         case 'theme':
             AccessibilityManager.applyTheme(value);
             break;
-        case 'contrast_level':
-            AccessibilityManager.applyContrast(value);
+        case 'brightness_level':
+            AccessibilityManager.applyBrightness(value);
             break;
     }
 
@@ -230,6 +431,10 @@ async function handleAccessibilityChange(setting, value) {
 
     if (result.success) {
         localStorage.setItem('currentUser', JSON.stringify(result.user));
+        webix.message({
+            type: "success",
+            text: `${setting.replace('_', ' ').charAt(0).toUpperCase() + setting.replace('_', ' ').slice(1)} updated successfully`
+        });
     } else {
         webix.message({
             type: "error",
@@ -238,13 +443,13 @@ async function handleAccessibilityChange(setting, value) {
     }
 }
 
-function handleContrastChange(level) {
-    console.log('Contrast level changed to:', level);
+function handleBrightnessChange(level) {
+    console.log('Brightness level changed to:', level);
 
-    const indicator = $("contrastStepIndicator");
+    const indicator = $$("brightnessStepIndicator");
     if (indicator) {
         indicator.setHTML(createStepIndicator(level));
     }
 
-    handleAccessibilityChange('contrast_level', level);
+    handleAccessibilityChange('brightness_level', level);
 }

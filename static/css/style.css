@@ -643,3 +643,228 @@ html {
      /* red for No */
      color: white !important
  }
+
+ /* ==========================================
+   HIGH CONTRAST MODE ENHANCEMENTS
+   ========================================== */
+
+ .high-contrast-mode {
+     background-color: #000000 !important;
+ }
+
+ /* Improve visibility of borders and separators */
+ .high-contrast-mode .webix_layout_line {
+     border-color: #FFFFFF !important;
+ }
+
+ /* Ensure form labels are visible */
+ .high-contrast-mode .webix_el_label label {
+     color: #CCCCCC !important;
+     font-weight: 600 !important;
+ }
+
+ /* Switch buttons in high contrast */
+ .high-contrast-mode .webix_el_switch {
+     border: 2px solid #FFFFFF !important;
+ }
+
+ .high-contrast-mode .webix_el_switch .webix_switch_on {
+     background-color: #00FF00 !important;
+ }
+
+ .high-contrast-mode .webix_el_switch .webix_switch_off {
+     background-color: #FF0000 !important;
+ }
+
+ /* Segmented buttons in high contrast */
+ .high-contrast-mode .webix_el_segmented button {
+     background-color: #000000 !important;
+     color: #FFFFFF !important;
+     border: 1px solid #FFFFFF !important;
+ }
+
+ .high-contrast-mode .webix_el_segmented button.webix_selected {
+     background-color: #FFFF00 !important;
+     color: #000000 !important;
+     font-weight: bold !important;
+ }
+
+ /* Sidebar in high contrast */
+ .high-contrast-mode .webix_sidebar {
+     background-color: #000000 !important;
+     border-right: 2px solid #FFFFFF !important;
+ }
+
+ .high-contrast-mode .webix_sidebar .webix_list_item {
+     color: #FFFFFF !important;
+     border-bottom: 1px solid #555555 !important;
+ }
+
+ .high-contrast-mode .webix_sidebar .webix_list_item:hover {
+     background-color: #333333 !important;
+ }
+
+ .high-contrast-mode .webix_sidebar .webix_list_item.webix_selected {
+     background-color: #FFFF00 !important;
+     color: #000000 !important;
+ }
+
+ /* Toolbar in high contrast */
+ .high-contrast-mode .webix_toolbar {
+     background-color: #000000 !important;
+     border-bottom: 2px solid #FFFFFF !important;
+ }
+
+ /* Messages/Notifications in high contrast */
+ .high-contrast-mode .webix_message {
+     background-color: #000000 !important;
+     color: #FFFF00 !important;
+     border: 2px solid #FFFF00 !important;
+ }
+
+ .high-contrast-mode .webix_message.webix_error {
+     background-color: #000000 !important;
+     color: #FF0000 !important;
+     border-color: #FF0000 !important;
+ }
+
+ .high-contrast-mode .webix_message.webix_success {
+     background-color: #000000 !important;
+     color: #00FF00 !important;
+     border-color: #00FF00 !important;
+ }
+
+ /* Tables in high contrast */
+ .high-contrast-mode .webix_dtable {
+     background-color: #000000 !important;
+ }
+
+ .high-contrast-mode .webix_cell {
+     background-color: #000000 !important;
+     color: #FFFFFF !important;
+     border-color: #FFFFFF !important;
+ }
+
+ .high-contrast-mode .webix_ss_header {
+     background-color: #000000 !important;
+     color: #FFFF00 !important;
+     border-color: #FFFFFF !important;
+ }
+
+ /* ==========================================
+   BRIGHTNESS LEVELS
+   ========================================== */
+
+ body.brightness-low {
+     filter: brightness(0.7);
+ }
+
+ body.brightness-normal {
+     filter: brightness(1.0);
+ }
+
+ body.brightness-high {
+     filter: brightness(1.2);
+ }
+
+ body.brightness-highest {
+     filter: brightness(1.5);
+ }
+
+ /* ==========================================
+   FONT SIZES
+   ========================================== */
+
+ body.font-small {
+     font-size: 12px;
+ }
+
+ body.font-small .webix_view,
+ body.font-small input,
+ body.font-small button,
+ body.font-small textarea {
+     font-size: 12px;
+ }
+
+ body.font-medium {
+     font-size: 14px;
+ }
+
+ body.font-medium .webix_view,
+ body.font-medium input,
+ body.font-medium button,
+ body.font-medium textarea {
+     font-size: 14px;
+ }
+
+ body.font-large {
+     font-size: 18px;
+ }
+
+ body.font-large .webix_view,
+ body.font-large input,
+ body.font-large button,
+ body.font-large textarea {
+     font-size: 18px;
+ }
+
+ /* ==========================================
+   THEMES
+   ========================================== */
+
+ body.theme-light {
+     background-color: #f8f9fa;
+ }
+
+ body.theme-light .webix_view {
+     background-color: #ffffff;
+     color: #212529;
+ }
+
+ body.theme-dark {
+     background-color: #1a1a1a;
+ }
+
+ body.theme-dark .webix_view {
+     background-color: #2d2d2d;
+     color: #e0e0e0;
+ }
+
+ body.theme-dark input,
+ body.theme-dark textarea,
+ body.theme-dark select {
+     background-color: #3a3a3a;
+     color: #e0e0e0;
+     border-color: #555555;
+ }
+
+ body.theme-dark .webix_inp_static {
+     color: #e0e0e0;
+ }
+
+ body.theme-dark button,
+ body.theme-dark .webix_button {
+     background-color: #404040;
+     color: #e0e0e0;
+     border-color: #555555;
+ }
+
+ body.theme-dark button:hover,
+ body.theme-dark .webix_button:hover {
+     background-color: #505050;
+ }
+
+ /* ==========================================
+   KEYBOARD NAVIGATION FOCUS STYLES
+   ========================================== */
+
+ [data-keyboard-nav="true"] *:focus {
+     outline: 2px solid #3498db !important;
+     outline-offset: 2px !important;
+ }
+
+ [data-keyboard-nav="true"] button:focus,
+ [data-keyboard-nav="true"] .webix_button:focus {
+     outline: 3px solid #3498db !important;
+     outline-offset: 3px !important;
+ }

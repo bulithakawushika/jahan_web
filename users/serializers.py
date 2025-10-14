@@ -47,7 +47,7 @@ class UserSerializer(serializers.ModelSerializer):
                   'address', 'job_role', 'profile_photo', 'bio', 'profile_visibility',
                   'show_age', 'show_gender', 'show_marital_status', 'show_email', 'show_phone', 'show_address',
                   'send_public_notifications', 'notification_preference',
-                  'keyboard_navigation', 'screen_reader', 'font_size', 'theme', 'contrast_level']
+                  'keyboard_navigation', 'screen_reader', 'high_contrast', 'font_size', 'theme', 'brightness_level']
         read_only_fields = ['id', 'birthday']
 
 

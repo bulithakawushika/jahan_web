@@ -153,9 +153,10 @@ function loadUserSettings() {
         // Apply all accessibility settings
         AccessibilityManager.applyFontSize(user.font_size || 'medium');
         AccessibilityManager.applyTheme(user.theme || 'standard');
-        AccessibilityManager.applyContrast(user.contrast_level || 'normal');
+        AccessibilityManager.applyBrightness(user.brightness_level || 'normal');
         AccessibilityManager.applyKeyboardNavigation(user.keyboard_navigation !== false);
         AccessibilityManager.applyScreenReader(user.screen_reader || false);
+        AccessibilityManager.applyHighContrast(user.high_contrast || false);
 
         console.log('User settings loaded and applied');
     }

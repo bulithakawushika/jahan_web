@@ -483,6 +483,9 @@ def update_accessibility_settings(request):
     if 'screen_reader' in request.data:
         user.screen_reader = request.data['screen_reader']
     
+    if 'high_contrast' in request.data:
+        user.high_contrast = request.data['high_contrast']
+    
     if 'font_size' in request.data:
         font_size = request.data['font_size']
         if font_size in ['small', 'medium', 'large']:
@@ -493,10 +496,10 @@ def update_accessibility_settings(request):
         if theme in ['light', 'dark', 'standard']:
             user.theme = theme
     
-    if 'contrast_level' in request.data:
-        contrast = request.data['contrast_level']
-        if contrast in ['normal', 'high', 'higher', 'highest']:
-            user.contrast_level = contrast
+    if 'brightness_level' in request.data:
+        brightness = request.data['brightness_level']
+        if brightness in ['low', 'normal', 'high', 'highest']:
+            user.brightness_level = brightness
     
     user.save()
     
