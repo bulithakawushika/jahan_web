@@ -236,7 +236,7 @@ function createAccessibilityContent(user, isMobile = false) {
                                             {
                                                 view: "label",
                                                 label: "Status:",
-                                                width: labelWidth
+                                                width: 80
                                             },
                                             {
                                                 view: "switch",
