@@ -612,3 +612,34 @@ html {
  .settings_form{
     padding: 0 !important;
  }
+
+.custom_confirm_dialog .webix_popup_button {
+    padding: 10px 22px !important;
+    /* Top/Bottom 10px, Left/Right 22px */
+    margin: 5px;
+    /* Space between buttons */
+    border-radius: 6px;
+    display: flex !important;
+    /* Use flexbox for proper centering */
+    align-items: center !important;
+    /* Vertically center text */
+    justify-content: center !important;
+    /* Horizontally center text */
+    text-align: center !important;
+    /* Text stays centered */
+    line-height: normal !important;
+    /* Prevent cramped text */
+}
+
+ /* Optional: make Yes/No visually distinct */
+ .custom_confirm_dialog .webix_popup_button:nth-child(1) {
+     background-color: #27ae60 !important;
+     /* green for Yes */
+     color: white !important;
+ }
+
+ .custom_confirm_dialog .webix_popup_button:nth-child(2) {
+     background-color: #dd5647 !important;
+     /* red for No */
+     color: white !important
+ }

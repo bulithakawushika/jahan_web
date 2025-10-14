@@ -3,6 +3,30 @@
 // File: static/settings_privacy.js
 // ==========================================
 
+/*
+ADD THIS CSS TO YOUR STYLESHEET:
+
+.private_btn_inactive {
+    border: 2px solid #2980b9 !important;
+}
+
+.field_label_larger .webix_el_label {
+    font-size: 15px !important;
+}
+
+.webix_popup_button.webix_primary_button, 
+.custom_confirm_dialog .webix_popup_button.webix_primary_button,
+.webix_confirm .webix_popup_button:first-child {
+    background: #e74c3c !important;
+    border-color: #c0392b !important;
+    min-width: 140px !important;
+}
+
+.webix_confirm .webix_popup_button:first-child:hover {
+    background: #c0392b !important;
+}
+*/
+
 function createPrivacySecurityContent(user, isMobile = false) {
     const labelWidth = isMobile ? 140 : 170;
     const padding = isMobile ? 20 : 40;
@@ -136,7 +160,7 @@ function createPrivacySecurityContent(user, isMobile = false) {
                                     {
                                         view: "template",
                                         template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; line-height:1.6;'>Control who can see your profile information in search results.</div>`,
-                                        height: isMobile ? 60 : 40,
+                                        height: isMobile ? 60 : 20,
                                         borderless: true
                                     },
                                     isMobile
@@ -156,7 +180,7 @@ function createPrivacySecurityContent(user, isMobile = false) {
                                                     view: "button",
                                                     id: "privateBtn",
                                                     value: "🔒 Private",
-                                                    css: user.profile_visibility === 'private' ? "webix_danger" : "",
+                                                    css: user.profile_visibility === 'private' ? "webix_danger" : "private_btn_inactive",
                                                     click: function () {
                                                         handlePrivacyChange('private');
                                                     }
@@ -182,7 +206,7 @@ function createPrivacySecurityContent(user, isMobile = false) {
                                                     id: "privateBtn",
                                                     value: "🔒 Private",
                                                     width: 150,
-                                                    css: user.profile_visibility === 'private' ? "webix_danger" : "",
+                                                    css: user.profile_visibility === 'private' ? "webix_danger" : "private_btn_inactive",
                                                     click: function () {
                                                         handlePrivacyChange('private');
                                                     }
@@ -209,171 +233,189 @@ function createPrivacySecurityContent(user, isMobile = false) {
                                     },
                                     {
                                         view: "template",
-                                        template: `<div style='font-size:${isMobile ? '13px' : '14px'}; color:#7f8c8d; line-height:1.6; margin-bottom:15px;'>Choose which personal information is visible when others search for you. Disabled fields will be hidden from search result cards.</div>`,
+                                        template: `<div style='font-size:${isMobile ? '14px' : '15px'}; color:#7f8c8d; line-height:1.6; margin-bottom:15px;'>Choose which personal information is visible when others search for you. Disabled fields will be hidden from search result cards.</div>`,
                                         height: isMobile ? 70 : 50,
                                         borderless: true
                                     },
 
-                                    // Age Visibility
-                                    {
-                                        cols: [
-                                            {
-                                                view: "label",
-                                                label: "Age:",
-                                                width: labelWidth
-                                            },
-                                            {
-                                                view: "switch",
-                                                id: "showAgeSwitch",
-                                                onLabel: "Visible",
-                                                offLabel: "Hidden",
-                                                value: user.show_age ? 1 : 0,
-                                                width: isMobile ? undefined : 150,
-                                                on: {
-                                                    onChange: function (newVal) {
-                                                        handleFieldVisibilityChange('show_age', newVal === 1);
-                                                    }
+                                    isMobile ?
+                                        // Mobile layout - single column
+                                        {
+                                            rows: [
+                                                // Age
+                                                {
+                                                    cols: [
+                                                        { view: "label", label: "Age:", width: labelWidth },
+                                                        {
+                                                            view: "switch", id: "showAgeSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_age ? 1 : 0,
+                                                            on: { onChange: function (newVal) { handleFieldVisibilityChange('show_age', newVal === 1); } }
+                                                        },
+                                                        {}
+                                                    ],
+                                                    height: 40
+                                                },
+                                                { height: 5 },
+                                                // Gender
+                                                {
+                                                    cols: [
+                                                        { view: "label", label: "Gender:", width: labelWidth },
+                                                        {
+                                                            view: "switch", id: "showGenderSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_gender ? 1 : 0,
+                                                            on: { onChange: function (newVal) { handleFieldVisibilityChange('show_gender', newVal === 1); } }
+                                                        },
+                                                        {}
+                                                    ],
+                                                    height: 40
+                                                },
+                                                { height: 5 },
+                                                // Marital Status
+                                                {
+                                                    cols: [
+                                                        { view: "label", label: "Marital Status:", width: labelWidth },
+                                                        {
+                                                            view: "switch", id: "showMaritalStatusSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_marital_status ? 1 : 0,
+                                                            on: { onChange: function (newVal) { handleFieldVisibilityChange('show_marital_status', newVal === 1); } }
+                                                        },
+                                                        {}
+                                                    ],
+                                                    height: 40
+                                                },
+                                                { height: 5 },
+                                                // Email
+                                                {
+                                                    cols: [
+                                                        { view: "label", label: "Email:", width: labelWidth },
+                                                        {
+                                                            view: "switch", id: "showEmailSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_email ? 1 : 0,
+                                                            on: { onChange: function (newVal) { handleFieldVisibilityChange('show_email', newVal === 1); } }
+                                                        },
+                                                        {}
+                                                    ],
+                                                    height: 40
+                                                },
+                                                { height: 5 },
+                                                // Phone Number
+                                                {
+                                                    cols: [
+                                                        { view: "label", label: "Phone Number:", width: labelWidth },
+                                                        {
+                                                            view: "switch", id: "showPhoneSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_phone ? 1 : 0,
+                                                            on: { onChange: function (newVal) { handleFieldVisibilityChange('show_phone', newVal === 1); } }
+                                                        },
+                                                        {}
+                                                    ],
+                                                    height: 40
+                                                },
+                                                { height: 5 },
+                                                // Address
+                                                {
+                                                    cols: [
+                                                        { view: "label", label: "Address:", width: labelWidth },
+                                                        {
+                                                            view: "switch", id: "showAddressSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_address ? 1 : 0,
+                                                            on: { onChange: function (newVal) { handleFieldVisibilityChange('show_address', newVal === 1); } }
+                                                        },
+                                                        {}
+                                                    ],
+                                                    height: 40
                                                 }
-                                            },
-                                            {}
-                                        ],
-                                        height: 40
-                                    },
-                                    { height: 10 },
-
-                                    // Gender Visibility
-                                    {
-                                        cols: [
-                                            {
-                                                view: "label",
-                                                label: "Gender:",
-                                                width: labelWidth
-                                            },
-                                            {
-                                                view: "switch",
-                                                id: "showGenderSwitch",
-                                                onLabel: "Visible",
-                                                offLabel: "Hidden",
-                                                value: user.show_gender ? 1 : 0,
-                                                width: isMobile ? undefined : 150,
-                                                on: {
-                                                    onChange: function (newVal) {
-                                                        handleFieldVisibilityChange('show_gender', newVal === 1);
-                                                    }
-                                                }
-                                            },
-                                            {}
-                                        ],
-                                        height: 40
-                                    },
-                                    { height: 10 },
-
-                                    // Marital Status Visibility
-                                    {
-                                        cols: [
-                                            {
-                                                view: "label",
-                                                label: "Marital Status:",
-                                                width: labelWidth
-                                            },
-                                            {
-                                                view: "switch",
-                                                id: "showMaritalStatusSwitch",
-                                                onLabel: "Visible",
-                                                offLabel: "Hidden",
-                                                value: user.show_marital_status ? 1 : 0,
-                                                width: isMobile ? undefined : 150,
-                                                on: {
-                                                    onChange: function (newVal) {
-                                                        handleFieldVisibilityChange('show_marital_status', newVal === 1);
-                                                    }
-                                                }
-                                            },
-                                            {}
-                                        ],
-                                        height: 40
-                                    },
-                                    { height: 10 },
-
-                                    // Email Visibility
-                                    {
-                                        cols: [
-                                            {
-                                                view: "label",
-                                                label: "Email:",
-                                                width: labelWidth
-                                            },
-                                            {
-                                                view: "switch",
-                                                id: "showEmailSwitch",
-                                                onLabel: "Visible",
-                                                offLabel: "Hidden",
-                                                value: user.show_email ? 1 : 0,
-                                                width: isMobile ? undefined : 150,
-                                                on: {
-                                                    onChange: function (newVal) {
-                                                        handleFieldVisibilityChange('show_email', newVal === 1);
-                                                    }
-                                                }
-                                            },
-                                            {}
-                                        ],
-                                        height: 40
-                                    },
-                                    { height: 10 },
-
-                                    // Phone Number Visibility
-                                    {
-                                        cols: [
-                                            {
-                                                view: "label",
-                                                label: "Phone Number:",
-                                                width: labelWidth
-                                            },
-                                            {
-                                                view: "switch",
-                                                id: "showPhoneSwitch",
-                                                onLabel: "Visible",
-                                                offLabel: "Hidden",
-                                                value: user.show_phone ? 1 : 0,
-                                                width: isMobile ? undefined : 150,
-                                                on: {
-                                                    onChange: function (newVal) {
-                                                        handleFieldVisibilityChange('show_phone', newVal === 1);
-                                                    }
-                                                }
-                                            },
-                                            {}
-                                        ],
-                                        height: 40
-                                    },
-                                    { height: 10 },
-
-                                    // Address Visibility
-                                    {
-                                        cols: [
-                                            {
-                                                view: "label",
-                                                label: "Address:",
-                                                width: labelWidth
-                                            },
-                                            {
-                                                view: "switch",
-                                                id: "showAddressSwitch",
-                                                onLabel: "Visible",
-                                                offLabel: "Hidden",
-                                                value: user.show_address ? 1 : 0,
-                                                width: isMobile ? undefined : 150,
-                                                on: {
-                                                    onChange: function (newVal) {
-                                                        handleFieldVisibilityChange('show_address', newVal === 1);
-                                                    }
-                                                }
-                                            },
-                                            {}
-                                        ],
-                                        height: 40
-                                    }
+                                            ]
+                                        }
+                                        :
+                                        // Desktop layout - 2 columns with padding
+                                        {
+                                            cols: [
+                                                { }, // Left padding
+                                                {
+                                                    // First column
+                                                    rows: [
+                                                        // Email
+                                                        {
+                                                            cols: [
+                                                                { view: "label", label: "Email:", width: 140, css: "field_label_larger" },
+                                                                {
+                                                                    view: "switch", id: "showEmailSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_email ? 1 : 0, width: 150,
+                                                                    on: { onChange: function (newVal) { handleFieldVisibilityChange('show_email', newVal === 1); } }
+                                                                },
+                                                                {}
+                                                            ],
+                                                            height: 42
+                                                        },
+                                                        { height: 8 },
+                                                        // Phone Number
+                                                        {
+                                                            cols: [
+                                                                { view: "label", label: "Phone Number:", width: 140, css: "field_label_larger" },
+                                                                {
+                                                                    view: "switch", id: "showPhoneSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_phone ? 1 : 0, width: 150,
+                                                                    on: { onChange: function (newVal) { handleFieldVisibilityChange('show_phone', newVal === 1); } }
+                                                                },
+                                                                {}
+                                                            ],
+                                                            height: 42
+                                                        },
+                                                        { height: 8 },
+                                                        // Address
+                                                        {
+                                                            cols: [
+                                                                { view: "label", label: "Address:", width: 140, css: "field_label_larger" },
+                                                                {
+                                                                    view: "switch", id: "showAddressSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_address ? 1 : 0, width: 150,
+                                                                    on: { onChange: function (newVal) { handleFieldVisibilityChange('show_address', newVal === 1); } }
+                                                                },
+                                                                {}
+                                                            ],
+                                                            height: 42
+                                                        }
+                                                    ]
+                                                },
+                                                { width: 150 }, // Middle spacing
+                                                {
+                                                    // Second column
+                                                    rows: [
+                                                        // Age
+                                                        {
+                                                            cols: [
+                                                                { view: "label", label: "Age:", width: 140, css: "field_label_larger" },
+                                                                {
+                                                                    view: "switch", id: "showAgeSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_age ? 1 : 0, width: 150,
+                                                                    on: { onChange: function (newVal) { handleFieldVisibilityChange('show_age', newVal === 1); } }
+                                                                },
+                                                                {}
+                                                            ],
+                                                            height: 42
+                                                        },
+                                                        { height: 8 },
+                                                        // Gender
+                                                        {
+                                                            cols: [
+                                                                { view: "label", label: "Gender:", width: 140, css: "field_label_larger" },
+                                                                {
+                                                                    view: "switch", id: "showGenderSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_gender ? 1 : 0, width: 150,
+                                                                    on: { onChange: function (newVal) { handleFieldVisibilityChange('show_gender', newVal === 1); } }
+                                                                },
+                                                                {}
+                                                            ],
+                                                            height: 42
+                                                        },
+                                                        { height: 8 },
+                                                        // Marital Status
+                                                        {
+                                                            cols: [
+                                                                { view: "label", label: "Marital Status:", width: 140, css: "field_label_larger" },
+                                                                {
+                                                                    view: "switch", id: "showMaritalStatusSwitch", onLabel: "Visible", offLabel: "Hidden", value: user.show_marital_status ? 1 : 0, width: 150,
+                                                                    on: { onChange: function (newVal) { handleFieldVisibilityChange('show_marital_status', newVal === 1); } }
+                                                                },
+                                                                {}
+                                                            ],
+                                                            height: 42
+                                                        }
+                                                    ]
+                                                },
+                                                { } // Right padding
+                                            ]
+                                        }
                                 ]
                             }
                         ]
@@ -463,7 +505,9 @@ function handlePrivacyChange(visibility) {
             title: "Change Privacy Setting",
             text: "Do you want to make your account private?<br><br>If you set your account to private, your profile will be hidden from search results and your data will not be visible to others.",
             ok: "Yes, Make Private",
-            cancel: "No, Keep Public",
+            cancel: " No, Keep Public ",
+            css: "custom_confirm_dialog",
+            width: 420,
             callback: function (result) {
                 if (result) updatePrivacySetting("private");
             }
@@ -481,15 +525,46 @@ async function updatePrivacySetting(visibility) {
     if (result.success) {
         localStorage.setItem("currentUser", JSON.stringify(result.user));
 
+        // Get both button elements
+        const publicBtn = $$("publicBtn");
+        const privateBtn = $$("privateBtn");
+
         if (visibility === "public") {
-            $$("publicBtn").define("css", "webix_primary");
-            $$("privateBtn").define("css", "");
+            // Remove all CSS classes and add primary to public button
+            publicBtn.define("css", "webix_primary");
+            publicBtn.refresh();
+
+            // Remove all CSS classes and add inactive to private button
+            privateBtn.define("css", "private_btn_inactive");
+            privateBtn.refresh();
+
+            // Force re-render to ensure CSS changes take effect
+            publicBtn.getNode().className = publicBtn.getNode().className.replace(/webix_danger|private_btn_inactive/g, '');
+            privateBtn.getNode().className = privateBtn.getNode().className.replace(/webix_danger|webix_primary/g, '');
+
+            if (!publicBtn.getNode().className.includes('webix_primary')) {
+                publicBtn.getNode().className += ' webix_primary';
+            }
+            if (!privateBtn.getNode().className.includes('private_btn_inactive')) {
+                privateBtn.getNode().className += ' private_btn_inactive';
+            }
         } else {
-            $$("publicBtn").define("css", "");
-            $$("privateBtn").define("css", "webix_danger");
+            // Remove all CSS classes and reset public button
+            publicBtn.define("css", "");
+            publicBtn.refresh();
+
+            // Remove all CSS classes and add danger to private button
+            privateBtn.define("css", "webix_danger");
+            privateBtn.refresh();
+
+            // Force re-render to ensure CSS changes take effect
+            publicBtn.getNode().className = publicBtn.getNode().className.replace(/webix_primary|webix_danger|private_btn_inactive/g, '');
+            privateBtn.getNode().className = privateBtn.getNode().className.replace(/webix_primary|private_btn_inactive/g, '');
+
+            if (!privateBtn.getNode().className.includes('webix_danger')) {
+                privateBtn.getNode().className += ' webix_danger';
+            }
         }
-        $$("publicBtn").refresh();
-        $$("privateBtn").refresh();
 
         webix.message({ type: "success", text: `Privacy set to ${visibility}` });
     } else {
