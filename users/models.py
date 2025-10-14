@@ -55,6 +55,14 @@ class CustomUser(AbstractUser):
         default='public'
     )
     
+    # NEW: Granular field visibility controls
+    show_age = models.BooleanField(default=True)
+    show_gender = models.BooleanField(default=True)
+    show_marital_status = models.BooleanField(default=True)
+    show_email = models.BooleanField(default=True)
+    show_phone = models.BooleanField(default=True)
+    show_address = models.BooleanField(default=True)
+
     # Notification settings
     send_public_notifications = models.BooleanField(default=True)
     notification_preference = models.CharField(

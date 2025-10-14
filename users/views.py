@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.db.models import Q
 from django.utils import timezone
-from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer
+from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, SearchUserSerializer
 from core.models import Notification, UserNotificationStatus
 from core.notification_utils import create_notification, cleanup_fully_read_notifications
 
@@ -116,8 +116,9 @@ def search_users(request):
     
     return Response({
         'success': True,
-        'results': UserSerializer(users, many=True).data
+        'results': SearchUserSerializer(users, many=True).data
     })
+
 
 @api_view(['GET'])
 def get_profile(request):
@@ -300,7 +301,7 @@ def change_password(request):
 @api_view(['POST'])
 def update_privacy_settings(request):
     """
-    Update privacy settings
+    Update privacy settings including granular field visibility
     """
     if not request.user.is_authenticated:
         return Response({
@@ -308,22 +309,41 @@ def update_privacy_settings(request):
             'message': 'Not authenticated'
         }, status=status.HTTP_401_UNAUTHORIZED)
     
-    profile_visibility = request.data.get('profile_visibility')
+    user = request.user
     
-    if profile_visibility not in ['public', 'private']:
-        return Response({
-            'success': False,
-            'message': 'Invalid privacy setting'
-        }, status=status.HTTP_400_BAD_REQUEST)
+    # Update overall profile visibility
+    if 'profile_visibility' in request.data:
+        profile_visibility = request.data['profile_visibility']
+        if profile_visibility in ['public', 'private']:
+            user.profile_visibility = profile_visibility
     
-    request.user.profile_visibility = profile_visibility
-    request.user.save()
+    # Update granular field visibility
+    if 'show_age' in request.data:
+        user.show_age = request.data['show_age']
+    
+    if 'show_gender' in request.data:
+        user.show_gender = request.data['show_gender']
+    
+    if 'show_marital_status' in request.data:
+        user.show_marital_status = request.data['show_marital_status']
+    
+    if 'show_email' in request.data:
+        user.show_email = request.data['show_email']
+    
+    if 'show_phone' in request.data:
+        user.show_phone = request.data['show_phone']
+    
+    if 'show_address' in request.data:
+        user.show_address = request.data['show_address']
+    
+    user.save()
     
     return Response({
         'success': True,
-        'message': f'Privacy set to {profile_visibility}',
+        'message': 'Privacy settings updated',
         'user': UserSerializer(request.user).data
     })
+
 
 @api_view(['GET'])
 def get_notifications(request):

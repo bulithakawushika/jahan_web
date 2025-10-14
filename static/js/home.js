@@ -382,6 +382,24 @@ function createUserCardContent(user) {
         `${API_CONFIG.BASE_URL}${user.profile_photo}` :
         'https://via.placeholder.com/150/cccccc/666666?text=No+Photo';
 
+    // Helper function to display field or "Hidden" message
+    const displayField = (value, label) => {
+        if (value === undefined || value === null || value === '') {
+            return `<div style="font-size: 13px; color: #bdc3c7; margin-bottom: 6px;">
+                        <strong>${label}:</strong> <em>Hidden by user</em>
+                    </div>`;
+        }
+        return `<div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
+                    <strong>${label}:</strong> ${value}
+                </div>`;
+    };
+
+    // Calculate age only if birthday data is available
+    let ageDisplay = 'Hidden by user';
+    if (user.birthday || (user.birth_year && user.birth_month && user.birth_day)) {
+        ageDisplay = calculateAge(user.birthday);
+    }
+
     return {
         view: "template",
         css: "user_card",
@@ -411,28 +429,58 @@ function createUserCardContent(user) {
                 <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
                     <strong>Department:</strong> ${user.department || 'Not specified'}
                 </div>
-                <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
-                    <strong>Email:</strong> ${user.email}
-                </div>
-                <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
-                    <strong>Phone Number:</strong> ${user.phone_number}
-                </div>
-                <div style="font-size: 13px; color: #7f8c8d;">
-                    <strong>Address:</strong> ${user.address || 'Not specified'}
-                </div>
+                ${user.email !== undefined ?
+                `<div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
+                        <strong>Email:</strong> ${user.email}
+                    </div>` :
+                `<div style="font-size: 13px; color: #bdc3c7; margin-bottom: 6px;">
+                        <strong>Email:</strong> <em>Hidden by user</em>
+                    </div>`
+            }
+                ${user.phone_number !== undefined ?
+                `<div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
+                        <strong>Phone Number:</strong> ${user.phone_number}
+                    </div>` :
+                `<div style="font-size: 13px; color: #bdc3c7; margin-bottom: 6px;">
+                        <strong>Phone Number:</strong> <em>Hidden by user</em>
+                    </div>`
+            }
+                ${user.address !== undefined && user.address !== null && user.address !== '' ?
+                `<div style="font-size: 13px; color: #7f8c8d;">
+                        <strong>Address:</strong> ${user.address}
+                    </div>` :
+                `<div style="font-size: 13px; color: #bdc3c7;">
+                        <strong>Address:</strong> <em>Hidden by user</em>
+                    </div>`
+            }
             </div>
 
             <!-- Right Column -->
             <div style="flex: 1; min-width: 200px;">
-                <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
-                    <strong>Age:</strong> ${calculateAge(user.birthday)}
-                </div>
-                <div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
-                    <strong>Gender:</strong> ${user.gender || 'Not specified'}
-                </div>
-                <div style="font-size: 13px; color: #7f8c8d;">
-                    <strong>Marital Status:</strong> ${user.marital_status || 'Not specified'}
-                </div>
+                ${ageDisplay !== 'Hidden by user' ?
+                `<div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
+                        <strong>Age:</strong> ${ageDisplay}
+                    </div>` :
+                `<div style="font-size: 13px; color: #bdc3c7; margin-bottom: 6px;">
+                        <strong>Age:</strong> <em>Hidden by user</em>
+                    </div>`
+            }
+                ${user.gender !== undefined && user.gender !== null && user.gender !== '' ?
+                `<div style="font-size: 13px; color: #7f8c8d; margin-bottom: 6px;">
+                        <strong>Gender:</strong> ${user.gender}
+                    </div>` :
+                `<div style="font-size: 13px; color: #bdc3c7; margin-bottom: 6px;">
+                        <strong>Gender:</strong> <em>Hidden by user</em>
+                    </div>`
+            }
+                ${user.marital_status !== undefined && user.marital_status !== null && user.marital_status !== '' ?
+                `<div style="font-size: 13px; color: #7f8c8d;">
+                        <strong>Marital Status:</strong> ${user.marital_status}
+                    </div>` :
+                `<div style="font-size: 13px; color: #bdc3c7;">
+                        <strong>Marital Status:</strong> <em>Hidden by user</em>
+                    </div>`
+            }
             </div>
         </div>
     </div>
