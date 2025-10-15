@@ -1,4 +1,3 @@
-// Toggle password visibility
 function toggleLoginPasswordVisibility() {
     const form = $("loginForm");
     if (!form) return;

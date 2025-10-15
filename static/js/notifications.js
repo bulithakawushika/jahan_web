@@ -1,12 +1,10 @@
-// Global variable to store unread count
 let unreadNotificationCount = 0;
 
-// Create Desktop Notifications Page (with Toolbar)
 function createDesktopNotificationsPage() {
     return {
         id: "notificationsPage",
         rows: [
-            createNavigationBar('notifications'), // Use shared navigation bar
+            createNavigationBar('notifications'),
             {
                 id: "notificationsContentArea",
                 gravity: 1,
@@ -45,7 +43,6 @@ function createMobileNotificationsPage() {
                 on: {
                     onAfterSelect: function (id) {
                         handleSidebarNavigation(id);
-                        // Hide sidebar after selection on mobile
                         const sidebar = $$("mainSidebar");
                         if (sidebar) {
                             sidebar.hide();
@@ -59,7 +56,6 @@ function createMobileNotificationsPage() {
                 id: "mainContentArea",
                 gravity: 1,
                 rows: [
-                    // Top Bar with Menu Toggle
                     {
                         view: "toolbar",
                         height: 40,
@@ -118,7 +114,7 @@ async function loadNotifications() {
         unreadNotificationCount = result.unread_count;
         displayNotifications(result.notifications, result.unread_count);
         updateNotificationBadge(result.unread_count);
-        updateSidebarNotificationBadge(result.unread_count); // Update sidebar badge too
+        updateSidebarNotificationBadge(result.unread_count);
     } else {
         webix.message({
             type: "error",
@@ -372,7 +368,7 @@ function updateNotificationBadge(count) {
     }
 }
 
-// Check for unread notifications (call on login)
+// Check for unread notifications
 async function checkUnreadNotifications() {
     const result = await apiCall(API_CONFIG.ENDPOINTS.NOTIFICATIONS, 'GET');
 
