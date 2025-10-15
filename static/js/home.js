@@ -1,4 +1,3 @@
-// Create Desktop Home Page (with Toolbar)
 function createDesktopHomePage() {
     return {
         id: "homePage",
@@ -15,7 +14,7 @@ function createDesktopHomePage() {
     };
 }
 
-// Create Mobile/Tablet Home Page (with Sidebar)
+// Create Mobile/Tablet Home Page
 function createMobileHomePage() {
     return {
         id: "homePage",
@@ -52,7 +51,6 @@ function createMobileHomePage() {
                 id: "mainContentArea",
                 gravity: 1,
                 rows: [
-                    // Top Bar with Menu Toggle
                     {
                         view: "toolbar",
                         height: 40,
@@ -86,7 +84,6 @@ function createMobileHomePage() {
     };
 }
 
-// Create Responsive Home Page
 function createHomePage() {
     const screenWidth = window.innerWidth;
 
@@ -188,7 +185,7 @@ function createNavigationBar(activePage) {
     };
 }
 
-// Initial Search View (before search)
+// Initial Search View
 function createSearchView() {
     const screenWidth = window.innerWidth;
     const isMobile = screenWidth <= 768;
@@ -331,22 +328,18 @@ function calculateAge(birthday) {
     return age + ' years old';
 }
 
-// Create User Grid (2 columns for desktop, 1 for mobile)
 function createUserGrid(results) {
     const rows = [];
     const isMobile = window.innerWidth < 768;
 
     if (isMobile) {
-        // Mobile: One card per row
         results.forEach(user => {
             rows.push(createUserCard(user));
         });
     } else {
-        // Desktop: Two cards per row
         for (let i = 0; i < results.length; i += 2) {
             const cols = [{ width: 20 }];
 
-            // First card
             cols.push({
                 gravity: 1,
                 rows: [createUserCardContent(results[i])]
@@ -354,7 +347,6 @@ function createUserGrid(results) {
 
             cols.push({ width: 20 });
 
-            // Second card (if exists)
             if (i + 1 < results.length) {
                 cols.push({
                     gravity: 1,
@@ -376,7 +368,7 @@ function createUserGrid(results) {
     return rows;
 }
 
-// Create User Card Content (without wrapper)
+// Create User Card Content
 function createUserCardContent(user) {
     const profilePhoto = user.profile_photo ?
         `${API_CONFIG.BASE_URL}${user.profile_photo}` :
@@ -491,7 +483,7 @@ function createUserCardContent(user) {
     };
 }
 
-// Create User Card (with mobile wrapper)
+// Create User Card
 function createUserCard(user) {
     return {
         height: 200,
@@ -593,7 +585,6 @@ function toggleSidebar() {
 
     if (sidebar.config.hidden) {
         sidebar.show();
-        // Add click listener to hide sidebar when clicking outside
         setTimeout(() => {
             attachOutsideClickListener();
         }, 100);
@@ -603,7 +594,6 @@ function toggleSidebar() {
     }
 }
 
-// Attach click listener to detect clicks outside sidebar
 function attachOutsideClickListener() {
     const mainContentArea = $$("mainContentArea");
     if (!mainContentArea) return;
@@ -614,7 +604,6 @@ function attachOutsideClickListener() {
     }
 }
 
-// Remove outside click listener
 function removeOutsideClickListener() {
     const mainContentArea = $$("mainContentArea");
     if (!mainContentArea) return;
@@ -625,7 +614,6 @@ function removeOutsideClickListener() {
     }
 }
 
-// Handle clicks outside sidebar
 function handleOutsideClick(e) {
     const sidebar = $$("mainSidebar");
     if (!sidebar || sidebar.config.hidden) return;
@@ -634,7 +622,6 @@ function handleOutsideClick(e) {
     const menuBtn = $$("menuToggleBtn");
     const menuBtnNode = menuBtn ? menuBtn.getNode() : null;
 
-    // Check if click is outside sidebar and not on menu button
     if (sidebarNode && !sidebarNode.contains(e.target) &&
         menuBtnNode && !menuBtnNode.contains(e.target)) {
         sidebar.hide();
@@ -646,7 +633,6 @@ function handleOutsideClick(e) {
 window.addEventListener('resize', function () {
     const currentPage = $$("homePage");
     if (currentPage && currentPage.isVisible()) {
-        // Clean up event listeners before destroying
         removeOutsideClickListener();
 
         if (mainApp) {
