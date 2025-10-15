@@ -2,22 +2,21 @@
 let currentPage = null;
 let mainApp = null;
 
-// Initialize the application
 webix.ready(function () {
-    // Small delay to ensure all scripts are loaded
+    
     setTimeout(function () {
         checkAuthentication();
     }, 100);
 });
 
-// Check authentication status
+
 async function checkAuthentication() {
     const result = await apiCall(API_CONFIG.ENDPOINTS.CHECK_AUTH);
 
     if (result.authenticated) {
         localStorage.setItem('currentUser', JSON.stringify(result.user));
 
-        // Load user settings
+       
         loadUserSettings();
 
         showHomePage();
@@ -41,7 +40,7 @@ function showLoginPage() {
 
     currentPage = "login";
 
-    // Attach password toggle handler
+    
     if (typeof attachPasswordToggle === 'function') {
         attachPasswordToggle();
     }
@@ -68,7 +67,7 @@ function showHomePage() {
         mainApp.destructor();
     }
 
-    // Check if createHomePage function exists
+    
     if (typeof createHomePage !== 'function') {
         console.error('createHomePage is not defined');
         webix.message('Error loading home page');
@@ -98,7 +97,7 @@ function showProfilePage() {
 
     currentPage = "profile";
 
-    // Fetch fresh profile data from database
+    
     setTimeout(function () {
         fetchProfileFromDatabase();
     }, 100);
@@ -118,7 +117,7 @@ function showSettingsPage() {
 
     currentPage = "settings";
 
-    // Load settings data
+    
     setTimeout(function () {
         loadSettingsData();
     }, 100);
@@ -138,7 +137,7 @@ function showNotificationsPage() {
 
     currentPage = "notifications";
 
-    // Load notifications
+   
     setTimeout(function () {
         loadNotifications();
     }, 100);
@@ -150,7 +149,7 @@ function loadUserSettings() {
     if (user) {
         console.log('Loading user settings:', user);
 
-        // Apply all accessibility settings
+       
         AccessibilityManager.applyFontSize(user.font_size || 'medium');
         AccessibilityManager.applyTheme(user.theme || 'standard');
         AccessibilityManager.applyBrightness(user.brightness_level || 'normal');

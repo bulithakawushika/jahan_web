@@ -81,7 +81,7 @@ function createLoginFormUI() {
                         value: "Login",
                         css: "webix_primary",
                         height: 45,
-                        click: handleLogin 
+                        click: handleLogin
                     },
                     {
                         view: "template",
@@ -99,14 +99,14 @@ function createLoginFormUI() {
     };
 }
 
-// Create Desktop Login Page (50:50 Split - Image and Form)
+// Create Desktop Login Page
 function createDesktopLoginPage() {
     return {
         id: "loginPage",
         type: "clean",
         css: "login_page_container",
         cols: [
-            // Left side - Image (50%)
+            // Left side
             {
                 gravity: 1,
                 rows: [
@@ -130,7 +130,7 @@ function createDesktopLoginPage() {
                     }
                 ]
             },
-            // Right side - Login Form (50%)
+            // Right side
             {
                 gravity: 1,
                 rows: [
@@ -151,83 +151,132 @@ function createDesktopLoginPage() {
     };
 }
 
-// Create Mobile/Tablet Login Page (Centered, No Image)
+// Create Mobile/Tablet Login Page
 function createMobileLoginPage() {
     return {
         id: "loginPage",
         type: "clean",
-        css: "login_page_container",
-        height: window.innerHeight, 
+        css: "login_page_container mobile_login_page",
         rows: [
             {
                 view: "template",
                 template: `
-                         <div class="wave-container">
-                        <svg viewBox="0 0 1440 150" preserveAspectRatio="none" class="wave-svg flipped">
-                            <path d="M0,50 C360,150 1080,0 1440,100 L1440,150 L0,150 Z" fill="#3296d8ff"></path>
+                    <div class="wave-top-fixed">
+                        <svg viewBox="0 0 1440 150" preserveAspectRatio="none">
+                            <path d="M0,50 C360,150 1080,0 1440,100 L1440,0 L0,0 Z" fill="#3296d8ff"></path>
                         </svg>
                     </div>
                     <style>
-                        .wave-container {
+                        .mobile_login_page {
+                            position: relative !important;
+                            overflow: hidden !important;
+                        }
+                        .wave-top-fixed {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
                             width: 100%;
+                            z-index: 100;
                             overflow: hidden;
                             line-height: 0;
                         }
-                        .wave-svg {
+                        .wave-top-fixed svg {
                             display: block;
                             width: 100%;
-                            height: 200px;
+                            height: 15vh;
+                            min-height: 80px;
+                            max-height: 150px;
                         }
-                        .wave-svg.flipped {
-                            transform: scaleY(-1);
+                        @media (max-width: 480px) {
+                            .wave-top-fixed svg {
+                                height: 12vh;
+                                min-height: 60px;
+                                max-height: 100px;
+                            }
                         }
                     </style>
-                        `,
+                `,
+                height: 1,
                 borderless: true
-            },          
+            },
             {
-                cols: [
-                    { gravity: 0.1 },
+                view: "scrollview",
+                scroll: "y",
+                css: "mobile_scrollview",
+                body: {
+                    css: "mobile_scroll_body",
+                    rows: [
                         {
-                        maxWidth: 700,
-                        rows: [
-                            createLoginFormUI()
-                        ]},
-                    { gravity: 0.2 }
-                    ] 
+                            view: "template",
+                            template: `<style>
+                                .mobile_scroll_body {
+                                    padding-top: 15vh !important;
+                                    padding-bottom: 15vh !important;
+                                    min-height: 100vh !important;
+                                }
+                                @media (max-width: 480px) {
+                                    .mobile_scroll_body {
+                                        padding-top: 12vh !important;
+                                        padding-bottom: 12vh !important;
+                                    }
+                                }
+                            </style>`,
+                            height: 1,
+                            borderless: true
+                        },
+                        { height: 30 },
+                        {
+                            cols: [
+                                { gravity: 0.05, minWidth: 20 },
+                                {
+                                    gravity: 0.9,
+                                    maxWidth: 500,
+                                    rows: [createLoginFormUI()]
+                                },
+                                { gravity: 0.05, minWidth: 20 }
+                            ]
+                        },
+                        { height: 30 }
+                    ]
+                }
             },
             {
                 view: "template",
                 template: `
-        <div style="position: relative; height: 100%; width: 100%;">
-            <!-- Other content here -->
-
-            <div class="wave-bottom-container">
-                <svg viewBox="0 0 1440 150" preserveAspectRatio="none" class="wave-bottom-svg">
-                    <path d="M0,50 C360,150 1080,0 1440,100 L1440,150 L0,150 Z" fill="#3296d8ff"></path>
-                </svg>
-            </div>
-
-            <style>
-                .wave-bottom-container {
-                    position: absolute;
-                    bottom: 0;
-                    left: 0;
-                    width: 100%;
-                    overflow: hidden;
-                    line-height: 0;
-                }
-                .wave-bottom-svg {
-                    display: block;
-                    width: 100%;
-                    height: 200px;
-                }
-            </style>
-        </div>
-    `,
-                borderless: true,
+                    <div class="wave-bottom-fixed">
+                        <svg viewBox="0 0 1440 150" preserveAspectRatio="none">
+                            <path d="M0,50 C360,150 1080,0 1440,100 L1440,150 L0,150 Z" fill="#3296d8ff"></path>
+                        </svg>
+                    </div>
+                    <style>
+                        .wave-bottom-fixed {
+                            position: fixed;
+                            bottom: 0;
+                            left: 0;
+                            width: 100%;
+                            z-index: 100;
+                            overflow: hidden;
+                            line-height: 0;
+                        }
+                        .wave-bottom-fixed svg {
+                            display: block;
+                            width: 100%;
+                            height: 15vh;
+                            min-height: 80px;
+                            max-height: 150px;
+                        }
+                        @media (max-width: 480px) {
+                            .wave-bottom-fixed svg {
+                                height: 12vh;
+                                min-height: 60px;
+                                max-height: 100px;
+                            }
+                        }
+                    </style>
+                `,
+                height: 1,
+                borderless: true
             }
-
         ]
     };
 }
@@ -236,11 +285,10 @@ function createMobileLoginPage() {
 function createLoginPage() {
     const screenWidth = window.innerWidth;
 
-    // Desktop view (> 1024px) - Show 50:50 split
     if (screenWidth > 1024) {
         return createDesktopLoginPage();
     } else {
-        // Mobile/Tablet view (<= 1024px) - Centered form only
+       
         return createMobileLoginPage();
     }
 }
@@ -280,16 +328,16 @@ async function handleLogin() {
             text: result.message
         });
 
-        // Store user data
+        
         localStorage.setItem('currentUser', JSON.stringify(result.user));
 
-        // Load user settings immediately
+        
         loadUserSettings();
 
-        // Check for unread notifications
+        
         checkUnreadNotifications();
 
-        // Redirect to home page
+        
         showHomePage();
     } else {
         webix.message({
@@ -299,14 +347,27 @@ async function handleLogin() {
     }
 }
 
-// Handle window resize for responsiveness
+
+let resizeTimer;
+let lastWidth = window.innerWidth;
+
 window.addEventListener('resize', function () {
-    const currentPage = $$("loginPage");
-    if (currentPage && currentPage.isVisible()) {
-        // Recreate page with appropriate layout for new screen size
-        if (mainApp) {
-            mainApp.destructor();
-        }
-        showLoginPage();
+    const currentWidth = window.innerWidth;
+
+    if (currentWidth === lastWidth) {
+        return;
     }
+
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+        const currentPage = $$("loginPage");
+        if (currentPage && currentPage.isVisible()) {
+            lastWidth = currentWidth;
+            
+            if (mainApp) {
+                mainApp.destructor();
+            }
+            showLoginPage();
+        }
+    }, 300);
 });

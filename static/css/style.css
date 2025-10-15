@@ -33,7 +33,6 @@ body {
     overflow: visible !important;
 }
 
-/* User Card Styles */
 .user_card {
     transition: transform 0.2s;
 }
@@ -42,13 +41,11 @@ body {
     transform: translateY(-2px);
 }
 
-/* Search Input Styles */
 .webix_el_text input {
     font-size: 16px !important;
     padding: 10px !important;
 }
 
-/* Fix widget spacing */
 .user_card_wrapper {
     margin-bottom: 5px !important;
 }
@@ -57,7 +54,6 @@ body {
     background: transparent !important;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .webix_form {
         padding: 20px;
@@ -118,16 +114,14 @@ body {
     color: #3498db !important;
 }
 
-/* Profile Page - Responsive Layout */
+/* Profile Page */
 @media (max-width: 992px) {
 
-    /* For tablets and mobile - stack vertically */
     .profile_details_card {
         margin-top: 20px !important;
     }
 }
 
-/* Profile card shadow on hover */
 .profile_details_card>div {
     transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
@@ -158,7 +152,6 @@ body {
     }
 }
 
-/* Alternative - Multiple circles spinner (choose one) */
 .loading-spinner-dots {
     display: inline-block;
     position: relative;
@@ -223,8 +216,6 @@ body {
     font-weight: bold;
     font-size: 12px !important;
 }
-
-/* ========== ACCESSIBILITY STYLES ========== */
 
 /* Font Size Variations */
 .font-small {
@@ -310,7 +301,6 @@ body {
 }
 
 .contrast-normal {
-    /* Default contrast */
     filter: contrast(1.0);
 }
 
@@ -470,14 +460,11 @@ body {
     align-items: center;
     justify-content: center;
     height: 100%;
-    /* ensures full height for vertical centering */
 }
 
 .webix_input_icon:hover {
     color: #2c3e50;
 }
-
-/* Login image container */
 
 .login_image {
     width: 507px;
@@ -527,7 +514,7 @@ html {
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
  }
 
- /* Active Navigation Button (with webix_primary) */
+ 
  .webix_primary.nav_button {
      background: #3498db !important;
      color: #ffffff !important;
@@ -540,7 +527,7 @@ html {
      border-color: #2980b9 !important;
  }
 
- /* Notification Badge - Ensure it's visible */
+ 
  .webix_badge {
      background: #e74c3c !important;
      color: white !important;
@@ -553,7 +540,7 @@ html {
      padding: 0 5px !important;
  }
 
- /* User Card Styles */
+ 
  .user_card {
      transition: transform 0.2s ease;
  }
@@ -562,7 +549,7 @@ html {
      transform: translateY(-5px);
  }
 
- /* Responsive adjustments */
+ 
  @media (max-width: 768px) {
      .nav_button {
          width: 100px !important;
@@ -577,18 +564,16 @@ html {
  /* Style for mobile sidebar */
  .mobile_sidebar .webix_sidebar {
      padding-top: 50px !important;
-     /* Add padding from top */
+     
  }
 
  .mobile_sidebar .webix_tree_item {
      font-size: 23px !important;
-     /* Increase text size */
      padding: 40px 25px !important;
-     /* Increase gap between items */
      letter-spacing: 0.3px;
  }
 
- /* Optional: add slight hover or active background for better UX */
+ 
  .mobile_sidebar .webix_tree_item.webix_selected {
      background-color: #e8f0fe !important;
      color: #2c3e50 !important;
@@ -597,73 +582,54 @@ html {
 
  .mobile_sidebar .webix_tree_icon {
      font-size: 20px !important;
-     /* Make icons slightly larger */
      margin-right: 10px;
  }
 
- /* .custom-border-button {
-     border: 5px solid #2980b9;
-     border-radius: 5px;
-     color: #2980b9;
-     font-weight: bold;
- } */
 
- /* Gap In settings form (bulitha) */
+
  .settings_form{
     padding: 0 !important;
  }
 
 .custom_confirm_dialog .webix_popup_button {
     padding: 10px 22px !important;
-    /* Top/Bottom 10px, Left/Right 22px */
     margin: 5px;
-    /* Space between buttons */
     border-radius: 6px;
     display: flex !important;
-    /* Use flexbox for proper centering */
     align-items: center !important;
-    /* Vertically center text */
     justify-content: center !important;
-    /* Horizontally center text */
     text-align: center !important;
-    /* Text stays centered */
     line-height: normal !important;
-    /* Prevent cramped text */
 }
 
- /* Optional: make Yes/No visually distinct */
+ 
  .custom_confirm_dialog .webix_popup_button:nth-child(1) {
      background-color: #27ae60 !important;
-     /* green for Yes */
      color: white !important;
  }
 
  .custom_confirm_dialog .webix_popup_button:nth-child(2) {
      background-color: #dd5647 !important;
-     /* red for No */
      color: white !important
  }
 
- /* ==========================================
-   HIGH CONTRAST MODE ENHANCEMENTS
-   ========================================== */
 
  .high-contrast-mode {
      background-color: #000000 !important;
  }
 
- /* Improve visibility of borders and separators */
+ 
  .high-contrast-mode .webix_layout_line {
      border-color: #FFFFFF !important;
  }
 
- /* Ensure form labels are visible */
+ 
  .high-contrast-mode .webix_el_label label {
      color: #CCCCCC !important;
      font-weight: 600 !important;
  }
 
- /* Switch buttons in high contrast */
+
  .high-contrast-mode .webix_el_switch {
      border: 2px solid #FFFFFF !important;
  }
@@ -676,7 +642,6 @@ html {
      background-color: #FF0000 !important;
  }
 
- /* Segmented buttons in high contrast */
  .high-contrast-mode .webix_el_segmented button {
      background-color: #000000 !important;
      color: #FFFFFF !important;
@@ -689,7 +654,6 @@ html {
      font-weight: bold !important;
  }
 
- /* Sidebar in high contrast */
  .high-contrast-mode .webix_sidebar {
      background-color: #000000 !important;
      border-right: 2px solid #FFFFFF !important;
@@ -715,7 +679,6 @@ html {
      border-bottom: 2px solid #FFFFFF !important;
  }
 
- /* Messages/Notifications in high contrast */
  .high-contrast-mode .webix_message {
      background-color: #000000 !important;
      color: #FFFF00 !important;
@@ -751,10 +714,6 @@ html {
      border-color: #FFFFFF !important;
  }
 
- /* ==========================================
-   BRIGHTNESS LEVELS
-   ========================================== */
-
  body.brightness-low {
      filter: brightness(0.7);
  }
@@ -770,10 +729,6 @@ html {
  body.brightness-highest {
      filter: brightness(1.5);
  }
-
- /* ==========================================
-   FONT SIZES
-   ========================================== */
 
  body.font-small {
      font-size: 12px;
@@ -808,9 +763,7 @@ html {
      font-size: 18px;
  }
 
- /* ==========================================
-   THEMES
-   ========================================== */
+ /* THEMES */
 
  body.theme-light {
      background-color: #f8f9fa;
@@ -854,10 +807,6 @@ html {
      background-color: #505050;
  }
 
- /* ==========================================
-   KEYBOARD NAVIGATION FOCUS STYLES
-   ========================================== */
-
  [data-keyboard-nav="true"] *:focus {
      outline: 2px solid #3498db !important;
      outline-offset: 2px !important;
@@ -869,11 +818,6 @@ html {
      outline-offset: 3px !important;
  }
 
- /* ==========================================
-   DARK THEME TEXT FIXES
-   ========================================== */
-
- /* Make all text white in dark theme */
  body.theme-dark {
      background-color: #1a1a1a !important;
      color: #e0e0e0 !important;
@@ -891,21 +835,18 @@ html {
      color: #e0e0e0 !important;
  }
 
- /* Template text (titles and descriptions) in dark theme */
  body.theme-dark .webix_template,
  body.theme-dark .webix_template div {
      background-color: transparent !important;
      color: #FFFFFF !important;
  }
 
- /* Labels in dark theme */
  body.theme-dark .webix_el_label,
  body.theme-dark .webix_el_label label,
  body.theme-dark .webix_inp_label {
      color: #FFFFFF !important;
  }
 
- /* Input fields in dark theme */
  body.theme-dark input,
  body.theme-dark textarea,
  body.theme-dark select {
@@ -1016,18 +957,15 @@ html {
      border-color: #555555 !important;
  }
 
- /* Step indicator (brightness slider) in dark theme */
  body.theme-dark .step-circle {
      background-color: #3a3a3a !important;
      border-color: #888888 !important;
  }
 
- /* Scrollview in dark theme */
  body.theme-dark .webix_scroll_cont {
      background-color: #2d2d2d !important;
  }
 
- /* Tab view in dark theme */
  body.theme-dark .webix_item_tab {
      background-color: #3a3a3a !important;
      color: #e0e0e0 !important;
@@ -1038,7 +976,6 @@ html {
      color: #ffffff !important;
  }
 
- /* Ensure all nested divs in templates inherit white color */
  body.theme-dark div[style*="color:#34495e"],
  body.theme-dark div[style*="color:#2c3e50"],
  body.theme-dark div[style*="color:#7f8c8d"] {
@@ -1055,7 +992,6 @@ html {
      color: #FFFFFF !important;
  }
 
- /* Fix for any remaining gray text */
  body.theme-dark * {
      border-color: #555555 !important;
  }
@@ -1064,9 +1000,6 @@ html {
      color: inherit;
  }
 
- /* ==========================================
-   DARK THEME - SWITCH BUTTON TEXT FIX
-   ========================================== */
 
  /* Switch button labels should be black on the colored background */
  body.theme-dark .webix_el_switch .webix_switch_on,
@@ -1074,7 +1007,7 @@ html {
      color: #000000 !important;
  }
 
- /* Switch button circle (handle) should be blue */
+
  body.theme-dark .webix_el_switch input:checked+div:before {
      background-color: #3498db !important;
  }
@@ -1083,9 +1016,6 @@ html {
      background-color: #3498db !important;
  }
 
- /* ==========================================
-   DARK THEME - SELECT/COMBO BOX FIX
-   ========================================== */
 
  /* Select dropdown items */
  body.theme-dark .webix_list_item {
@@ -1123,11 +1053,6 @@ html {
      color: #e0e0e0 !important;
  }
 
- /* ==========================================
-   FONT SIZE SCALING FOR ALL TEXT
-   ========================================== */
-
- /* Small Font Size */
  body.font-small {
      font-size: 12px !important;
  }

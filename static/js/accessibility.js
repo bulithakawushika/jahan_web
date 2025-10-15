@@ -1,19 +1,15 @@
-// ==========================================
-// ACCESSIBILITY MANAGER
-// ==========================================
-
 const AccessibilityManager = {
-    // Speech synthesis instance
+   
     synthesis: window.speechSynthesis,
     isScreenReaderEnabled: false,
     currentUtterance: null,
 
-    // Apply Keyboard Navigation
+    
     applyKeyboardNavigation: function (enabled) {
         console.log('Keyboard navigation:', enabled);
         if (enabled) {
             document.body.setAttribute('data-keyboard-nav', 'true');
-            // Add keyboard navigation styles
+            
             const style = document.getElementById('keyboard-nav-style') || document.createElement('style');
             style.id = 'keyboard-nav-style';
             style.innerHTML = `
@@ -39,12 +35,12 @@ const AccessibilityManager = {
         document.body.setAttribute('data-screen-reader', enabled ? 'true' : 'false');
 
         if (enabled) {
-            // Add ARIA labels and announcements
+            
             document.body.setAttribute('role', 'application');
             this.speak('Screen reader enabled. You will now hear announcements for search results and important updates.');
         } else {
             document.body.removeAttribute('role');
-            // Cancel any ongoing speech
+            
             if (this.synthesis.speaking) {
                 this.synthesis.cancel();
             }
@@ -52,14 +48,14 @@ const AccessibilityManager = {
         }
     },
 
-    // NEW: Apply High Contrast Mode
+    
     applyHighContrast: function (enabled) {
         console.log('High contrast mode:', enabled);
 
         if (enabled) {
             document.body.classList.add('high-contrast-mode');
 
-            // Create or update high contrast stylesheet
+           
             let style = document.getElementById('high-contrast-style');
             if (!style) {
                 style = document.createElement('style');
@@ -174,7 +170,6 @@ applyFontSize: function(size) {
     document.body.classList.remove('font-small', 'font-medium', 'font-large');
     document.body.classList.add(`font-${size}`);
     
-    // Create or update font size stylesheet
     let style = document.getElementById('font-size-style');
     if (!style) {
         style = document.createElement('style');
@@ -252,13 +247,13 @@ applyFontSize: function(size) {
     }
   },
 
-    // Apply Font Size
+    
     applyFontSize: function (size) {
         console.log('Font size:', size);
         document.body.classList.remove('font-small', 'font-medium', 'font-large');
         document.body.classList.add(`font-${size}`);
 
-        // Create or update font size stylesheet
+        
         let style = document.getElementById('font-size-style');
         if (!style) {
             style = document.createElement('style');
@@ -342,7 +337,7 @@ applyFontSize: function(size) {
         document.body.classList.remove('theme-light', 'theme-dark', 'theme-standard');
         document.body.classList.add(`theme-${theme}`);
 
-        // Create or update theme stylesheet
+        
         let style = document.getElementById('theme-style');
         if (!style) {
             style = document.createElement('style');
@@ -499,7 +494,7 @@ applyFontSize: function(size) {
         document.body.classList.remove('brightness-low', 'brightness-normal', 'brightness-high', 'brightness-highest');
         document.body.classList.add(`brightness-${level}`);
 
-        // Create or update brightness stylesheet
+        
         let style = document.getElementById('brightness-style');
         if (!style) {
             style = document.createElement('style');
@@ -529,19 +524,18 @@ applyFontSize: function(size) {
     speak: function (text, priority = 'normal') {
         if (!this.isScreenReaderEnabled) return;
 
-        // Cancel current speech if priority is high
         if (priority === 'high' && this.synthesis.speaking) {
             this.synthesis.cancel();
         }
 
-        // Create new utterance
+        
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.rate = 1.0;  // Normal speed
-        utterance.pitch = 1.0; // Normal pitch
-        utterance.volume = 1.0; // Full volume
+        utterance.rate = 1.0;  
+        utterance.pitch = 1.0; 
+        utterance.volume = 1.0; 
         utterance.lang = 'en-US';
 
-        // Error handling
+        
         utterance.onerror = function (event) {
             console.error('Speech synthesis error:', event);
         };
@@ -561,11 +555,11 @@ applyFontSize: function(size) {
             return;
         }
 
-        // Announce count
+     
         const countMessage = `Found ${count} result${count !== 1 ? 's' : ''}`;
         this.speak(countMessage, 'high');
 
-        // Wait a bit, then read first few results
+     
         setTimeout(() => {
             if (!this.isScreenReaderEnabled) return;
 
@@ -629,11 +623,10 @@ applyFontSize: function(size) {
         this.speak(message, 'high');
     },
 
-    // Announce for ARIA
     announce: function (message) {
         if (!this.isScreenReaderEnabled) return;
 
-        // Create or get announcement div for screen readers
+        
         let announcer = document.getElementById('aria-announcer');
         if (!announcer) {
             announcer = document.createElement('div');
@@ -649,17 +642,17 @@ applyFontSize: function(size) {
             document.body.appendChild(announcer);
         }
 
-        // Clear and announce
+        
         announcer.textContent = '';
         setTimeout(() => {
             announcer.textContent = message;
         }, 100);
 
-        // Also use speech synthesis
+        
         this.speak(message);
     },
 
-    // Stop all speech
+  
     stopSpeaking: function () {
         if (this.synthesis.speaking) {
             this.synthesis.cancel();
@@ -671,7 +664,7 @@ applyFontSize: function(size) {
 (function () {
     const user = JSON.parse(localStorage.getItem('currentUser'));
     if (user) {
-        // Apply all saved accessibility settings
+        
         if (user.keyboard_navigation !== undefined) {
             AccessibilityManager.applyKeyboardNavigation(user.keyboard_navigation);
         }

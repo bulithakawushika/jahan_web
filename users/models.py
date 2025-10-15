@@ -32,12 +32,12 @@ class CustomUser(AbstractUser):
         null=True
     )
     
-    # Birthday stored as separate fields for easier selection
+    # Birthday 
     birth_year = models.IntegerField(blank=True, null=True)
     birth_month = models.IntegerField(blank=True, null=True)
     birth_day = models.IntegerField(blank=True, null=True)
     
-    # Keep birthday as a computed property
+    
     birthday = models.DateField(null=True, blank=True)
     
     address = models.TextField(blank=True, null=True)
@@ -55,7 +55,7 @@ class CustomUser(AbstractUser):
         default='public'
     )
     
-    # NEW: Granular field visibility controls
+    
     show_age = models.BooleanField(default=True)
     show_gender = models.BooleanField(default=True)
     show_marital_status = models.BooleanField(default=True)
@@ -78,7 +78,7 @@ class CustomUser(AbstractUser):
     # Accessibility settings
     keyboard_navigation = models.BooleanField(default=True)
     screen_reader = models.BooleanField(default=False)
-    high_contrast = models.BooleanField(default=False)  # NEW FIELD
+    high_contrast = models.BooleanField(default=False) 
     font_size = models.CharField(
         max_length=20,
         choices=[
@@ -97,7 +97,7 @@ class CustomUser(AbstractUser):
         ],
         default='standard'
     )
-    brightness_level = models.CharField(  # RENAMED from contrast_level
+    brightness_level = models.CharField(  
         max_length=20,
         choices=[
             ('low', 'Low Brightness'),
@@ -112,7 +112,7 @@ class CustomUser(AbstractUser):
     updated_at = models.DateTimeField(auto_now=True)
     
     def save(self, *args, **kwargs):
-        # Construct birthday from year, month, day if provided
+        
         if self.birth_year and self.birth_month and self.birth_day:
             try:
                 from datetime import date

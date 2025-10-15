@@ -20,7 +20,7 @@ def register_user(request):
     serializer = UserRegistrationSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
-        login(request, user)  # Automatically log in after registration
+        login(request, user)  
         return Response({
             'success': True,
             'message': 'User registered successfully',
@@ -104,8 +104,7 @@ def search_users(request):
             'results': []
         })
     
-    # Search in first_name, last_name, or job_role
-    # Only return users with public profile visibility
+    
     users = User.objects.filter(
         profile_visibility='public'
     ).filter(
@@ -153,21 +152,19 @@ def update_account_details(request):
     old_job_role = user.job_role
     old_address = user.address
     
-    # Update basic fields
+    
     user.first_name = request.data.get('first_name', user.first_name)
     user.last_name = request.data.get('last_name', user.last_name)
     user.username = request.data.get('username', user.username)
     user.email = request.data.get('email', user.email)
     user.job_role = request.data.get('job_role', user.job_role)
     user.address = request.data.get('address', user.address)
-    
-    # Update NEW fields - Phone, Department, Gender, Marital Status
     user.phone_number = request.data.get('phone_number', user.phone_number)
     user.department = request.data.get('department', user.department)
     user.gender = request.data.get('gender', user.gender)
     user.marital_status = request.data.get('marital_status', user.marital_status)
     
-    # Update birthday fields safely
+   
     if 'birth_year' in request.data:
         try:
             user.birth_year = int(request.data.get('birth_year'))
@@ -186,15 +183,14 @@ def update_account_details(request):
         except (ValueError, TypeError):
             return Response({'success': False, 'message': 'Invalid birth day'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # Handle profile photo if uploaded
+   
     if 'profile_photo' in request.FILES:
         user.profile_photo = request.FILES['profile_photo']
     
     try:
         user.save()
         
-        # Send notifications for changes
-        # 1. Job Role Change (Company Notification)
+        
         if old_job_role != user.job_role and user.job_role:
             title = "Job Role Update"
             message = f"{user.first_name} has changed their job position from {old_job_role or 'None'} to {user.job_role}."
@@ -207,7 +203,7 @@ def update_account_details(request):
                 new_value=user.job_role
             )
         
-        # 2. Address Change (Public Notification - only if user allows)
+       
         if old_address != user.address and user.address and user.send_public_notifications:
             title = "Address Update"
             message = f"{user.first_name} has updated their residential address from {old_address or 'None'} to {user.address}. Congratulations on the new home!"
@@ -540,7 +536,7 @@ def login_user(request):
             return Response({
                 'success': True,
                 'message': 'Login successful',
-                'user': UserSerializer(user).data  # Full user data with settings
+                'user': UserSerializer(user).data
             }, status=status.HTTP_200_OK)
         else:
             return Response({

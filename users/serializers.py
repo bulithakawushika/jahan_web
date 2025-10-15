@@ -51,7 +51,6 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'birthday']
 
 
-# NEW: Serializer for search results with conditional field visibility
 class SearchUserSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = {
@@ -63,7 +62,7 @@ class SearchUserSerializer(serializers.ModelSerializer):
             'profile_photo': instance.profile_photo.url if instance.profile_photo else None,
         }
         
-        # Conditionally include fields based on visibility settings
+        
         if instance.show_email:
             data['email'] = instance.email
         
